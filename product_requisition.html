@@ -1022,6 +1022,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 </head>
 
 <body>
@@ -1560,17 +1561,11 @@
 
     <!-- Camera Modal -->
     <div class="camera-modal" id="cameraModal">
-        <button class="close-camera" onclick="closeCamera()">&times;</button>
-        <div class="camera-container">
-            <video id="videoElement" autoplay playsinline></video>
-            <div class="camera-overlay"></div>
-            <div class="camera-controls">
-                <div class="shutter-btn" onclick="captureBarcode()" title="ถ่ายภาพเพื่ออ่านบาร์โค้ด">
-                    <div class="shutter-btn-inner"></div>
-                </div>
-            </div>
+        <button class="close-camera" onclick="closeCamera()" style="display: block; position: absolute; top: 20px; right: 20px; background: rgba(0,0,0,0.5); border: none; color: white; font-size: 2rem; cursor: pointer; border-radius: 50%; width: 40px; height: 40px; z-index: 10001; line-height: 1;">&times;</button>
+        <div class="camera-container" style="background: white; width: 90%; max-width: 500px; border-radius: var(--radius-lg); overflow: hidden;">
+            <div id="reader" style="width: 100%;"></div>
         </div>
-        <p style="color: white; margin-top: 1rem; text-align: center;">เล็งกล้องไปที่บาร์โค้ดแล้วกดปุ่มถ่ายภาพ</p>
+        <p style="color: white; margin-top: 1rem; text-align: center;">เล็งกล้องไปที่บาร์โค้ดเพื่อสแกนอัตโนมัติ</p>
     </div>
 
     <script>
@@ -2019,70 +2014,74 @@
             }
         }
 
+        let html5QrcodeScanner = null;
+
         async function openCamera(targetId = 'barcode') {
             currentScanTarget = targetId;
             const modal = document.getElementById('cameraModal');
-            const video = document.getElementById('videoElement');
             modal.classList.add('active');
 
-            try {
-                stream = await navigator.mediaDevices.getUserMedia({
-                    video: { facingMode: "environment" }
-                });
-                video.srcObject = stream;
-            } catch (err) {
-                console.error("Error accessing camera:", err);
-                showAlert("ข้อผิดพลาด", "ไม่สามารถเข้าถึงกล้องได้ กรุณาตรวจสอบการอนุญาตใช้งานกล้อง");
-                closeCamera();
+            if (!html5QrcodeScanner) {
+                html5QrcodeScanner = new Html5Qrcode("reader");
             }
+
+            const config = { fps: 10, qrbox: { width: 250, height: 150 } };
+
+            html5QrcodeScanner.start(
+                { facingMode: "environment" },
+                config,
+                (decodedText, decodedResult) => {
+                    // Success
+                    html5QrcodeScanner.stop().then((ignore) => {
+                        modal.classList.remove('active');
+                        processScannedBarcode(decodedText);
+                    }).catch((err) => {
+                        console.error("Stop failed: ", err);
+                        modal.classList.remove('active');
+                        processScannedBarcode(decodedText);
+                    });
+                },
+                (errorMessage) => {
+                    // Ignore parse errors as it scans continuously
+                }
+            ).catch((err) => {
+                console.error("Error starting camera: ", err);
+                showAlert("ข้อผิดพลาด", "ไม่สามารถเปิดกล้องได้: " + err);
+                modal.classList.remove('active');
+            });
         }
 
         function closeCamera() {
             const modal = document.getElementById('cameraModal');
-            const video = document.getElementById('videoElement');
             modal.classList.remove('active');
-
-            if (stream) {
-                stream.getTracks().forEach(track => track.stop());
-                video.srcObject = null;
-                stream = null;
+            
+            if (html5QrcodeScanner) {
+                html5QrcodeScanner.stop().then(() => {
+                    console.log("Scanner stopped");
+                }).catch((err) => {
+                    console.error("Failed to stop scanner", err);
+                });
             }
         }
 
-        function captureBarcode() {
-            const video = document.getElementById('videoElement');
+        function processScannedBarcode(barcode) {
+            document.getElementById(currentScanTarget).value = barcode;
 
-            // Visual effect of taking a photo
-            video.pause();
-
-            // Simulate processing time
-            setTimeout(() => {
-                let foundCode = 'MOCK-123';
-                let foundProduct = null;
-
-                if (mockProducts.length > 0) {
-                    foundProduct = mockProducts[Math.floor(Math.random() * mockProducts.length)];
-                    foundCode = foundProduct.barcode || foundProduct.code;
+            if (currentScanTarget === 'barcode') {
+                const foundProduct = mockProducts.find(p => p.barcode === barcode || p.code === barcode);
+                if (foundProduct) {
+                    showAddItemPopup(foundProduct);
+                } else {
+                    const unknownProduct = { code: barcode, name: 'สินค้าใหม่ (ต้องลงทะเบียน)' };
+                    showAddItemPopup(unknownProduct);
                 }
-
-                document.getElementById(currentScanTarget).value = foundCode;
-
-                if (currentScanTarget === 'barcode') {
-                    if (foundProduct) {
-                        showAddItemPopup(foundProduct);
-                    } else {
-                        const unknownProduct = { code: foundCode, name: 'สินค้าใหม่ (ต้องลงทะเบียน)' };
-                        showAddItemPopup(unknownProduct);
-                    }
-                } else if (currentScanTarget === 'searchInput') {
-                    searchProducts();
-                    if (foundProduct) {
-                        showLocationPopup(foundProduct.location, foundProduct.name);
-                    }
+            } else if (currentScanTarget === 'searchInput') {
+                searchProducts();
+                const foundProduct = mockProducts.find(p => p.barcode === barcode || p.code === barcode);
+                if (foundProduct) {
+                    showLocationPopup(foundProduct.location, foundProduct.name);
                 }
-
-                closeCamera();
-            }, 600);
+            }
         }
 
 
