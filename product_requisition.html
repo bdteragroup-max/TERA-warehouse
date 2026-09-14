@@ -1,0 +1,2418 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ขั้นตอนการเบิกจ่ายสินค้า</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #FF416C 0%, #FF4B2B 100%);
+            --primary-color: #FF416C;
+            --primary-hover: #ff2a5a;
+            --bg-color: #f3f5f8;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --sidebar-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.02);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.08);
+            --shadow-primary: 0 8px 20px rgba(255, 65, 108, 0.25);
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Sarabun', 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 10% 20%, rgba(255, 65, 108, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 75, 43, 0.05) 0%, transparent 20%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            padding: 0;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border-color);
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+            box-shadow: var(--shadow-md);
+        }
+
+        .sidebar .logo {
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .sidebar .logo svg {
+            stroke: var(--primary-color);
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            flex: 1;
+        }
+
+        .nav-item {
+            padding: 1rem 1.25rem;
+            border-radius: var(--radius-md);
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+        }
+
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary-gradient);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .nav-item:hover {
+            color: var(--primary-color);
+            background: rgba(255, 65, 108, 0.05);
+            transform: translateX(5px);
+        }
+
+        .nav-item.active {
+            color: white;
+            box-shadow: var(--shadow-primary);
+        }
+
+        .nav-item.active::before {
+            opacity: 1;
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        header {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+            background: transparent;
+        }
+
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: -0.5px;
+        }
+
+        .step-indicator {
+            display: flex;
+            gap: 0.5rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 99px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .step-indicator span {
+            padding: 0.5rem 1rem;
+            border-radius: 99px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .step-indicator span.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: var(--shadow-primary);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .view {
+            display: none;
+            animation: slideUpFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        @keyframes slideUpFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        h2::before {
+            content: '';
+            display: block;
+            width: 6px;
+            height: 24px;
+            background: var(--primary-gradient);
+            border-radius: 4px;
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 1rem 1.25rem;
+            background: #f8fafc;
+            border: 2px solid transparent;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            color: var(--text-main);
+            transition: var(--transition);
+            outline: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        input:hover {
+            background: #f1f5f9;
+        }
+
+        input:focus {
+            background: #ffffff;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(255, 65, 108, 0.15);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .input-group input {
+            flex: 1;
+        }
+
+        .btn {
+            padding: 1rem 1.75rem;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: var(--shadow-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 65, 108, 0.35);
+        }
+
+        .btn-primary:active {
+            transform: translateY(1px);
+        }
+
+        .btn-secondary {
+            background-color: white;
+            color: var(--text-main);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--text-muted);
+            background: #f8fafc;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(255, 65, 108, 0.05);
+        }
+
+        .btn-icon {
+            padding: 1rem;
+            aspect-ratio: 1;
+        }
+
+        /* Items List Modernization */
+        .items-list {
+            margin-top: 2.5rem;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .item-row:not(.header):hover {
+            background: #f8fafc;
+        }
+
+        .item-row:last-child {
+            border-bottom: none;
+        }
+
+        .item-row.header {
+            background-color: #f1f5f9;
+            font-weight: 700;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .empty-state {
+            padding: 4rem 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .actions {
+            margin-top: 2.5rem;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* Barcode Box */
+        .barcode-box {
+            background: #f8fafc;
+            border: 2px dashed #cbd5e1;
+            padding: 3rem;
+            text-align: center;
+            border-radius: var(--radius-lg);
+            margin: 2rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            transition: var(--transition);
+        }
+
+        .barcode-box:hover {
+            border-color: var(--primary-color);
+            background: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .barcode-bars {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+            color: var(--text-main);
+        }
+
+        /* Success Icon */
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 2rem;
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: rgba(245, 158, 11, 0.1);
+            color: #d97706;
+            letter-spacing: 0.5px;
+        }
+
+        /* Modals */
+        .location-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .location-modal.active {
+            display: flex;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .location-modal-content {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 450px;
+            border-radius: var(--radius-lg);
+            padding: 3rem 2.5rem;
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            transform: scale(0.95);
+            animation: scaleIn 0.4s forwards cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .location-modal-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(245, 158, 11, 0.05) 100%);
+            color: #F59E0B;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .location-modal-title {
+            font-size: 1rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .location-modal-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .location-modal-item {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+        }
+
+        .location-modal-btn {
+            width: 100%;
+            padding: 1.25rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-primary);
+        }
+
+        .location-modal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 65, 108, 0.4);
+        }
+
+        /* Camera Modal Styles */
+        .camera-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .camera-modal.active {
+            display: flex;
+            animation: fadeIn 0.3s;
+        }
+
+        .camera-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            background: #000;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        #videoElement {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .camera-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70%;
+            height: 40%;
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            border-radius: var(--radius-md);
+            pointer-events: none;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
+        }
+
+        .camera-overlay::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #FF416C;
+            animation: scanline 2s linear infinite;
+            box-shadow: 0 0 15px #FF416C;
+        }
+
+        @keyframes scanline {
+            0% {
+                top: 0;
+            }
+
+            100% {
+                top: 100%;
+            }
+        }
+
+        /* PDF Export Styles */
+        #printArea {
+            display: none;
+            background: white;
+            padding: 30px;
+            color: black;
+            width: 700px;
+            box-sizing: border-box;
+            margin: 0 auto;
+        }
+
+        .print-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .print-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+            text-align: left;
+        }
+
+        .print-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 3rem;
+        }
+
+        .print-table th,
+        .print-table td {
+            border: 1px solid #000;
+            padding: 0.5rem;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .print-table th {
+            background-color: #f0f0f0 !important;
+        }
+
+        .print-barcode svg {
+            height: 40px;
+            max-width: 180px;
+        }
+
+        .print-signatures {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 4rem;
+        }
+
+        .sig-box {
+            text-align: center;
+        }
+
+        .camera-controls {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .shutter-btn {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 4px solid #FFF;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .shutter-btn:active {
+            transform: scale(0.9);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        .shutter-btn-inner {
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            background-color: #FFF;
+            transition: all 0.2s ease;
+        }
+
+        .shutter-btn:active .shutter-btn-inner {
+            width: 46px;
+            height: 46px;
+        }
+
+        .close-camera {
+            position: absolute;
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.75);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .location-modal.active {
+            display: flex;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .location-modal-content {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 400px;
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            transform: scale(0.95);
+            animation: scaleIn 0.3s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes scaleIn {
+            to {
+                transform: scale(1);
+            }
+        }
+
+        .location-modal-icon {
+            width: 80px;
+            height: 80px;
+            background-color: rgba(245, 158, 11, 0.15);
+            color: #F59E0B;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .location-modal-icon svg {
+            width: 40px;
+            height: 40px;
+        }
+
+        .location-modal-title {
+            font-size: 1rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .location-modal-value {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .location-modal-item {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .location-modal-btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary-red);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .location-modal-btn:hover {
+            background-color: var(--primary-red-hover);
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .sidebar {
+                top: auto;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: auto;
+                min-height: 70px;
+                flex-direction: row;
+                padding: 0;
+                border-right: none;
+                border-top: 1px solid var(--border-color);
+                box-shadow: 0 -10px 25px rgba(0,0,0,0.05);
+                z-index: 1000;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(10px);
+            }
+            .sidebar .logo, .sidebar-footer {
+                display: none;
+            }
+            .nav-menu {
+                flex-direction: row;
+                width: 100%;
+                justify-content: space-around;
+                align-items: center;
+                gap: 0;
+                padding-bottom: env(safe-area-inset-bottom, 0px);
+            }
+            .nav-en {
+                display: none;
+            }
+            .nav-item {
+                flex: 1;
+                flex-direction: column;
+                padding: 0.6rem 0.25rem;
+                gap: 0.4rem;
+                border-radius: 0;
+                justify-content: center;
+                color: var(--text-muted);
+                position: relative;
+            }
+            .nav-text {
+                font-size: 0.75rem;
+                font-weight: 700;
+            }
+            .nav-item svg {
+                width: 22px;
+                height: 22px;
+                transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            }
+            .nav-item:hover {
+                transform: none;
+                background: transparent;
+            }
+            .nav-item.active {
+                box-shadow: none;
+                background: transparent;
+                color: var(--primary-color);
+            }
+            .nav-item.active::before {
+                display: none;
+            }
+            .nav-item.active svg {
+                transform: translateY(-2px) scale(1.1);
+            }
+            .nav-item::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 0;
+                height: 3px;
+                background: var(--primary-gradient);
+                border-radius: 0 0 4px 4px;
+                transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .nav-item.active::after {
+                width: 32px;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 1.5rem 1rem 100px 1rem;
+            }
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+            }
+            .container {
+                padding: 1.5rem;
+            }
+            .input-group {
+                flex-direction: column;
+            }
+            .input-group .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .actions {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+            .actions .btn {
+                width: 100%;
+                margin: 0;
+            }
+            div[style*="grid-template-columns: 1fr 1fr;"] {
+                grid-template-columns: 1fr !important;
+            }
+            .items-list {
+                border: none;
+                background: transparent;
+                box-shadow: none;
+            }
+            .item-row.header {
+                display: none;
+            }
+            .item-row {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: space-between;
+                padding: 1.25rem;
+                background: white;
+                border-radius: 12px;
+                margin-bottom: 0.75rem;
+                border: 1px solid var(--border-color);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            }
+            /* First element: ID/Code */
+            .item-row > *:nth-child(1) {
+                flex: 0 0 100% !important;
+                width: 100% !important;
+                font-size: 0.85rem;
+                color: var(--text-muted);
+                margin-bottom: 0.25rem;
+                text-align: left !important;
+            }
+            /* Second element: Name */
+            .item-row > *:nth-child(2) {
+                flex: 0 0 100% !important;
+                width: 100% !important;
+                font-size: 1.05rem;
+                font-weight: 700;
+                color: var(--text-main);
+                margin-bottom: 1rem;
+                text-align: left !important;
+                line-height: 1.4;
+            }
+            /* Third element */
+            .item-row > *:nth-child(3) {
+                flex: 0 1 auto !important;
+                text-align: left !important;
+                justify-content: flex-start !important;
+                width: auto !important;
+            }
+            /* Last element (if it's not the 2nd child) */
+            .item-row > *:last-child:not(:nth-child(2)) {
+                flex: 1 1 auto !important;
+                text-align: right !important;
+                justify-content: flex-end !important;
+                width: auto !important;
+            }
+            /* Fix QTY Controls specifically */
+            .item-row > span[style*="gap: 0.5rem;"] {
+                flex: 0 1 auto !important;
+                justify-content: flex-start !important;
+            }
+            .barcode-box {
+                padding: 1.5rem;
+            }
+            .barcode-bars {
+                font-size: 1.5rem;
+            }
+            .location-modal-content {
+                padding: 2rem 1.5rem;
+            }
+            .location-modal-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+
+<body>
+
+
+    <!-- Identity Verification Modal -->
+    <div class="location-modal" id="verificationModal">
+        <div class="location-modal-content" style="max-width: 400px; padding: 2.5rem 2rem;">
+            <div class="location-modal-icon" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            </div>
+            <div class="location-modal-title" style="margin-bottom: 0.5rem;">ยืนยันสิทธิ์การแก้ไข</div>
+            <p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; margin-bottom: 1.5rem;">
+                กรุณาระบุ <strong>รหัสงาน (Job ID)</strong> หรือ <strong>ชื่อผู้เบิก</strong> ให้ตรงกับรายการที่คุณต้องการแก้ไข
+            </p>
+            <div class="form-group" style="text-align: left;">
+                <input type="text" id="verifyIdentityInput" class="form-control" placeholder="รหัสงาน หรือ ชื่อผู้เบิก" autocomplete="off">
+            </div>
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button class="btn btn-secondary" style="flex: 1;" onclick="closeVerificationPopup()">ยกเลิก</button>
+                <button class="btn btn-primary" style="flex: 1; background: #8b5cf6; border-color: #8b5cf6;" onclick="confirmVerification()">ตรวจสอบ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Location Modal Popup -->
+    <div class="location-modal" id="locationModalPopup">
+        <div class="location-modal-content">
+            <div class="location-modal-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+            </div>
+            <div class="location-modal-title">ตำแหน่งจัดเก็บ (Location)</div>
+            <div class="location-modal-value" id="popupLocationValue">-</div>
+            <div class="location-modal-item" id="popupItemName">-</div>
+            <button class="location-modal-btn" onclick="closeLocationPopup()">ตกลง (OK)</button>
+        </div>
+    </div>
+
+    <!-- Add Item Modal Popup -->
+    <div class="location-modal" id="addItemModal">
+        <div class="location-modal-content" style="max-width: 550px; padding: 3rem 2.5rem;">
+            <div class="location-modal-icon" style="background: rgba(255, 65, 108, 0.1); color: var(--primary-color);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path
+                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                    </path>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+            </div>
+            <div class="location-modal-title" style="font-size: 1.1rem;">เพิ่มสินค้าลงในรายการ</div>
+            <div class="location-modal-value" id="addPopupItemName"
+                style="font-size: 1.8rem; margin-top: 1.5rem; line-height: 1.4; color: var(--text-main);">-</div>
+            <div id="addPopupItemCode"
+                style="display: inline-block; padding: 0.5rem 1.25rem; background: #f1f5f9; color: var(--text-muted); border-radius: 99px; font-family: monospace; font-size: 1.1rem; font-weight: 600; letter-spacing: 1px; margin-bottom: 2.5rem;">
+                -</div>
+
+            <div class="form-group"
+                style="text-align: left; margin-bottom: 2.5rem; background: #f8fafc; padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <label for="addPopupQuantity"
+                    style="color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; font-size: 0.85rem; margin-bottom: 1rem; display: block; text-align: center;">จำนวนที่ต้องการเบิก</label>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 1rem;">
+                    <button type="button" class="btn btn-outline btn-icon"
+                        style="border-radius: 50%; width: 50px; height: 50px; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"
+                        onclick="const q = document.getElementById('addPopupQuantity'); q.value = Math.max(1, parseInt(q.value||1) - 1)">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                    <input type="number" id="addPopupQuantity" value="1" min="1"
+                        style="width: 140px; text-align: center; font-size: 3rem; font-weight: 800; padding: 0.5rem; background: transparent; border: none; box-shadow: none; color: var(--text-main); outline: none;">
+                    <button type="button" class="btn btn-outline btn-icon"
+                        style="border-radius: 50%; width: 50px; height: 50px; padding: 0; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"
+                        onclick="const q = document.getElementById('addPopupQuantity'); q.value = parseInt(q.value||0) + 1">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn btn-secondary" style="flex: 1; padding: 1.25rem; font-size: 1.1rem;"
+                    onclick="closeAddItemPopup()">ยกเลิก</button>
+                <button class="btn btn-primary" style="flex: 2; padding: 1.25rem; font-size: 1.1rem;"
+                    onclick="confirmAddItemFromPopup()">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    ยืนยันเพิ่มรายการ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Modal Popup -->
+    <div class="location-modal" id="alertModal" style="z-index: 10005;">
+        <div class="location-modal-content" style="text-align: center;">
+            <div class="location-modal-icon" style="background: rgba(255, 65, 108, 0.1); color: var(--primary-color);">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+            </div>
+            <div class="location-modal-title" id="alertModalTitle" style="font-size: 1.5rem;">แจ้งเตือน</div>
+            <div class="location-modal-item" id="alertModalMessage"
+                style="font-size: 1.1rem; color: var(--text-muted); margin: 1.5rem 0; white-space: pre-wrap; line-height: 1.6;">
+                -</div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;" onclick="closeAlertModal()">ตกลง
+                (OK)</button>
+        </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <div class="sidebar">
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path
+                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                </path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            ReqFlow
+        </div>
+
+        <div class="nav-menu">
+            <div class="nav-item" id="nav-search" onclick="switchTab('search')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <span class="nav-text">ค้นหาตำแหน่ง <span class="nav-en">(Search)</span></span>
+            </div>
+            <div class="nav-item active" id="nav-requisition" onclick="switchTab('requisition')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                    </path>
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                    <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                </svg>
+                <span class="nav-text">เบิกสินค้า <span class="nav-en">(Requisition)</span></span>
+            </div>
+
+            <div class="nav-item" id="nav-history" onclick="switchTab('history')">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                <span class="nav-text">ประวัติ <span class="nav-en">(History)</span></span>
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                    </path>
+                </svg>
+                ตั้งค่า (Settings)
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header>
+            <div style="font-size: 1.25rem; font-weight: 700; color: var(--text-main);">ระบบเบิกจ่ายสินค้า</div>
+            <div class="step-indicator" id="stepIndicator">
+                <span class="active" id="ind-1">1. เบิกสินค้า</span>
+                <span id="ind-2">2. ตรวจสอบ</span>
+            </div>
+        </header>
+
+        <div class="container">
+
+            <!-- View Search: Search Locations -->
+            <div class="view" id="view-search">
+                <h2>ค้นหาตำแหน่งสินค้า</h2>
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" id="searchInput"
+                            placeholder="พิมพ์ชื่อสินค้า, บาร์โค้ด หรือโลเคชั่น เพื่อค้นหา..."
+                            oninput="searchProducts()" style="padding: 1rem; font-size: 1.1rem; flex: 1;">
+                        <button class="btn btn-secondary btn-icon" onclick="openCamera('searchInput')"
+                            title="เปิดกล้องสแกน" style="padding: 0 1.5rem;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z">
+                                </path>
+                                <circle cx="12" cy="13" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="items-list">
+                    <div class="item-row header">
+                        <span style="flex: 1;">รหัส / บาร์โค้ด</span>
+                        <span style="flex: 2;">ชื่อสินค้า</span>
+                        <span style="flex: 1;">ตำแหน่ง</span>
+                        <span style="flex: 1; text-align: right;">คงเหลือ</span>
+                    </div>
+                    <div id="searchResults">
+                        <div class="empty-state">พิมพ์เพื่อเริ่มค้นหา...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View 1: Requisition -->
+            <div class="view active" id="view-1">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+                    <h2 style="margin: 0; padding: 0; border: none;">เพิ่มรายการสินค้า</h2>
+                    <span id="editingBadge" style="display: none; background: #FEF3C7; color: #D97706; padding: 0.25rem 0.75rem; border-radius: 99px; font-size: 0.85rem; font-weight: 600;">กำลังแก้ไขรายการที่ถูกส่งคืน</span>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="reqJobId">รหัสงาน / ชื่อโครงการ</label>
+                        <input type="text" id="reqJobId" placeholder="เช่น JOB-1042">
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="reqName">ชื่อผู้เบิก</label>
+                        <input type="text" id="reqName" placeholder="ระบุชื่อ-นามสกุล">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="barcode">สแกนบาร์โค้ดภายใน (ชั้นวาง)</label>
+                    <div class="input-group">
+                        <input type="text" id="barcode" placeholder="สแกนหรือกรอกบาร์โค้ด..." onkeypress="handleBarcodeEnter(event)">
+                        <button class="btn btn-secondary btn-icon" onclick="openCamera()" title="เปิดกล้องสแกน">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z">
+                                </path>
+                                <circle cx="12" cy="13" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    <small style="color: var(--text-muted); display: block; margin-top: 0.5rem;">หากไม่พบ
+                        ระบบจะแจ้งให้ลงทะเบียนสินค้าใหม่</small>
+                    <div id="scannedItemName"
+                        style="color: var(--primary-red); font-weight: 600; margin-top: 0.5rem; font-size: 1.1rem;">
+                    </div>
+                </div>
+
+
+
+                <div class="items-list">
+                    <div class="item-row header">
+                        <span style="flex: 2;">บาร์โค้ด</span>
+                        <span style="flex: 3;">ชื่อสินค้า</span>
+                        <span style="flex: 1; text-align: center;">จำนวน</span>
+                        <span style="flex: 1; text-align: right;">จัดการ</span>
+                    </div>
+                    <div id="cartItems">
+                        <div class="empty-state">ยังไม่มีรายการสินค้า สแกนและเพิ่มรายการเพื่อเริ่มต้น</div>
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-primary" id="btnToSummary" onclick="validateAndGoToSummary()"
+                        disabled>ตรวจสอบรายการเบิก</button>
+                </div>
+            </div>
+
+            <!-- View 2: Summary & Confirmation -->
+            <div class="view" id="view-2">
+                <h2>สรุปการเบิกสินค้า</h2>
+                <p style="margin-bottom: 1.5rem; color: var(--text-muted);">โปรดตรวจสอบรายการก่อนส่งไปยังแผนกคลังสินค้า
+                </p>
+
+                <div style="background: var(--bg-color); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                        <div>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.25rem;">รหัสงาน /
+                                โครงการ</p>
+                            <h3 id="summaryJobId" style="font-family: 'Inter', sans-serif; margin: 0;">-</h3>
+                        </div>
+                    </div>
+                    <div>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.25rem;">ชื่อผู้เบิก</p>
+                        <p id="summaryReqName" style="font-weight: 600; margin: 0;">-</p>
+                    </div>
+                </div>
+
+                <div class="items-list">
+                    <div class="item-row header">
+                        <span style="flex: 2;">บาร์โค้ด</span>
+                        <span style="flex: 3;">ชื่อสินค้า</span>
+                        <span style="flex: 1; text-align: right;">จำนวน</span>
+                    </div>
+                    <div id="summaryItems">
+                        <!-- Populated via JS -->
+                    </div>
+                </div>
+
+                <div class="actions">
+                    <button class="btn btn-secondary" onclick="goToView(1)">แก้ไขรายการ</button>
+                    <button class="btn btn-primary" onclick="submitToWarehouse()">ยืนยันและส่งไปคลังสินค้า</button>
+                </div>
+            </div>
+
+            <!-- View Submitted (Requisitioner Success) -->
+            <div class="view" id="view-submitted">
+                <div class="text-center" style="padding: 3rem 0;">
+                    <div class="success-icon">✓</div>
+                    <h2 style="border: none; padding: 0; margin-bottom: 1rem;">ส่งรายการเบิกสำเร็จ</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 2rem;">
+                        รายการของคุณถูกส่งไปยังแผนกคลังสินค้าเพื่อตรวจสอบแล้ว</p>
+                    <button class="btn btn-primary" onclick="resetFlow()">เริ่มการเบิกสินค้าใหม่</button>
+                </div>
+            </div>
+
+            <!-- View 3: Warehouse Check -->
+            <div class="view" id="view-3">
+                <h2>การตรวจสอบโดยแผนกคลังสินค้า</h2>
+
+                <!-- List View -->
+                <div id="warehouse-list-view">
+                    <div class="items-list" style="margin-top: 1rem;">
+                        <div class="item-row header">
+                            <span style="flex: 2;">รหัสงาน / โครงการ</span>
+                            <span style="flex: 2;">ชื่อผู้เบิก</span>
+                            <span style="flex: 1; text-align: right;">จำนวนรายการ</span>
+                            <span style="flex: 1; text-align: center;">จัดการ</span>
+                        </div>
+                        <div id="warehouseRequestsList">
+                            <!-- Populated via JS -->
+                            <div class="empty-state">ไม่มีรายการรอตรวจสอบ</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detail View -->
+                <div id="warehouse-detail-view" style="display: none;">
+                    <button class="btn btn-secondary" onclick="backToWarehouseList()"
+                        style="margin-bottom: 1.5rem; padding: 0.5rem 1rem; font-size: 0.9rem;">&larr;
+                        กลับไปหน้ารายการ</button>
+                    <div
+                        style="background: var(--bg-color); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <div>
+                                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.25rem;">รหัสงาน
+                                    / โครงการ</p>
+                                <h3 id="warehouseJobId" style="font-family: 'Inter', sans-serif; margin: 0;">-</h3>
+                            </div>
+                            <span class="badge">รอตรวจสอบ</span>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.25rem;">ชื่อผู้เบิก
+                            </p>
+                            <p id="warehouseReqName" style="font-weight: 600; margin: 0;">-</p>
+                        </div>
+                    </div>
+
+                    <div class="items-list">
+                        <div class="item-row header">
+                            <span style="flex: 2;">บาร์โค้ด</span>
+                            <span style="flex: 3;">ชื่อสินค้า</span>
+                            <span style="flex: 1; text-align: right;">จำนวน</span>
+                        </div>
+                        <div id="warehouseItems">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+
+                    <div class="actions">
+                        <button class="btn btn-outline" onclick="rejectRequisition()">ส่งคืนเพื่อแก้ไข</button>
+                        <button class="btn btn-primary" onclick="approveAndGenerate()">ยืนยันและสร้างบาร์โค้ด</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View History -->
+            <div class="view" id="view-history">
+                <h2>ประวัติการอนุมัติ (History)</h2>
+
+                <!-- List View -->
+                <div id="history-list-view">
+                    <div class="items-list" style="margin-top: 1rem;">
+                        <div class="item-row header">
+                            <span style="flex: 2;">รหัสงาน / โครงการ</span>
+                            <span style="flex: 2;">ชื่อผู้เบิก</span>
+                            <span style="flex: 1; text-align: right;">จำนวนรายการ</span>
+                            <span style="flex: 1; text-align: center;">สถานะ</span>
+                        </div>
+                        <div id="historyRequestsList">
+                            <!-- Populated via JS -->
+                            <div class="empty-state">ไม่มีประวัติการอนุมัติ</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detail View -->
+                <div id="history-detail-view" style="display: none;">
+                    <button class="btn btn-secondary" onclick="backToHistoryList()"
+                        style="margin-bottom: 1.5rem; padding: 0.5rem 1rem; font-size: 0.9rem;">&larr;
+                        กลับไปหน้าประวัติ</button>
+                    <div
+                        style="background: var(--bg-color); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <div>
+                                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.25rem;">รหัสงาน
+                                    / โครงการ</p>
+                                <h3 id="historyJobId" style="font-family: 'Inter', sans-serif; margin: 0;">-</h3>
+                            </div>
+                            <span class="badge" id="historyDetailBadge"
+                                style="background: rgba(16, 185, 129, 0.1); color: #10B981;">อนุมัติแล้ว</span>
+                        </div>
+                        <div>
+                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.25rem;">ชื่อผู้เบิก
+                            </p>
+                            <p id="historyReqName" style="font-weight: 600; margin: 0;">-</p>
+                        </div>
+                    </div>
+
+                    <div class="items-list">
+                        <div class="item-row header">
+                            <span style="flex: 2;">บาร์โค้ด</span>
+                            <span style="flex: 3;">ชื่อสินค้า</span>
+                            <span style="flex: 1; text-align: right;">จำนวน</span>
+                        </div>
+                        <div id="historyItems">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View 4: Complete & Express Processing -->
+            <div class="view" id="view-4">
+                <div class="text-center">
+                    <h2>บันทึกประวัติการเบิกแล้ว</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 2rem;">สร้างบาร์โค้ดสรุปภายในเรียบร้อยแล้ว</p>
+                </div>
+
+                <div class="barcode-box">
+                    <div
+                        style="font-size: 0.9rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase;">
+                        บาร์โค้ดสรุปภายใน</div>
+                    <div class="barcode-bars">||| || ||| | || | ||| ||</div>
+                    <div style="font-family: monospace; font-size: 1.2rem; letter-spacing: 3px;" id="finalBarcodeId">
+                        REQ-1042-88X</div>
+                </div>
+
+                <div class="text-center" style="margin-top: 2rem;">
+                    <p style="margin-bottom: 1.5rem;">สแกนบาร์โค้ดนี้ระหว่างขั้นตอนการจัดส่งด่วนเพื่อตัดยอดจาก PDC</p>
+                    <button class="btn btn-primary" onclick="processExpress()" id="expressBtn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                        สแกนและตัดยอดจาก PDC
+                    </button>
+                </div>
+            </div>
+            <!-- View 5: Success -->
+            <div class="view" id="view-5">
+                <div class="text-center" style="padding: 3rem 0;">
+                    <div class="success-icon">✓</div>
+                    <h2 style="border: none; padding: 0; margin-bottom: 1rem;">ดำเนินการเสร็จสิ้น</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 2rem;">ตัดยอดสินค้าจาก PDC เรียบร้อยแล้ว
+                        ขั้นตอนการเบิกสินค้าเสร็จสมบูรณ์</p>
+                    <button class="btn btn-outline" onclick="resetFlow()">เริ่มการเบิกสินค้าใหม่</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Print Area for PDF Export -->
+    <div id="printArea">
+        <div class="print-header">
+            <h2>ใบเบิกสินค้า (Requisition Form)</h2>
+            <div class="print-meta">
+                <div>
+                    <p><strong>รหัสงาน:</strong> <span id="printJobId"></span></p>
+                    <p><strong>ผู้เบิก:</strong> <span id="printReqName"></span></p>
+                </div>
+                <div>
+                    <p><strong>วันที่:</strong> <span id="printDate"></span></p>
+                </div>
+            </div>
+        </div>
+        <table class="print-table">
+            <thead>
+                <tr>
+                    <th style="width: 25%;">รหัส</th>
+                    <th style="width: 40%;">ในระบบ</th>
+                    <th style="width: 25%;">ชื่อสินค้า</th>
+                    <th style="width: 10%;">จำนวน</th>
+                </tr>
+            </thead>
+            <tbody id="printTableBody">
+            </tbody>
+        </table>
+        <div class="print-signatures">
+            <div class="sig-box">
+                <br><br><br>
+                <p>_______________________</p>
+                <p>ผู้เบิก</p>
+            </div>
+            <div class="sig-box">
+                <br><br><br>
+                <p>_______________________</p>
+                <p>ผู้จ่าย</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Camera Modal -->
+    <div class="camera-modal" id="cameraModal">
+        <button class="close-camera" onclick="closeCamera()">&times;</button>
+        <div class="camera-container">
+            <video id="videoElement" autoplay playsinline></video>
+            <div class="camera-overlay"></div>
+            <div class="camera-controls">
+                <div class="shutter-btn" onclick="captureBarcode()" title="ถ่ายภาพเพื่ออ่านบาร์โค้ด">
+                    <div class="shutter-btn-inner"></div>
+                </div>
+            </div>
+        </div>
+        <p style="color: white; margin-top: 1rem; text-align: center;">เล็งกล้องไปที่บาร์โค้ดแล้วกดปุ่มถ่ายภาพ</p>
+    </div>
+
+    <script>
+        // State
+        let items = [];
+        let currentJobId = '';
+        let stream = null;
+        let currentScanTarget = 'barcode';
+        let scannedProductToAdd = null;
+        let editingRequestId = null;
+        let currentUserRole = 'requester'; // Hardcoded for this file
+        let requestToVerify = null; // Holds the request ID being verified for editing
+
+        // ==========================================
+        // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE:
+        // ==========================================
+        const GOOGLE_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwpf5lvhy28Cvjnxpes5iXRYQnnG8IZNCo3lR0qGXzk4SFsEa_81HPxnYQ8u6359_SO/exec";
+
+        // Mock DB for Warehouse
+        let pendingWarehouseRequests = [];
+        let historyWarehouseRequests = [];
+        let confirmedRequestIds = JSON.parse(localStorage.getItem('confirmedReqs') || '[]');
+        let currentViewingRequestId = null;
+        let isSavingToBackend = false;
+
+        function showAddItemPopup(product) {
+            scannedProductToAdd = product;
+            document.getElementById('addPopupItemName').innerText = product.name;
+            document.getElementById('addPopupItemCode').innerText = product.code;
+            document.getElementById('addPopupQuantity').value = 1;
+
+            const modal = document.getElementById('addItemModal');
+            modal.classList.add('active');
+
+            setTimeout(() => {
+                const qtyInput = document.getElementById('addPopupQuantity');
+                qtyInput.focus();
+                qtyInput.select();
+            }, 100);
+        }
+
+        function closeAddItemPopup() {
+            document.getElementById('addItemModal').classList.remove('active');
+            scannedProductToAdd = null;
+            document.getElementById('barcode').value = '';
+        }
+
+        function confirmAddItemFromPopup() {
+            if (!scannedProductToAdd) return;
+
+            const qty = parseInt(document.getElementById('addPopupQuantity').value) || 1;
+
+            const existingIndex = items.findIndex(i => i.code === scannedProductToAdd.code);
+            const currentCartQty = existingIndex >= 0 ? items[existingIndex].qty : 0;
+            
+            // Calculate how much is currently pending approval in the warehouse
+            let pendingQty = 0;
+            pendingWarehouseRequests.forEach(req => {
+                // If we are currently editing this exact request, don't double-count its old items
+                if (req.id === editingRequestId) return; 
+                
+                const reqItem = req.items.find(i => i.code === scannedProductToAdd.code);
+                if (reqItem) {
+                    pendingQty += parseInt(reqItem.qty) || 0;
+                }
+            });
+
+            // Available stock is what's in the system minus what's currently pending
+            const actualSystemStock = scannedProductToAdd.quantity || 0;
+            const availableStock = actualSystemStock - pendingQty;
+
+            if (currentCartQty + qty > availableStock) {
+                if (pendingQty > 0) {
+                    showAlert("สินค้าคงเหลือไม่เพียงพอ!", `ในระบบมี: ${actualSystemStock} ชิ้น\nรอคลังอนุมัติอยู่: ${pendingQty} ชิ้น\nเหลือเบิกได้จริง: ${availableStock} ชิ้น\nคุณต้องการเบิกทั้งหมด: ${currentCartQty + qty} ชิ้น`);
+                } else {
+                    showAlert("สินค้าคงเหลือไม่เพียงพอ!", `ในคลังมี: ${actualSystemStock} ชิ้น\nคุณต้องการเบิกทั้งหมด: ${currentCartQty + qty} ชิ้น`);
+                }
+                return;
+            }
+
+            if (existingIndex >= 0) {
+                items[existingIndex].qty += qty;
+            } else {
+                items.push({ ...scannedProductToAdd, qty });
+            }
+
+            document.getElementById('barcode').value = '';
+            document.getElementById('scannedItemName').innerText = '';
+
+            updateCartUI();
+            closeAddItemPopup();
+        }
+
+        function showLocationPopup(location, itemName) {
+            document.getElementById('popupLocationValue').innerText = location || 'ไม่ระบุตำแหน่ง';
+            document.getElementById('popupItemName').innerText = itemName || '';
+            document.getElementById('locationModalPopup').classList.add('active');
+        }
+
+        function closeLocationPopup() {
+            document.getElementById('locationModalPopup').classList.remove('active');
+        }
+
+        function showAlert(title, message) {
+            document.getElementById('alertModalTitle').innerText = title;
+            document.getElementById('alertModalMessage').innerText = message;
+            document.getElementById('alertModal').classList.add('active');
+        }
+
+        function closeAlertModal() {
+            document.getElementById('alertModal').classList.remove('active');
+        }
+
+        let mockProducts = [];
+
+        async function loadProductsFromSheet() {
+            const sheetUrl = "https://docs.google.com/spreadsheets/d/1qowevGtNwTDaXStrJzoKmPgkVR9U0mQ0sNb3MW9uuMw/export?format=csv&gid=439510755";
+            try {
+                const response = await fetch(sheetUrl);
+                const csvText = await response.text();
+
+                Papa.parse(csvText, {
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: function (results) {
+                        mockProducts = results.data
+                            .filter(row => row['Bar128'] || row['รหัส']) // ensure there's an identifier
+                            .map(row => ({
+                                code: (row['รหัส'] || row['Bar128'] || '').trim(),
+                                barcode: (row['Bar128'] || '').trim(),
+                                name: row['รายการ'] ? row['รายการ'].trim() : 'ไม่ทราบชื่อ',
+                                location: row['โลเคชั่น'] ? row['โลเคชั่น'].trim() : '',
+                                quantity: parseInt(row['จำนวน']) || 0,
+                                inSystemText: row['ในระบบ'] ? row['ในระบบ'].trim() : ''
+                            }));
+                        console.log("Loaded products from sheet:", mockProducts);
+                    }
+                });
+            } catch (err) {
+                console.error("Error loading sheet data:", err);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            loadProductsFromSheet();
+            switchTab('requisition');
+        });
+
+        // Functions
+        function switchTab(tabId) {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            const targetNav = document.getElementById('nav-' + tabId);
+            if (targetNav) targetNav.classList.add('active');
+
+            const headerObj = document.getElementById('stepIndicator');
+
+            if (tabId === 'requisition') {
+                headerObj.style.display = 'flex';
+                goToView(1);
+            } else if (tabId === 'search') {
+                headerObj.style.display = 'none';
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                document.getElementById('view-search').classList.add('active');
+                setTimeout(() => document.getElementById('searchInput').focus(), 100);
+            } else if (tabId === 'warehouse') {
+                headerObj.style.display = 'none';
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+
+                document.getElementById('warehouse-list-view').style.display = 'block';
+                document.getElementById('warehouse-detail-view').style.display = 'none';
+
+                if (GOOGLE_WEBAPP_URL && GOOGLE_WEBAPP_URL.startsWith("http") && !isSavingToBackend) {
+                    document.getElementById('warehouseRequestsList').innerHTML = '<div class="empty-state">กำลังโหลดข้อมูล...</div>';
+
+                    fetch(GOOGLE_WEBAPP_URL + "?action=getAll", {
+                        method: 'GET'
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (Array.isArray(data) && data.length > 0) {
+                                // Filter based on backend status instead of localStorage
+                                pendingWarehouseRequests = data.filter(r => r.status !== 'Confirmed');
+                            }
+                            renderWarehouseList();
+                        })
+                        .catch(err => {
+                            console.error("Fetch error:", err);
+                            renderWarehouseList();
+                        });
+                } else {
+                    renderWarehouseList();
+                }
+
+                document.getElementById('view-3').classList.add('active');
+            } else if (tabId === 'history') {
+                headerObj.style.display = 'none';
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+
+                document.getElementById('history-list-view').style.display = 'block';
+                document.getElementById('history-detail-view').style.display = 'none';
+
+                if (GOOGLE_WEBAPP_URL && GOOGLE_WEBAPP_URL.startsWith("http")) {
+                    document.getElementById('historyRequestsList').innerHTML = '<div class="empty-state">กำลังโหลดข้อมูล...</div>';
+
+                    fetch(GOOGLE_WEBAPP_URL + "?action=getAll", {
+                        method: 'GET'
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (Array.isArray(data) && data.length > 0) {
+                                if (currentUserRole === 'requester') {
+                                    // Requester sees ALL their requests
+                                    historyWarehouseRequests = data;
+                                } else {
+                                    // Warehouse sees ONLY confirmed requests in history
+                                    historyWarehouseRequests = data.filter(r => r.status === 'Confirmed');
+                                }
+                                renderHistoryList(historyWarehouseRequests);
+                            } else {
+                                historyWarehouseRequests = [];
+                                renderHistoryList([]);
+                            }
+                        })
+                        .catch(err => {
+                            console.error("Fetch error:", err);
+                            renderHistoryList(historyWarehouseRequests);
+                        });
+                } else {
+                    renderHistoryList(historyWarehouseRequests);
+                }
+
+                document.getElementById('view-history').classList.add('active');
+            }
+        }
+
+
+
+        // --- Verification & Self-Editing ---
+        function editOwnRequest(reqId) {
+            requestToVerify = reqId;
+            document.getElementById('verifyIdentityInput').value = '';
+            document.getElementById('verificationModal').classList.add('active');
+            setTimeout(() => document.getElementById('verifyIdentityInput').focus(), 100);
+        }
+
+        function closeVerificationPopup() {
+            document.getElementById('verificationModal').classList.remove('active');
+            requestToVerify = null;
+        }
+
+        function confirmVerification() {
+            const inputVal = document.getElementById('verifyIdentityInput').value.trim().toLowerCase();
+            if (!inputVal) {
+                alert("กรุณาระบุข้อมูลเพื่อยืนยันสิทธิ์");
+                return;
+            }
+
+            // Find the request in our loaded history list
+            const req = historyWarehouseRequests.find(r => r.id === requestToVerify);
+            if (!req) return;
+
+            // Check if input matches either Job ID or Requester Name (case insensitive)
+            const matchJob = (req.jobId || "").trim().toLowerCase() === inputVal;
+            const matchName = (req.reqName || "").trim().toLowerCase() === inputVal;
+
+            if (matchJob || matchName) {
+                closeVerificationPopup();
+                
+                // Set state for editing
+                editingRequestId = req.id;
+                document.getElementById('reqJobId').value = req.jobId || '';
+                document.getElementById('reqName').value = req.reqName || '';
+                
+                // Deep copy items to avoid reference mutation issues
+                items = req.items.map(i => ({...i}));
+                
+                // Inform user and switch to requisition tab
+                showAlert("ยืนยันสำเร็จ", "ข้อมูลรายการถูกนำเข้าสู่หน้าเบิกสินค้าแล้ว คุณสามารถแก้ไขและส่งรายการใหม่ได้");
+                updateCartUI();
+                switchTab('requisition');
+            } else {
+                alert("ข้อมูลไม่ตรงกับรายการนี้ กรุณาลองใหม่อีกครั้ง");
+            }
+        }
+
+        function renderWarehouseList() {
+            const listContainer = document.getElementById('warehouseRequestsList');
+            if (pendingWarehouseRequests.length === 0) {
+                listContainer.innerHTML = '<div class="empty-state">ไม่มีรายการรอตรวจสอบ</div>';
+                return;
+            }
+
+            listContainer.innerHTML = pendingWarehouseRequests.map(req => `
+                <div class="item-row" style="cursor: pointer;" onclick="viewWarehouseRequest('${req.id}')">
+                    <span style="flex: 2; font-weight: 600; color: var(--primary-color);">${req.jobId}</span>
+                    <span style="flex: 2;">${req.reqName}</span>
+                    <span style="flex: 1; text-align: right; font-weight: 600;">${req.items.length} รายการ</span>
+                    <div style="flex: 1; text-align: center;">
+                        <button class="btn btn-outline" style="padding: 0.25rem 0.75rem; font-size: 0.8rem;" onclick="event.stopPropagation(); viewWarehouseRequest('${req.id}')">ดูรายละเอียด</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderHistoryList(historyReqs) {
+            const listContainer = document.getElementById('historyRequestsList');
+            if (!historyReqs || historyReqs.length === 0) {
+                listContainer.innerHTML = '<div class="empty-state">ไม่มีประวัติการอนุมัติ</div>';
+                return;
+            }
+
+            listContainer.innerHTML = historyReqs.map(req => {
+                const isPending = req.status !== 'Confirmed';
+                const badgeHtml = isPending 
+                    ? '<span class="badge" style="background: rgba(245, 158, 11, 0.1); color: #F59E0B;">รอตรวจสอบ</span>'
+                    : '<span class="badge" style="background: rgba(16, 185, 129, 0.1); color: #10B981;">อนุมัติแล้ว</span>';
+                
+                const editBtnHtml = (isPending && currentUserRole === 'requester')
+                    ? `<button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; margin-top: 0.25rem;" onclick="event.stopPropagation(); editOwnRequest('${req.id}')">แก้ไข</button>`
+                    : '';
+
+                return `
+                <div class="item-row" style="cursor: pointer; align-items: center;" onclick="viewHistoryRequest('${req.id}')">
+                    <span style="flex: 2; font-weight: 600; color: ${isPending ? '#F59E0B' : '#10B981'};">${req.jobId}</span>
+                    <span style="flex: 2;">${req.reqName}</span>
+                    <span style="flex: 1; text-align: right; font-weight: 600;">${req.items.length} รายการ</span>
+                    <div style="flex: 1; text-align: center; display: flex; flex-direction: column; align-items: center;">
+                        ${badgeHtml}
+                        ${editBtnHtml}
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function viewHistoryRequest(id) {
+            const req = historyWarehouseRequests.find(r => r.id === id);
+            if (!req) return;
+
+            document.getElementById('historyJobId').innerText = req.jobId;
+            document.getElementById('historyReqName').innerText = req.reqName;
+            
+            // Update the status badge in the detail view
+            const isPending = req.status !== 'Confirmed';
+            const detailBadge = document.getElementById('historyDetailBadge');
+            if (detailBadge) {
+                if (isPending) {
+                    detailBadge.innerText = 'รอตรวจสอบ';
+                    detailBadge.style.background = 'rgba(245, 158, 11, 0.1)';
+                    detailBadge.style.color = '#F59E0B';
+                } else {
+                    detailBadge.innerText = 'อนุมัติแล้ว';
+                    detailBadge.style.background = 'rgba(16, 185, 129, 0.1)';
+                    detailBadge.style.color = '#10B981';
+                }
+            }
+
+            const itemsContainer = document.getElementById('historyItems');
+            itemsContainer.innerHTML = req.items.map(item => `
+                <div class="item-row">
+                    <span style="flex: 2; font-family: monospace;">${item.code}</span>
+                    <span style="flex: 3; font-weight: 500;">${item.name}</span>
+                    <span style="flex: 1; text-align: right; font-weight: 600; font-size: 1.1rem; color: var(--text-main);">${item.qty}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('history-list-view').style.display = 'none';
+            document.getElementById('history-detail-view').style.display = 'block';
+        }
+
+        function backToHistoryList() {
+            document.getElementById('history-detail-view').style.display = 'none';
+            document.getElementById('history-list-view').style.display = 'block';
+        }
+
+        function viewWarehouseRequest(id) {
+            const req = pendingWarehouseRequests.find(r => r.id === id);
+            if (!req) return;
+
+            currentViewingRequestId = id;
+            document.getElementById('warehouseJobId').innerText = req.jobId;
+            document.getElementById('warehouseReqName').innerText = req.reqName;
+
+            const warehouseItems = document.getElementById('warehouseItems');
+            warehouseItems.innerHTML = req.items.map(item => `
+                <div class="item-row">
+                    <span style="flex: 2; font-family: monospace;">${item.code}</span>
+                    <span style="flex: 3; font-weight: 500;">${item.name}</span>
+                    <span style="flex: 1; font-weight: 700; font-size: 1.1rem; text-align: right;">${item.qty}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('warehouse-list-view').style.display = 'none';
+            document.getElementById('warehouse-detail-view').style.display = 'block';
+        }
+
+        function backToWarehouseList() {
+            document.getElementById('warehouse-detail-view').style.display = 'none';
+            document.getElementById('warehouse-list-view').style.display = 'block';
+            currentViewingRequestId = null;
+        }
+
+        function searchProducts() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const resultsContainer = document.getElementById('searchResults');
+
+            if (!query) {
+                resultsContainer.innerHTML = '<div class="empty-state">พิมพ์เพื่อเริ่มค้นหา...</div>';
+                return;
+            }
+
+            const results = mockProducts.filter(p =>
+                (p.name && p.name.toLowerCase().includes(query)) ||
+                (p.code && p.code.toLowerCase().includes(query)) ||
+                (p.location && p.location.toLowerCase().includes(query))
+            );
+
+            if (results.length === 0) {
+                resultsContainer.innerHTML = '<div class="empty-state">ไม่พบสินค้าที่ตรงกับคำค้นหา</div>';
+                return;
+            }
+
+            resultsContainer.innerHTML = results.slice(0, 50).map(p => `
+                <div class="item-row">
+                    <span style="flex: 1; font-family: monospace;">${p.code}</span>
+                    <span style="flex: 2;">${p.name}</span>
+                    <span style="flex: 1; font-weight: 600; color: #F59E0B;">${p.location || '-'}</span>
+                    <span style="flex: 1; text-align: right;">${p.quantity}</span>
+                </div>
+            `).join('');
+        }
+
+        function handleBarcodeEnter(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                const barcode = event.target.value.trim();
+                if (!barcode) return;
+                
+                const foundProduct = mockProducts.find(p => p.barcode === barcode || p.code === barcode);
+                if (foundProduct) {
+                    showAddItemPopup(foundProduct);
+                } else {
+                    const unknownProduct = { code: barcode, name: 'สินค้าใหม่ (ต้องลงทะเบียน)' };
+                    showAddItemPopup(unknownProduct);
+                }
+            }
+        }
+
+        async function openCamera(targetId = 'barcode') {
+            currentScanTarget = targetId;
+            const modal = document.getElementById('cameraModal');
+            const video = document.getElementById('videoElement');
+            modal.classList.add('active');
+
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: "environment" }
+                });
+                video.srcObject = stream;
+            } catch (err) {
+                console.error("Error accessing camera:", err);
+                showAlert("ข้อผิดพลาด", "ไม่สามารถเข้าถึงกล้องได้ กรุณาตรวจสอบการอนุญาตใช้งานกล้อง");
+                closeCamera();
+            }
+        }
+
+        function closeCamera() {
+            const modal = document.getElementById('cameraModal');
+            const video = document.getElementById('videoElement');
+            modal.classList.remove('active');
+
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                video.srcObject = null;
+                stream = null;
+            }
+        }
+
+        function captureBarcode() {
+            const video = document.getElementById('videoElement');
+
+            // Visual effect of taking a photo
+            video.pause();
+
+            // Simulate processing time
+            setTimeout(() => {
+                let foundCode = 'MOCK-123';
+                let foundProduct = null;
+
+                if (mockProducts.length > 0) {
+                    foundProduct = mockProducts[Math.floor(Math.random() * mockProducts.length)];
+                    foundCode = foundProduct.barcode || foundProduct.code;
+                }
+
+                document.getElementById(currentScanTarget).value = foundCode;
+
+                if (currentScanTarget === 'barcode') {
+                    if (foundProduct) {
+                        showAddItemPopup(foundProduct);
+                    } else {
+                        const unknownProduct = { code: foundCode, name: 'สินค้าใหม่ (ต้องลงทะเบียน)' };
+                        showAddItemPopup(unknownProduct);
+                    }
+                } else if (currentScanTarget === 'searchInput') {
+                    searchProducts();
+                    if (foundProduct) {
+                        showLocationPopup(foundProduct.location, foundProduct.name);
+                    }
+                }
+
+                closeCamera();
+            }, 600);
+        }
+
+
+
+        function removeItem(index) {
+            items.splice(index, 1);
+            updateCartUI();
+        }
+
+        function increaseItemQty(index) {
+            const item = items[index];
+            const product = mockProducts.find(p => p.code === item.code);
+            const availableStock = product ? (product.quantity || 0) : 0;
+
+            if (item.qty + 1 > availableStock) {
+                showAlert("สินค้าคงเหลือไม่เพียงพอ!", `ในคลังมี: ${availableStock} ชิ้น\nคุณต้องการเบิกทั้งหมด: ${item.qty + 1} ชิ้น`);
+                return;
+            }
+
+            items[index].qty += 1;
+            updateCartUI();
+        }
+
+        function decreaseItemQty(index) {
+            if (items[index].qty > 1) {
+                items[index].qty -= 1;
+                updateCartUI();
+            }
+        }
+
+        function updateCartUI() {
+            const cartDiv = document.getElementById('cartItems');
+            const btnNext = document.getElementById('btnToSummary');
+            const editingBadge = document.getElementById('editingBadge');
+            
+            if (editingBadge) {
+                editingBadge.style.display = editingRequestId ? 'inline-block' : 'none';
+            }
+
+            if (items.length === 0) {
+                cartDiv.innerHTML = '<div class="empty-state">ยังไม่มีรายการสินค้า สแกนและเพิ่มรายการเพื่อเริ่มต้น</div>';
+                btnNext.disabled = true;
+                return;
+            }
+
+            btnNext.disabled = false;
+            cartDiv.innerHTML = items.map((item, index) => `
+                <div class="item-row">
+                    <span style="flex: 2; font-family: monospace;">${item.code}</span>
+                    <span style="flex: 3; font-weight: 500;">${item.name}</span>
+                    <span style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                        <button type="button" class="btn btn-outline" style="padding: 0 0.5rem; height: 30px; font-weight: bold; min-width: 30px;" onclick="decreaseItemQty(${index})">-</button>
+                        <span style="font-weight: 700; font-size: 1.1rem; min-width: 1.5rem; text-align: center;">${item.qty}</span>
+                        <button type="button" class="btn btn-outline" style="padding: 0 0.5rem; height: 30px; font-weight: bold; min-width: 30px;" onclick="increaseItemQty(${index})">+</button>
+                    </span>
+                    <div style="flex: 1; text-align: right;">
+                        <button class="btn btn-outline" style="padding: 0.5rem 1rem; border-color: var(--text-muted); color: var(--text-muted);" onclick="removeItem(${index})">ลบ</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function validateAndGoToSummary() {
+            const jobId = document.getElementById('reqJobId').value.trim();
+            const reqName = document.getElementById('reqName').value.trim();
+
+            if (!jobId || !reqName) {
+                showAlert("ข้อมูลไม่ครบถ้วน", "กรุณาระบุรหัสงาน/ชื่อโครงการ และ ชื่อผู้เบิก ให้ครบถ้วน");
+                return;
+            }
+            if (items.length === 0) {
+                showAlert("ไม่มีรายการสินค้า", "กรุณาเพิ่มสินค้าอย่างน้อย 1 รายการ");
+                return;
+            }
+            goToView(2);
+        }
+
+        function renderSummaryLists() {
+            const html = items.map(item => `
+                <div class="item-row">
+                    <span style="flex: 2; font-family: monospace;">${item.code}</span>
+                    <span style="flex: 3; font-weight: 500;">${item.name}</span>
+                    <span style="flex: 1; font-weight: 700; font-size: 1.1rem; text-align: right;">${item.qty}</span>
+                </div>
+            `).join('');
+
+            document.getElementById('summaryItems').innerHTML = html;
+            document.getElementById('warehouseItems').innerHTML = html;
+
+            const jobId = document.getElementById('reqJobId').value.trim();
+            const reqName = document.getElementById('reqName').value.trim();
+
+            document.getElementById('summaryJobId').innerText = jobId;
+            document.getElementById('summaryReqName').innerText = reqName;
+        }
+
+        function submitToWarehouse() {
+            const jobId = document.getElementById('reqJobId').value.trim();
+            const reqName = document.getElementById('reqName').value.trim();
+
+            if (!jobId || !reqName) {
+                showAlert("ข้อมูลไม่ครบถ้วน", "กรุณาระบุรหัสงาน/ชื่อโครงการ และ ชื่อผู้เบิก ให้ครบถ้วนก่อนส่ง");
+                return;
+            }
+
+            // Use the editingRequestId if it exists, otherwise generate a new one
+            const finalReqId = editingRequestId || Date.now().toString();
+
+            // Save to Mock DB
+            pendingWarehouseRequests.push({
+                id: finalReqId,
+                jobId: jobId,
+                reqName: reqName,
+                items: [...items]
+            });
+
+            // Push to Google Apps Script Backend (via REST API)
+            if (GOOGLE_WEBAPP_URL && GOOGLE_WEBAPP_URL.startsWith("http")) {
+                isSavingToBackend = true;
+                const cleanItems = items.map(i => ({ 
+                    code: i.code, 
+                    name: i.name, 
+                    qty: i.qty,
+                    inSystem: i.inSystemText || ''
+                }));
+                const payload = {
+                    action: "save",
+                    reqId: finalReqId,
+                    jobId: jobId,
+                    reqName: reqName,
+                    items: cleanItems
+                };
+
+                fetch(GOOGLE_WEBAPP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload),
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8',
+                    }
+                }).then(response => response.json())
+                    .then(res => {
+                        console.log("Saved to Google Sheets:", res);
+                        isSavingToBackend = false;
+                        loadProductsFromSheet(); // Refresh stock quantities after saving
+                    })
+                    .catch(err => {
+                        console.error("Error saving:", err);
+                        isSavingToBackend = false;
+                    });
+            }
+
+            // Show Success Screen for Requisitioner
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById('view-submitted').classList.add('active');
+
+            document.querySelectorAll('.step-indicator span').forEach(s => s.classList.remove('active'));
+            document.getElementById('ind-1').classList.add('active');
+            document.getElementById('ind-2').classList.add('active');
+
+            // Clear the form data so the requisition page is fresh for the next request
+            items = [];
+            editingRequestId = null;
+            document.getElementById('reqJobId').value = '';
+            document.getElementById('reqName').value = '';
+            updateCartUI();
+        }
+
+        function rejectRequisition() {
+            if (currentViewingRequestId) {
+                const reqToEdit = pendingWarehouseRequests.find(r => r.id === currentViewingRequestId);
+                if (reqToEdit) {
+                    document.getElementById('reqJobId').value = reqToEdit.jobId;
+                    document.getElementById('reqName').value = reqToEdit.reqName;
+                    items = [...reqToEdit.items];
+                    editingRequestId = reqToEdit.id;
+                    updateCartUI();
+
+                    pendingWarehouseRequests = pendingWarehouseRequests.filter(r => r.id !== currentViewingRequestId);
+                }
+                currentViewingRequestId = null;
+            }
+            showAlert("แจ้งเตือน", "ส่งคืนใบเบิกเพื่อแก้ไข คุณสามารถแก้ไขรายการได้ที่นี่");
+            switchTab('requisition');
+        }
+
+        function approveAndGenerate() {
+            downloadPDF(); // Generate PDF on confirmation
+
+            if (currentViewingRequestId) {
+                // Notify backend to confirm and deduct stock
+                if (GOOGLE_WEBAPP_URL && GOOGLE_WEBAPP_URL.startsWith("http")) {
+                    const confirmBtn = document.querySelector('.btn-success[onclick="approveAndGenerate()"]');
+                    const originalText = confirmBtn ? confirmBtn.innerText : '';
+                    if (confirmBtn) confirmBtn.innerText = 'กำลังยืนยัน...';
+
+                    fetch(GOOGLE_WEBAPP_URL, {
+                        method: 'POST',
+                        body: JSON.stringify({ action: "confirm", reqId: currentViewingRequestId }),
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                    })
+                    .then(r => r.json())
+                    .then(res => {
+                        console.log("Confirmed in backend:", res);
+                        loadProductsFromSheet(); // Reload updated stock
+                        if (confirmBtn) confirmBtn.innerText = originalText;
+                    })
+                    .catch(err => {
+                        console.error("Confirmation error:", err);
+                        if (confirmBtn) confirmBtn.innerText = originalText;
+                    });
+                }
+
+                if (!confirmedRequestIds.includes(currentViewingRequestId)) {
+                    confirmedRequestIds.push(currentViewingRequestId);
+                    localStorage.setItem('confirmedReqs', JSON.stringify(confirmedRequestIds));
+                }
+                pendingWarehouseRequests = pendingWarehouseRequests.filter(r => r.id !== currentViewingRequestId);
+                currentViewingRequestId = null;
+            }
+
+            showAlert("สำเร็จ", "ยืนยันรายการและสร้าง PDF เรียบร้อยแล้ว สต็อกสินค้าจะถูกหักออกจากระบบ");
+            backToWarehouseList();
+        }
+
+        function processExpress() {
+            const btn = document.getElementById('expressBtn');
+            btn.innerHTML = 'กำลังประมวลผล...';
+            btn.style.opacity = '0.7';
+
+            setTimeout(() => {
+                goToView(5);
+            }, 800);
+        }
+
+        function downloadPDF() {
+            const isWarehouseView = document.getElementById('view-3').classList.contains('active');
+            const jobId = isWarehouseView ? document.getElementById('warehouseJobId').innerText : (document.getElementById('reqJobId').value || 'ไม่ระบุ');
+            const reqName = isWarehouseView ? document.getElementById('warehouseReqName').innerText : (document.getElementById('reqName').value || 'ไม่ระบุ');
+            let currentReq = pendingWarehouseRequests.find(r => r.id === currentViewingRequestId);
+            const sourceItems = (isWarehouseView && currentReq) ? currentReq.items : items;
+
+            document.getElementById('printJobId').innerText = jobId;
+            document.getElementById('printReqName').innerText = reqName;
+            document.getElementById('printDate').innerText = new Date().toLocaleDateString('th-TH');
+
+            const tbody = document.getElementById('printTableBody');
+            let tableHTML = '';
+            for (let i = 0; i < sourceItems.length; i++) {
+                const item = sourceItems[i];
+                // In system text is either provided from backend or looked up
+                const inSystem = item.inSystem !== undefined ? item.inSystem : (item.inSystemText || '');
+                const barcodeHtml = item.code ? `<svg class="barcode-svg" data-value="${item.code}"></svg>` : '-';
+
+                tableHTML += `<tr>
+                    <td class="print-barcode" style="text-align: center; vertical-align: middle; padding: 0.75rem;">
+                        ${barcodeHtml}
+                    </td>
+                    <td style="text-align: center; vertical-align: middle; padding: 0.75rem;">
+                        <div style="font-size: 1rem; color: #1e293b; font-weight: 600; line-height: 1.4;">${inSystem}</div>
+                    </td>
+                    <td style="text-align: left; vertical-align: middle; padding: 0.75rem;">
+                        <div style="font-size: 1rem; color: #1e293b; font-weight: 600; line-height: 1.4;">${item.name}</div>
+                    </td>
+                    <td style="text-align: center; vertical-align: middle; padding: 0.75rem;">
+                        <strong style="font-size: 1.2rem; color: #1e293b;">${item.qty}</strong>
+                    </td>
+                </tr>`;
+            }
+            tbody.innerHTML = tableHTML;
+
+            // Init JsBarcode
+            document.querySelectorAll('.barcode-svg').forEach(svg => {
+                try {
+                    JsBarcode(svg, svg.getAttribute('data-value'), {
+                        format: "CODE128",
+                        width: 1.5,
+                        height: 40,
+                        displayValue: true,
+                        fontSize: 14,
+                        margin: 0
+                    });
+                } catch (e) { console.error("Barcode error:", e); }
+            });
+
+            // Use html2pdf to actually download the file
+            const element = document.getElementById('printArea');
+            element.style.display = 'block';
+
+            const opt = {
+                margin: 0.5,
+                filename: `ใบเบิกสินค้า_${jobId}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
+            };
+
+            html2pdf().set(opt).from(element).save().then(() => {
+                element.style.display = 'none';
+            });
+        }
+
+        function resetFlow() {
+            items = [];
+            editingRequestId = null;
+            document.getElementById('reqJobId').value = '';
+            document.getElementById('reqName').value = '';
+            updateCartUI();
+            switchTab('requisition');
+        }
+
+        function goToView(stepNumber) {
+            // Update views
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.getElementById(`view-${stepNumber}`).classList.add('active');
+
+            // Update indicators (if step 1-4)
+            if (stepNumber <= 4) {
+                document.querySelectorAll('.step-indicator span').forEach(s => s.classList.remove('active'));
+                for (let i = 1; i <= stepNumber; i++) {
+                    const ind = document.getElementById(`ind-${i}`);
+                    if (ind) ind.classList.add('active');
+                }
+            }
+
+            // Prep data if entering summary
+            if (stepNumber === 2 || stepNumber === 3) {
+                renderSummaryLists();
+            }
+        }
+    </script>
+</body>
+
+</html>
