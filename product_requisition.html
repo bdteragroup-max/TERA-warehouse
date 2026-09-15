@@ -1029,7 +1029,7 @@
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 </head>
 
@@ -1846,7 +1846,7 @@
 
             // Check if input matches either Job ID or Requester Name (case insensitive)
             const matchJob = (req.jobId || "").trim().toLowerCase() === inputVal;
-            const matchName = (req.reqName || "").trim().toLowerCase() === inputVal;
+            const matchName = (req.reqName || "").trim().toLowerCase().includes(inputVal);
 
             if (matchJob || matchName) {
                 closeVerificationPopup();
@@ -2331,7 +2331,7 @@
         }
 
         function approveAndGenerate() {
-            downloadPDF(); // Generate PDF on confirmation
+            downloadExcel(); // Generate Excel on confirmation
 
             if (currentViewingRequestId) {
                 // Notify backend to confirm and deduct stock
@@ -2365,7 +2365,7 @@
                 currentViewingRequestId = null;
             }
 
-            showAlert("สำเร็จ", "ยืนยันรายการและสร้าง PDF เรียบร้อยแล้ว สต็อกสินค้าจะถูกหักออกจากระบบ");
+            showAlert("สำเร็จ", "ยืนยันรายการและสร้างไฟล์ Excel เรียบร้อยแล้ว สต็อกสินค้าจะถูกหักออกจากระบบ");
             backToWarehouseList();
         }
 
@@ -2379,70 +2379,123 @@
             }, 800);
         }
 
-        function downloadPDF() {
+        function downloadExcel() {
             const isWarehouseView = document.getElementById('view-3').classList.contains('active');
             const jobId = isWarehouseView ? document.getElementById('warehouseJobId').innerText : (document.getElementById('reqJobId').value || 'ไม่ระบุ');
             const reqName = isWarehouseView ? document.getElementById('warehouseReqName').innerText : (document.getElementById('reqName').value || 'ไม่ระบุ');
             let currentReq = pendingWarehouseRequests.find(r => r.id === currentViewingRequestId);
             const sourceItems = (isWarehouseView && currentReq) ? currentReq.items : items;
 
-            document.getElementById('printJobId').innerText = jobId;
-            document.getElementById('printReqName').innerText = reqName;
-            document.getElementById('printDate').innerText = new Date().toLocaleDateString('th-TH');
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet('การเบิกสินค้า');
 
-            const tbody = document.getElementById('printTableBody');
-            let tableHTML = '';
-            for (let i = 0; i < sourceItems.length; i++) {
-                const item = sourceItems[i];
-                // In system text is either provided from backend or looked up
-                const inSystem = item.inSystem !== undefined ? item.inSystem : (item.inSystemText || '');
-                const barcodeHtml = item.code ? `<svg class="barcode-svg" data-value="${item.code}"></svg>` : '-';
+            // Set column widths
+            worksheet.columns = [
+                { width: 25 }, // Barcode (A)
+                { width: 20 }, // inSystem (B)
+                { width: 45 }, // Name (C)
+                { width: 15 }  // Qty (D)
+            ];
 
-                tableHTML += `<tr>
-                    <td class="print-barcode" style="text-align: center; vertical-align: middle; padding: 0.75rem;">
-                        ${barcodeHtml}
-                    </td>
-                    <td style="text-align: center; vertical-align: middle; padding: 0.75rem;">
-                        <div style="font-size: 1rem; color: #1e293b; font-weight: 600; line-height: 1.4;">${inSystem}</div>
-                    </td>
-                    <td style="text-align: left; vertical-align: middle; padding: 0.75rem;">
-                        <div style="font-size: 1rem; color: #1e293b; font-weight: 600; line-height: 1.4;">${item.name}</div>
-                    </td>
-                    <td style="text-align: center; vertical-align: middle; padding: 0.75rem;">
-                        <strong style="font-size: 1.2rem; color: #1e293b;">${item.qty}</strong>
-                    </td>
-                </tr>`;
-            }
-            tbody.innerHTML = tableHTML;
+            // Header Section
+            worksheet.addRow(['ใบเบิกสินค้า (Requisition Form)']);
+            worksheet.mergeCells('A1:D1');
+            worksheet.getCell('A1').font = { size: 16, bold: true };
+            worksheet.getCell('A1').alignment = { horizontal: 'center' };
+            worksheet.addRow([]); // empty row
 
-            // Init JsBarcode
-            document.querySelectorAll('.barcode-svg').forEach(svg => {
-                try {
-                    JsBarcode(svg, svg.getAttribute('data-value'), {
-                        format: "CODE128",
-                        width: 1.5,
-                        height: 40,
-                        displayValue: true,
-                        fontSize: 14,
-                        margin: 0
-                    });
-                } catch (e) { console.error("Barcode error:", e); }
+            worksheet.addRow(['รหัสงาน:', jobId, 'วันที่:', new Date().toLocaleDateString('th-TH')]);
+            worksheet.getCell('A3').font = { bold: true };
+            worksheet.getCell('C3').font = { bold: true };
+            worksheet.getCell('C3').alignment = { horizontal: 'right' };
+
+            worksheet.addRow(['ผู้เบิก:', reqName]);
+            worksheet.getCell('A4').font = { bold: true };
+            worksheet.addRow([]); // empty row
+
+            // Table Header
+            const headerRow = worksheet.addRow(['รหัส (Barcode)', 'ในระบบ', 'ชื่อสินค้า', 'จำนวน']);
+            headerRow.eachCell(cell => {
+                cell.font = { bold: true };
+                cell.fill = {
+                    type: 'pattern',
+                    pattern: 'solid',
+                    fgColor: { argb: 'FFF0F0F0' }
+                };
+                cell.border = {
+                    top: { style: 'thin' },
+                    left: { style: 'thin' },
+                    bottom: { style: 'thin' },
+                    right: { style: 'thin' }
+                };
+                cell.alignment = { horizontal: 'center', vertical: 'middle' };
             });
 
-            // Use html2pdf to actually download the file
-            const element = document.getElementById('printArea');
-            element.style.display = 'block';
+            // Process items and add to excel
+            const offscreenCanvas = document.createElement('canvas');
+            
+            sourceItems.forEach((item, index) => {
+                const rowIndex = index + 7; // starting after headers (row 6 is table header)
+                const inSystem = item.inSystem !== undefined ? item.inSystem : (item.inSystemText || '');
+                
+                // Add data row
+                const row = worksheet.addRow(['', inSystem, item.name, item.qty]);
+                row.height = 45; // Make row height larger for the barcode image
+                
+                // Add borders and alignment
+                row.eachCell(cell => {
+                    cell.border = {
+                        top: { style: 'thin' },
+                        left: { style: 'thin' },
+                        bottom: { style: 'thin' },
+                        right: { style: 'thin' }
+                    };
+                    cell.alignment = { vertical: 'middle' };
+                });
+                row.getCell(4).alignment = { horizontal: 'center', vertical: 'middle' };
+                row.getCell(4).font = { bold: true };
 
-            const opt = {
-                margin: 0.5,
-                filename: `ใบเบิกสินค้า_${jobId}.pdf`,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2 },
-                jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }
-            };
+                // Generate Barcode Base64
+                if (item.code) {
+                    try {
+                        JsBarcode(offscreenCanvas, item.code, {
+                            format: "CODE128",
+                            width: 2,
+                            height: 50,
+                            displayValue: true,
+                            fontSize: 16,
+                            margin: 5
+                        });
+                        const base64Image = offscreenCanvas.toDataURL("image/png");
+                        
+                        const imageId = workbook.addImage({
+                            base64: base64Image,
+                            extension: 'png',
+                        });
 
-            html2pdf().set(opt).from(element).save().then(() => {
-                element.style.display = 'none';
+                        // Insert image into cell A
+                        worksheet.addImage(imageId, {
+                            tl: { col: 0.1, row: rowIndex - 1 + 0.1 }, // tl is 0-indexed, add slight padding
+                            ext: { width: 150, height: 50 } // adjust dimensions to fit row
+                        });
+                    } catch (e) {
+                        console.error("Barcode generation error for Excel:", e);
+                        row.getCell(1).value = item.code; // fallback to text if barcode fails
+                    }
+                } else {
+                    row.getCell(1).value = '-';
+                }
+            });
+
+            // Trigger download
+            workbook.xlsx.writeBuffer().then(buffer => {
+                const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = `ใบเบิกสินค้า_${jobId}.xlsx`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             });
         }
 
