@@ -1895,23 +1895,34 @@
             }
 
             listContainer.innerHTML = historyReqs.map(req => {
-                const isPending = req.status !== 'Confirmed';
-                const badgeHtml = isPending 
-                    ? '<span class="badge" style="background: rgba(245, 158, 11, 0.1); color: #F59E0B;">รอตรวจสอบ</span>'
-                    : '<span class="badge" style="background: rgba(16, 185, 129, 0.1); color: #10B981;">อนุมัติแล้ว</span>';
+                const isConfirmed = req.status === 'Confirmed';
+                const isReturned = req.status === 'Returned';
+                const isPending = !isConfirmed && !isReturned;
                 
-                const editBtnHtml = (isPending && currentUserRole === 'requester')
-                    ? `<button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; margin-top: 0.25rem;" onclick="event.stopPropagation(); editOwnRequest('${req.id}')">แก้ไข</button>`
-                    : '';
+                let badgeHtml = '';
+                let jobIdColor = '#F59E0B'; // Pending color
+
+                if (isConfirmed) {
+                    badgeHtml = '<span class="badge" style="background: rgba(16, 185, 129, 0.1); color: #10B981;">อนุมัติแล้ว</span>';
+                    jobIdColor = '#10B981';
+                } else if (isReturned && currentUserRole === 'requester') {
+                    badgeHtml = `<span class="badge" style="background: rgba(239, 68, 68, 0.1); color: #EF4444; cursor: pointer; border: 1px solid rgba(239, 68, 68, 0.3);" onclick="event.stopPropagation(); editOwnRequest('${req.id}')" title="คลิกเพื่อแก้ไขรายการ">ต้องแก้ไข (Revision Required)</span>`;
+                    jobIdColor = '#EF4444';
+                } else if (isReturned) {
+                    badgeHtml = `<span class="badge" style="background: rgba(239, 68, 68, 0.1); color: #EF4444;">ต้องแก้ไข (Revision Required)</span>`;
+                    jobIdColor = '#EF4444';
+                } else {
+                    badgeHtml = '<span class="badge" style="background: rgba(245, 158, 11, 0.1); color: #F59E0B;">รอตรวจสอบ (Pending Review)</span>';
+                    jobIdColor = '#F59E0B';
+                }
 
                 return `
                 <div class="item-row" style="cursor: pointer; align-items: center;" onclick="viewHistoryRequest('${req.id}')">
-                    <span style="flex: 2; font-weight: 600; color: ${isPending ? '#F59E0B' : '#10B981'};">${req.jobId}</span>
+                    <span style="flex: 2; font-weight: 600; color: ${jobIdColor};">${req.jobId}</span>
                     <span style="flex: 2;">${req.reqName}</span>
                     <span style="flex: 1; text-align: right; font-weight: 600;">${req.items.length} รายการ</span>
                     <div style="flex: 1; text-align: center; display: flex; flex-direction: column; align-items: center;">
                         ${badgeHtml}
-                        ${editBtnHtml}
                     </div>
                 </div>
                 `;
