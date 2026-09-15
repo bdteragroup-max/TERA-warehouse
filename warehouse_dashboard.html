@@ -1691,6 +1691,7 @@
                 Papa.parse(csvText, {
                     header: true,
                     skipEmptyLines: true,
+                    transformHeader: function(h) { return h.trim(); },
                     complete: function (results) {
                         mockProducts = results.data
                             .filter(row => row['Bar128'] || row['รหัส']) // ensure there's an identifier
