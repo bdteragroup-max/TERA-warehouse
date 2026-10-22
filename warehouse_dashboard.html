@@ -1860,6 +1860,15 @@
                                     ตรวจสอบสินค้า
                                 </button>
                             </div>
+                            <div style="margin-top: 0.85rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                                <span style="font-size: 0.85rem; color: var(--text-muted);">
+                                    💡 สำหรับสินค้าชิ้นใหญ่ หรือสินค้าที่ไม่มีบาร์โค้ด สามารถเพิ่มเข้าระบบได้โดยตรง:
+                                </span>
+                                <button type="button" class="btn btn-outline" onclick="openAddNewProductModal()" style="font-size: 0.85rem; padding: 0.45rem 1rem; border-color: #10b981; color: #059669; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(16, 185, 129, 0.05); cursor: pointer;">
+                                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                    + เพิ่มสินค้าใหม่เข้าระบบโดยตรง (ไม่มีบาร์โค้ด)
+                                </button>
+                            </div>
                         </div>
                     </div>
 
@@ -2809,6 +2818,11 @@
             openCamera('importBarcodeScanInput');
         }
 
+        function openAddNewProductModal() {
+            const autoCode = 'ITEM-' + Date.now().toString().slice(-6);
+            lookupBarcodeForImport(autoCode);
+        }
+
         function lookupBarcodeForImport(barcode) {
             const code = (barcode || '').toString().trim();
             if (!code) {
@@ -2892,20 +2906,29 @@
                     infoContainer.innerHTML = `
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
                             <span style="font-family: 'Inter', monospace; font-size: 1rem; font-weight: 700; color: var(--primary-color);">
-                                🏷️ ${code}
+                                🏷️ สินค้าใหม่ (ยังไม่มีในระบบ)
                             </span>
                             <span class="badge" style="background: rgba(59, 130, 246, 0.1); color: #2563eb;">ไม่พบในระบบ</span>
                         </div>
 
                         <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.65rem 0.85rem; margin-bottom: 0.85rem; font-size: 0.85rem; color: #1e40af;">
-                            ℹ️ บาร์โค้ดนี้ยังไม่มีในฐานข้อมูล กรุณาระบุชื่อสินค้าเพื่อนำเข้าเป็นสินค้าใหม่
+                            ℹ️ ระบุรหัส ชื่อสินค้า และโลเคชั่น เพื่อบันทึกเป็นสินค้าใหม่เข้าสู่ฐานข้อมูลคลังสินค้า
+                        </div>
+
+                        <div style="margin-bottom: 0.75rem;">
+                            <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 0.35rem;">
+                                รหัสสินค้า / บาร์โค้ด (Product Code / Barcode) <span style="color: #ef4444;">*จำเป็น</span>:
+                            </label>
+                            <input type="text" id="barcodeModalItemCode" value="${code}" 
+                                style="width: 100%; padding: 0.6rem 0.85rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.9rem; font-family: monospace; font-weight: 600; outline: none;"
+                                placeholder="ระบุรหัสสินค้า เช่น ITEM-001 หรือสแกนบาร์โค้ด...">
                         </div>
 
                         <div style="margin-bottom: 0.75rem;">
                             <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 0.35rem;">
                                 ชื่อสินค้า (Product Name) <span style="color: #ef4444;">*จำเป็น</span>:
                             </label>
-                            <input type="text" id="barcodeModalItemName" placeholder="เช่น กล่องพัสดุ เบอร์ 0..." 
+                            <input type="text" id="barcodeModalItemName" placeholder="เช่น พาเลทไม้ขนาดใหญ่, เครื่องจักร ฯลฯ" 
                                 oninput="handleBarcodeModalNameChange(this.value)"
                                 style="width: 100%; padding: 0.6rem 0.85rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.9rem; outline: none;">
                             <div id="barcodeModalNameMatchAlert" style="margin-top: 0.4rem; font-size: 0.82rem; font-weight: 600; color: #2563eb;">
@@ -2917,7 +2940,7 @@
                             <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 0.35rem;">
                                 โลเคชั่นจัดเก็บ (Location):
                             </label>
-                            <input type="text" id="barcodeModalItemLocation" placeholder="เช่น A-01-01..." 
+                            <input type="text" id="barcodeModalItemLocation" placeholder="เช่น A-01-01 หรือ พื้นที่กองวาง 1..." 
                                 style="width: 100%; padding: 0.6rem 0.85rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.9rem; outline: none;">
                         </div>
                     `;
@@ -3001,6 +3024,12 @@
         function confirmSingleBarcodeImport() {
             if (!currentBarcodeImportItem) return;
 
+            const codeInput = document.getElementById('barcodeModalItemCode');
+            if (codeInput && codeInput.value.trim()) {
+                currentBarcodeImportItem.code = codeInput.value.trim();
+                currentBarcodeImportItem.barcode = codeInput.value.trim();
+            }
+
             const nameInput = document.getElementById('barcodeModalItemName');
             const finalName = nameInput ? nameInput.value.trim() : (currentBarcodeImportItem.name || '');
 
@@ -3042,6 +3071,7 @@
             if (!GOOGLE_WEBAPP_URL || !GOOGLE_WEBAPP_URL.startsWith("http")) {
                 showAlert("นำเข้าสินค้าสำเร็จ", `นำเข้า "${finalName}" เรียบร้อยแล้ว!\n• จำนวนที่เพิ่ม: +${finalQty} ชิ้น\n• สต็อกรวมใหม่: ${newTotalStock} ชิ้น`);
                 loadImportHistory();
+                loadProductsFromSheet();
                 return;
             }
 
@@ -3061,17 +3091,25 @@
                 closeAlertModal();
                 showAlert("นำเข้าสินค้าสำเร็จ", `นำเข้า "${finalName}" เรียบร้อยแล้ว!\n• จำนวนที่เพิ่ม: +${finalQty} ชิ้น\n• สต็อกรวมใหม่: ${newTotalStock} ชิ้น`);
                 loadImportHistory();
+                loadProductsFromSheet();
             })
             .catch(err => {
                 closeAlertModal();
                 showAlert("แจ้งเตือน", `นำเข้าสินค้าในเครื่องสำเร็จ: ${finalName} (+${finalQty} ชิ้น)`);
                 loadImportHistory();
+                loadProductsFromSheet();
             });
         }
 
         // Add scanned item to staging batch instead of direct single import
         function addScannedItemToBatch() {
             if (!currentBarcodeImportItem) return;
+
+            const codeInput = document.getElementById('barcodeModalItemCode');
+            if (codeInput && codeInput.value.trim()) {
+                currentBarcodeImportItem.code = codeInput.value.trim();
+                currentBarcodeImportItem.barcode = codeInput.value.trim();
+            }
 
             const nameInput = document.getElementById('barcodeModalItemName');
             const finalName = nameInput ? nameInput.value.trim() : (currentBarcodeImportItem.name || '');
@@ -3171,6 +3209,7 @@
             if (!GOOGLE_WEBAPP_URL || !GOOGLE_WEBAPP_URL.startsWith("http")) {
                 showAlert("นำเข้าสำเร็จ", `ยืนยันการนำเข้าสินค้าชุด ${count} รายการ เรียบร้อยแล้ว (อัปเดตสต็อกแล้ว)`);
                 loadImportHistory();
+                loadProductsFromSheet();
                 return;
             }
 
@@ -3190,11 +3229,13 @@
                 closeAlertModal();
                 showAlert("นำเข้าสำเร็จ", `ยืนยันการนำเข้าสินค้าชุด ${count} รายการ ไปยัง Google Sheets เรียบร้อยแล้ว`);
                 loadImportHistory();
+                loadProductsFromSheet();
             })
             .catch(err => {
                 closeAlertModal();
                 showAlert("แจ้งเตือน", `บันทึกรายการในเครื่องสำเร็จ: ${count} รายการ`);
                 loadImportHistory();
+                loadProductsFromSheet();
             });
         }
 
