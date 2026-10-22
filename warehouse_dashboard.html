@@ -1559,6 +1559,52 @@
         </div>
     </div>
 
+    <!-- Confirm Requisition Success Modal with Direct Excel Download for Mobile & Desktop -->
+    <div class="location-modal" id="confirmSuccessModal" style="z-index: 10008;">
+        <div class="location-modal-content" style="max-width: 480px; width: 92%; text-align: center; padding: 2rem 1.5rem;">
+            <div class="location-modal-icon" style="background: rgba(16, 185, 129, 0.15); color: #10B981; width: 70px; height: 70px; margin: 0 auto 1.25rem;">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <h3 style="font-size: 1.35rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">
+                ยืนยันการเบิกสินค้าสำเร็จ!
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 1.25rem; line-height: 1.5;">
+                ระบบได้อนุมัติรายการและหักยอดสต็อกออกจากระบบเรียบร้อยแล้ว
+            </p>
+
+            <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: 12px; padding: 1rem; margin-bottom: 1.25rem; text-align: left;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem;">
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">รหัสงาน / โครงการ:</span>
+                    <strong id="confirmSuccessJobId" style="color: var(--text-main); font-size: 0.9rem;">-</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.4rem;">
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">ชื่อผู้เบิก:</span>
+                    <strong id="confirmSuccessReqName" style="color: var(--text-main); font-size: 0.9rem;">-</strong>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">จำนวนรายการ:</span>
+                    <strong id="confirmSuccessItemCount" style="color: #10B981; font-size: 0.9rem;">0 รายการ</strong>
+                </div>
+            </div>
+
+            <!-- Prominent Download Excel Button for Mobile & Desktop -->
+            <button type="button" class="btn btn-primary" id="btnDownloadConfirmExcel" style="width: 100%; padding: 0.85rem; font-size: 1rem; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-bottom: 0.75rem; box-shadow: 0 4px 14px rgba(255, 65, 108, 0.3);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                ดาวน์โหลดไฟล์ Excel (.xlsx)
+            </button>
+
+            <button type="button" class="btn btn-secondary" onclick="closeConfirmSuccessModal()" style="width: 100%; padding: 0.75rem; font-size: 0.9rem;">
+                เสร็จสิ้น (กลับไปหน้ารายการ)
+            </button>
+        </div>
+    </div>
+
     <!-- Sidebar Menu -->
     <div class="sidebar">
         <div class="logo">
@@ -1932,9 +1978,13 @@
                         </div>
                     </div>
 
-                    <div class="actions">
-                        <button class="btn btn-outline" onclick="rejectRequisition()">ส่งคืนเพื่อแก้ไข</button>
-                        <button class="btn btn-primary" onclick="approveAndGenerate()">ยืนยันและสร้างบาร์โค้ด</button>
+                    <div class="actions" style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem;">
+                        <button type="button" class="btn btn-outline" onclick="rejectRequisition()" style="flex: 1; min-width: 140px;">ส่งคืนเพื่อแก้ไข</button>
+                        <button type="button" class="btn btn-secondary" onclick="downloadCurrentWarehouseExcel()" style="flex: 1.2; min-width: 160px; display: inline-flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            ดาวน์โหลด Excel
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="approveAndGenerate()" style="flex: 1.5; min-width: 180px;">ยืนยันและตัดสต็อก</button>
                     </div>
                 </div>
             </div>
@@ -1964,10 +2014,10 @@
                 <div id="history-list-view">
                     <div class="items-list" style="margin-top: 1rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: none;">
                         <div class="item-row header" style="background: #f8fafc; font-size: 0.82rem;">
-                            <span style="flex: 2;">รหัสงาน / โครงการ</span>
+                            <span style="flex: 1.8;">รหัสงาน / โครงการ</span>
                             <span style="flex: 2;">ชื่อผู้เบิก</span>
                             <span style="flex: 1; text-align: right;">จำนวนรายการ</span>
-                            <span style="flex: 1; text-align: center;">สถานะ</span>
+                            <span style="flex: 1.2; text-align: center;">สถานะ / ดาวน์โหลด</span>
                         </div>
                         <div id="historyRequestsList">
                             <!-- Populated via JS directly from Google Sheets -->
@@ -1978,9 +2028,20 @@
 
                 <!-- Detail View -->
                 <div id="history-detail-view" style="display: none;">
-                    <button class="btn btn-secondary" onclick="backToHistoryList()"
-                        style="margin-bottom: 1.5rem; padding: 0.5rem 1rem; font-size: 0.9rem;">&larr;
-                        กลับไปหน้าประวัติ</button>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 0.75rem;">
+                        <button type="button" class="btn btn-secondary" onclick="backToHistoryList()"
+                            style="padding: 0.5rem 1rem; font-size: 0.9rem;">&larr;
+                            กลับไปหน้าประวัติ</button>
+                        <button type="button" class="btn btn-primary" onclick="downloadCurrentHistoryExcel()"
+                            style="padding: 0.55rem 1.25rem; font-size: 0.9rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem; box-shadow: 0 4px 12px rgba(255, 65, 108, 0.25);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            ดาวน์โหลดไฟล์ Excel (.xlsx)
+                        </button>
+                    </div>
                     <div
                         style="background: var(--bg-color); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
                         <div
@@ -2009,6 +2070,18 @@
                         <div id="historyItems">
                             <!-- Populated via JS -->
                         </div>
+                    </div>
+
+                    <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+                        <button type="button" class="btn btn-primary" onclick="downloadCurrentHistoryExcel()"
+                            style="padding: 0.75rem 1.5rem; font-size: 0.95rem; font-weight: 700; display: inline-flex; align-items: center; gap: 0.5rem; width: 100%; max-width: 320px; justify-content: center; box-shadow: 0 4px 12px rgba(255, 65, 108, 0.25);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                            ดาวน์โหลดใบเบิกสินค้านี้ (Excel)
+                        </button>
                     </div>
                 </div>
             </div>
@@ -3468,6 +3541,8 @@
             `).join('');
         }
 
+        let currentViewingHistoryReq = null;
+
         function renderHistoryList(historyReqs) {
             const listContainer = document.getElementById('historyRequestsList');
             if (!listContainer) return;
@@ -3480,21 +3555,29 @@
             listContainer.innerHTML = historyReqs.map(req => {
                 const isPending = (req.status || '').toLowerCase() !== 'confirmed';
                 const badgeHtml = isPending 
-                    ? '<span class="badge" style="background: rgba(245, 158, 11, 0.1); color: #F59E0B;">รอตรวจสอบ</span>'
-                    : '<span class="badge" style="background: rgba(16, 185, 129, 0.1); color: #10B981;">อนุมัติแล้ว</span>';
+                    ? '<span class="badge" style="background: rgba(245, 158, 11, 0.1); color: #F59E0B; white-space: nowrap;">รอตรวจสอบ</span>'
+                    : '<span class="badge" style="background: rgba(16, 185, 129, 0.1); color: #10B981; white-space: nowrap;">อนุมัติแล้ว</span>';
                 
                 const itemCount = (req.items && Array.isArray(req.items)) ? req.items.length : 0;
                 const editBtnHtml = (isPending && currentUserRole === 'requester')
-                    ? `<button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; margin-top: 0.25rem;" onclick="event.stopPropagation(); editOwnRequest('${req.id}')">แก้ไข</button>`
+                    ? `<button type="button" class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="event.stopPropagation(); editOwnRequest('${req.id}')">แก้ไข</button>`
                     : '';
+
+                const downloadBtnHtml = `
+                    <button type="button" class="btn btn-outline" style="padding: 0.25rem 0.6rem; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 0.3rem; white-space: nowrap; color: #059669; border-color: rgba(5, 150, 105, 0.3); background: rgba(5, 150, 105, 0.05); font-weight: 600;" onclick="event.stopPropagation(); downloadHistoryExcelById('${req.id}')" title="ดาวน์โหลดไฟล์ Excel สำหรับรายการนี้">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        Excel
+                    </button>
+                `;
 
                 return `
                 <div class="item-row" style="cursor: pointer; align-items: center;" onclick="viewHistoryRequest('${req.id}')">
-                    <span style="flex: 2; font-weight: 600; color: ${isPending ? '#F59E0B' : '#10B981'};">${req.jobId || '-'}</span>
+                    <span style="flex: 1.8; font-weight: 600; color: ${isPending ? '#F59E0B' : '#10B981'};">${req.jobId || '-'}</span>
                     <span style="flex: 2;">${req.reqName || '-'}</span>
                     <span style="flex: 1; text-align: right; font-weight: 600;">${itemCount} รายการ</span>
-                    <div style="flex: 1; text-align: center; display: flex; flex-direction: column; align-items: center;">
+                    <div style="flex: 1.2; text-align: center; display: flex; gap: 0.35rem; align-items: center; justify-content: center; flex-wrap: wrap;">
                         ${badgeHtml}
+                        ${downloadBtnHtml}
                         ${editBtnHtml}
                     </div>
                 </div>
@@ -3506,6 +3589,7 @@
             const req = historyWarehouseRequests.find(r => r.id === id);
             if (!req) return;
 
+            currentViewingHistoryReq = req;
             document.getElementById('historyJobId').innerText = req.jobId || '-';
             document.getElementById('historyReqName').innerText = req.reqName || '-';
             
@@ -3539,6 +3623,32 @@
 
             document.getElementById('history-list-view').style.display = 'none';
             document.getElementById('history-detail-view').style.display = 'block';
+        }
+
+        function downloadCurrentHistoryExcel() {
+            if (currentViewingHistoryReq) {
+                exportRequisitionToExcel(currentViewingHistoryReq);
+            } else {
+                showAlert("แจ้งเตือน", "ไม่พบข้อมูลประวัติที่เปิดอยู่");
+            }
+        }
+
+        function downloadHistoryExcelById(id) {
+            const req = historyWarehouseRequests.find(r => r.id === id);
+            if (req) {
+                exportRequisitionToExcel(req);
+            } else {
+                showAlert("แจ้งเตือน", "ไม่พบข้อมูลรายการที่ต้องการดาวน์โหลด");
+            }
+        }
+
+        function downloadCurrentWarehouseExcel() {
+            let currentReq = pendingWarehouseRequests.find(r => r.id === currentViewingRequestId);
+            if (currentReq) {
+                exportRequisitionToExcel(currentReq);
+            } else {
+                exportRequisitionToExcel();
+            }
         }
 
         function backToHistoryList() {
@@ -3958,42 +4068,122 @@
             switchTab('requisition');
         }
 
+        let lastApprovedReqData = null;
+
         function approveAndGenerate() {
-            downloadExcel(); // Generate Excel on confirmation
-
-            if (currentViewingRequestId) {
-                // Notify backend to confirm and deduct stock
-                if (GOOGLE_WEBAPP_URL && GOOGLE_WEBAPP_URL.startsWith("http")) {
-                    const confirmBtn = document.querySelector('.btn-success[onclick="approveAndGenerate()"]');
-                    const originalText = confirmBtn ? confirmBtn.innerText : '';
-                    if (confirmBtn) confirmBtn.innerText = 'กำลังยืนยัน...';
-
-                    fetch(GOOGLE_WEBAPP_URL, {
-                        method: 'POST',
-                        body: JSON.stringify({ action: "confirm", reqId: currentViewingRequestId }),
-                        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-                    })
-                    .then(r => r.json())
-                    .then(res => {
-                        console.log("Confirmed in backend:", res);
-                        loadProductsFromSheet(); // Reload updated stock
-                        if (confirmBtn) confirmBtn.innerText = originalText;
-                    })
-                    .catch(err => {
-                        console.error("Confirmation error:", err);
-                        if (confirmBtn) confirmBtn.innerText = originalText;
-                    });
-                }
-
-                if (!confirmedRequestIds.includes(currentViewingRequestId)) {
-                    confirmedRequestIds.push(currentViewingRequestId);
-                    localStorage.setItem('confirmedReqs', JSON.stringify(confirmedRequestIds));
-                }
-                pendingWarehouseRequests = pendingWarehouseRequests.filter(r => r.id !== currentViewingRequestId);
-                currentViewingRequestId = null;
+            if (!currentViewingRequestId) {
+                showAlert("แจ้งเตือน", "ไม่พบรหัสใบเบิกที่กำลังตรวจสอบ");
+                return;
             }
 
-            showAlert("สำเร็จ", "ยืนยันรายการและสร้างไฟล์ Excel เรียบร้อยแล้ว สต็อกสินค้าจะถูกหักออกจากระบบ");
+            const reqId = currentViewingRequestId;
+            let currentReq = pendingWarehouseRequests.find(r => r.id === reqId);
+            
+            // Fallback if not found in pendingWarehouseRequests
+            if (!currentReq) {
+                const jobId = (document.getElementById('warehouseJobId') && document.getElementById('warehouseJobId').innerText) || 'ไม่ระบุ';
+                const reqName = (document.getElementById('warehouseReqName') && document.getElementById('warehouseReqName').innerText) || 'ไม่ระบุ';
+                currentReq = { id: reqId, jobId, reqName, items: [...items], status: 'confirmed' };
+            }
+
+            lastApprovedReqData = JSON.parse(JSON.stringify(currentReq));
+            lastApprovedReqData.status = 'confirmed';
+
+            const confirmBtn = document.querySelector('button[onclick="approveAndGenerate()"]');
+            const originalText = confirmBtn ? confirmBtn.innerText : '';
+            if (confirmBtn) {
+                confirmBtn.innerText = 'กำลังยืนยัน...';
+                confirmBtn.disabled = true;
+            }
+
+            // Notify backend to confirm and deduct stock
+            if (GOOGLE_WEBAPP_URL && GOOGLE_WEBAPP_URL.startsWith("http")) {
+                fetch(GOOGLE_WEBAPP_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ action: "confirm", reqId: reqId }),
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+                })
+                .then(r => r.json())
+                .then(res => {
+                    console.log("Confirmed in backend:", res);
+                    loadProductsFromSheet(); // Reload updated stock
+                    if (confirmBtn) {
+                        confirmBtn.innerText = originalText;
+                        confirmBtn.disabled = false;
+                    }
+                })
+                .catch(err => {
+                    console.error("Confirmation error:", err);
+                    if (confirmBtn) {
+                        confirmBtn.innerText = originalText;
+                        confirmBtn.disabled = false;
+                    }
+                });
+            } else {
+                if (confirmBtn) {
+                    confirmBtn.innerText = originalText;
+                    confirmBtn.disabled = false;
+                }
+            }
+
+            if (!confirmedRequestIds.includes(reqId)) {
+                confirmedRequestIds.push(reqId);
+                localStorage.setItem('confirmedReqs', JSON.stringify(confirmedRequestIds));
+            }
+
+            // Remove from pending list
+            pendingWarehouseRequests = pendingWarehouseRequests.filter(r => r.id !== reqId);
+
+            // Also update history records if present
+            const existingHistIdx = historyWarehouseRequests.findIndex(r => r.id === reqId);
+            if (existingHistIdx >= 0) {
+                historyWarehouseRequests[existingHistIdx].status = 'confirmed';
+            } else {
+                historyWarehouseRequests.unshift(lastApprovedReqData);
+            }
+
+            currentViewingRequestId = null;
+
+            // Show mobile-friendly modal with prominent Excel download button
+            showConfirmSuccessModal(lastApprovedReqData);
+        }
+
+        function showConfirmSuccessModal(reqData) {
+            if (!reqData) return;
+
+            const jobIdEl = document.getElementById('confirmSuccessJobId');
+            const reqNameEl = document.getElementById('confirmSuccessReqName');
+            const countEl = document.getElementById('confirmSuccessItemCount');
+            const dlBtn = document.getElementById('btnDownloadConfirmExcel');
+
+            if (jobIdEl) jobIdEl.innerText = reqData.jobId || '-';
+            if (reqNameEl) reqNameEl.innerText = reqData.reqName || '-';
+            if (countEl) countEl.innerText = `${(reqData.items || []).length} รายการ`;
+
+            if (dlBtn) {
+                dlBtn.onclick = function() {
+                    exportRequisitionToExcel(reqData);
+                };
+            }
+
+            const modal = document.getElementById('confirmSuccessModal');
+            if (modal) {
+                modal.classList.add('active');
+            }
+
+            // Attempt automatic download for desktop/non-gesture-blocked browsers
+            try {
+                exportRequisitionToExcel(reqData);
+            } catch (err) {
+                console.warn("Auto download suppressed on mobile, direct button ready:", err);
+            }
+        }
+
+        function closeConfirmSuccessModal() {
+            const modal = document.getElementById('confirmSuccessModal');
+            if (modal) {
+                modal.classList.remove('active');
+            }
             backToWarehouseList();
         }
 
@@ -4007,12 +4197,27 @@
             }, 800);
         }
 
-        function downloadExcel() {
-            const isWarehouseView = document.getElementById('view-3').classList.contains('active');
-            const jobId = isWarehouseView ? document.getElementById('warehouseJobId').innerText : (document.getElementById('reqJobId').value || 'ไม่ระบุ');
-            const reqName = isWarehouseView ? document.getElementById('warehouseReqName').innerText : (document.getElementById('reqName').value || 'ไม่ระบุ');
-            let currentReq = pendingWarehouseRequests.find(r => r.id === currentViewingRequestId);
-            const sourceItems = (isWarehouseView && currentReq) ? currentReq.items : items;
+        function exportRequisitionToExcel(customReqData) {
+            let jobId = 'ไม่ระบุ';
+            let reqName = 'ไม่ระบุ';
+            let sourceItems = [];
+
+            if (customReqData) {
+                jobId = customReqData.jobId || 'ไม่ระบุ';
+                reqName = customReqData.reqName || 'ไม่ระบุ';
+                sourceItems = customReqData.items || [];
+            } else {
+                const isWarehouseView = document.getElementById('view-3') && document.getElementById('view-3').classList.contains('active');
+                jobId = isWarehouseView ? (document.getElementById('warehouseJobId')?.innerText || 'ไม่ระบุ') : (document.getElementById('reqJobId')?.value || 'ไม่ระบุ');
+                reqName = isWarehouseView ? (document.getElementById('warehouseReqName')?.innerText || 'ไม่ระบุ') : (document.getElementById('reqName')?.value || 'ไม่ระบุ');
+                let currentReq = pendingWarehouseRequests.find(r => r.id === currentViewingRequestId);
+                sourceItems = (isWarehouseView && currentReq) ? currentReq.items : items;
+            }
+
+            if (!sourceItems || sourceItems.length === 0) {
+                showAlert("แจ้งเตือน", "ไม่มีรายการสินค้าสำหรับสร้างไฟล์ Excel");
+                return;
+            }
 
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet('การเบิกสินค้า');
@@ -4065,9 +4270,11 @@
             sourceItems.forEach((item, index) => {
                 const rowIndex = index + 7; // starting after headers (row 6 is table header)
                 const inSystem = item.inSystem !== undefined ? item.inSystem : (item.inSystemText || '');
+                const itemCode = (item.code || item.barcode || '').toString().trim();
+                const itemQty = item.qty !== undefined ? item.qty : (item.quantity !== undefined ? item.quantity : 1);
                 
                 // Add data row
-                const row = worksheet.addRow(['', inSystem, item.name, item.qty]);
+                const row = worksheet.addRow(['', inSystem, item.name || '', itemQty]);
                 row.height = 45; // Make row height larger for the barcode image
                 
                 // Add borders and alignment
@@ -4084,9 +4291,9 @@
                 row.getCell(4).font = { bold: true };
 
                 // Generate Barcode Base64
-                if (item.code) {
+                if (itemCode) {
                     try {
-                        JsBarcode(offscreenCanvas, item.code, {
+                        JsBarcode(offscreenCanvas, itemCode, {
                             format: "CODE128",
                             width: 2,
                             height: 50,
@@ -4108,23 +4315,47 @@
                         });
                     } catch (e) {
                         console.error("Barcode generation error for Excel:", e);
-                        row.getCell(1).value = item.code; // fallback to text if barcode fails
+                        row.getCell(1).value = itemCode; // fallback to text if barcode fails
                     }
                 } else {
                     row.getCell(1).value = '-';
                 }
             });
 
-            // Trigger download
-            workbook.xlsx.writeBuffer().then(buffer => {
+            const cleanJobId = String(jobId).replace(/[\/\\:*?"<>|]/g, '_').trim() || 'Req';
+            const fileName = `ใบเบิกสินค้า_${cleanJobId}.xlsx`;
+
+            // Trigger download safely across Mobile and Desktop
+            return workbook.xlsx.writeBuffer().then(buffer => {
                 const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveOrOpenBlob(blob, fileName);
+                    return;
+                }
+
+                const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = `ใบเบิกสินค้า_${jobId}.xlsx`;
+                link.href = url;
+                link.download = fileName;
+                link.style.display = 'none';
                 document.body.appendChild(link);
                 link.click();
-                document.body.removeChild(link);
+
+                setTimeout(() => {
+                    if (document.body.contains(link)) {
+                        document.body.removeChild(link);
+                    }
+                    URL.revokeObjectURL(url);
+                }, 1500);
+            }).catch(err => {
+                console.error("Download Excel error:", err);
+                showAlert("ข้อผิดพลาด", "ไม่สามารถสร้างหรือดาวน์โหลดไฟล์ Excel ได้: " + (err.message || err));
             });
+        }
+
+        function downloadExcel() {
+            exportRequisitionToExcel();
         }
 
         function resetFlow() {
