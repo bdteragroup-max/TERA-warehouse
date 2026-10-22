@@ -1334,8 +1334,21 @@
             <div class="location-modal-value" id="addPopupItemName"
                 style="font-size: 1.8rem; margin-top: 1.5rem; line-height: 1.4; color: var(--text-main);">-</div>
             <div id="addPopupItemCode"
-                style="display: inline-block; padding: 0.5rem 1.25rem; background: #f1f5f9; color: var(--text-muted); border-radius: 99px; font-family: monospace; font-size: 1.1rem; font-weight: 600; letter-spacing: 1px; margin-bottom: 2.5rem;">
+                style="display: inline-block; padding: 0.5rem 1.25rem; background: #f1f5f9; color: var(--text-muted); border-radius: 99px; font-family: monospace; font-size: 1.1rem; font-weight: 600; letter-spacing: 1px; margin-bottom: 1.5rem;">
                 -</div>
+
+            <div id="addPopupUnknownNotice" style="display: none; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 1rem; margin-bottom: 1.75rem; text-align: left; font-size: 0.9rem; color: #1e40af;">
+                <div style="font-weight: 700; margin-bottom: 0.35rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <span>⚠️ ยังไม่มีข้อมูลสินค้านี้ในระบบคลัง</span>
+                </div>
+                <div style="margin-bottom: 0.75rem; color: #3b82f6; font-size: 0.85rem;">
+                    คุณต้องการนำเข้าและบันทึกสินค้านี้เข้าคลัง โดยเก็บบาร์โค้ดนี้ไว้ แล้วระบุชื่อ โลเคชั่น และจำนวนสต็อกเลยหรือไม่?
+                </div>
+                <button type="button" class="btn btn-primary" onclick="proceedToRegisterProductFromPopup()" style="width: 100%; padding: 0.65rem 1rem; font-size: 0.9rem; background: #10b981; border-color: #10b981; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 0.4rem; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2); cursor: pointer;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    + นำเข้าและลงทะเบียนสินค้านี้เข้าคลัง (เก็บบาร์โค้ดนี้ไว้)
+                </button>
+            </div>
 
             <div class="form-group"
                 style="text-align: left; margin-bottom: 2.5rem; background: #f8fafc; padding: 1.5rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
@@ -2335,6 +2348,12 @@
             document.getElementById('addPopupItemCode').innerText = product.code;
             document.getElementById('addPopupQuantity').value = 1;
 
+            const isUnknown = !product.name || product.name.includes('ต้องลงทะเบียน') || product.quantity === undefined;
+            const unknownNotice = document.getElementById('addPopupUnknownNotice');
+            if (unknownNotice) {
+                unknownNotice.style.display = isUnknown ? 'block' : 'none';
+            }
+
             const modal = document.getElementById('addItemModal');
             modal.classList.add('active');
 
@@ -2345,8 +2364,19 @@
             }, 100);
         }
 
+        function proceedToRegisterProductFromPopup() {
+            const code = scannedProductToAdd ? (scannedProductToAdd.code || scannedProductToAdd.barcode) : '';
+            closeAddItemPopup();
+            if (code) {
+                switchTab('import');
+                lookupBarcodeForImport(code);
+            }
+        }
+
         function closeAddItemPopup() {
             document.getElementById('addItemModal').classList.remove('active');
+            const unknownNotice = document.getElementById('addPopupUnknownNotice');
+            if (unknownNotice) unknownNotice.style.display = 'none';
             scannedProductToAdd = null;
             document.getElementById('barcode').value = '';
         }
