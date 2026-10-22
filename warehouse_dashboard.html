@@ -4293,9 +4293,9 @@
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet('การเบิกสินค้า');
 
-            // Set column widths
+            // Set column widths (Column A widened to give ample quiet zone for scanner)
             worksheet.columns = [
-                { width: 25 }, // Barcode (A)
+                { width: 32 }, // Barcode (A) - widened from 25 to 32
                 { width: 20 }, // inSystem (B)
                 { width: 45 }, // Name (C)
                 { width: 15 }  // Qty (D)
@@ -4319,6 +4319,7 @@
 
             // Table Header
             const headerRow = worksheet.addRow(['รหัส (Barcode)', 'ในระบบ', 'ชื่อสินค้า', 'จำนวน']);
+            headerRow.height = 28;
             headerRow.eachCell(cell => {
                 cell.font = { bold: true };
                 cell.fill = {
@@ -4327,10 +4328,10 @@
                     fgColor: { argb: 'FFF0F0F0' }
                 };
                 cell.border = {
-                    top: { style: 'thin' },
-                    left: { style: 'thin' },
-                    bottom: { style: 'thin' },
-                    right: { style: 'thin' }
+                    top: { style: 'thin', color: { argb: 'FF94A3B8' } },
+                    left: { style: 'thin', color: { argb: 'FF94A3B8' } },
+                    bottom: { style: 'medium', color: { argb: 'FF64748B' } },
+                    right: { style: 'thin', color: { argb: 'FF94A3B8' } }
                 };
                 cell.alignment = { horizontal: 'center', vertical: 'middle' };
             });
@@ -4346,17 +4347,26 @@
                 
                 // Add data row
                 const row = worksheet.addRow(['', inSystem, item.name || '', itemQty]);
-                row.height = 45; // Make row height larger for the barcode image
+                // Set generous row height (82pt) to give large spacing between barcodes so scanners don't misread adjacent rows
+                row.height = 82;
                 
-                // Add borders and alignment
+                // Add borders, alignment and zebra background
+                const isEven = index % 2 === 1;
                 row.eachCell(cell => {
                     cell.border = {
-                        top: { style: 'thin' },
-                        left: { style: 'thin' },
-                        bottom: { style: 'thin' },
-                        right: { style: 'thin' }
+                        top: { style: 'thin', color: { argb: 'FFE2E8F0' } },
+                        left: { style: 'thin', color: { argb: 'FFE2E8F0' } },
+                        bottom: { style: 'medium', color: { argb: 'FF94A3B8' } },
+                        right: { style: 'thin', color: { argb: 'FFE2E8F0' } }
                     };
                     cell.alignment = { vertical: 'middle' };
+                    if (isEven) {
+                        cell.fill = {
+                            type: 'pattern',
+                            pattern: 'solid',
+                            fgColor: { argb: 'FFF8FAFC' }
+                        };
+                    }
                 });
                 row.getCell(4).alignment = { horizontal: 'center', vertical: 'middle' };
                 row.getCell(4).font = { bold: true };
@@ -4367,10 +4377,11 @@
                         JsBarcode(offscreenCanvas, itemCode, {
                             format: "CODE128",
                             width: 2,
-                            height: 50,
+                            height: 46,
                             displayValue: true,
-                            fontSize: 16,
-                            margin: 5
+                            fontSize: 13,
+                            margin: 5,
+                            background: isEven ? '#f8fafc' : '#ffffff'
                         });
                         const base64Image = offscreenCanvas.toDataURL("image/png");
                         
@@ -4379,10 +4390,10 @@
                             extension: 'png',
                         });
 
-                        // Insert image into cell A
+                        // Insert image into cell A with vertical centering and safe distance between rows
                         worksheet.addImage(imageId, {
-                            tl: { col: 0.1, row: rowIndex - 1 + 0.1 }, // tl is 0-indexed, add slight padding
-                            ext: { width: 150, height: 50 } // adjust dimensions to fit row
+                            tl: { col: 0.12, row: rowIndex - 1 + 0.18 },
+                            ext: { width: 165, height: 50 }
                         });
                     } catch (e) {
                         console.error("Barcode generation error for Excel:", e);
