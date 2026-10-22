@@ -1018,6 +1018,205 @@
                 font-size: 2rem;
             }
         }
+
+        /* Import Module Modern Styles */
+        .import-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .import-header {
+            margin-bottom: 2rem;
+        }
+
+        .import-header h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin: 0 0 0.5rem 0;
+            border: none;
+            padding: 0;
+        }
+
+        .import-header p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        .import-methods-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .import-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            padding: 1.75rem;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .import-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: rgba(255, 65, 108, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .import-card-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.3rem 0.75rem;
+            border-radius: 99px;
+            margin-bottom: 1rem;
+            align-self: flex-start;
+        }
+
+        .import-card-tag.excel {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .import-card-tag.barcode {
+            background: rgba(255, 65, 108, 0.1);
+            color: var(--primary-color);
+            border: 1px solid rgba(255, 65, 108, 0.2);
+        }
+
+        .import-card-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-main);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .import-card-desc {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+            flex: 1;
+        }
+
+        .import-card-actions {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .import-barcode-input-wrapper {
+            display: flex;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .import-barcode-input-wrapper input {
+            flex: 1;
+            padding: 0.85rem 1rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            font-size: 0.95rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        .import-barcode-input-wrapper input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(255, 65, 108, 0.15);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.3rem 0.65rem;
+            border-radius: 99px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .status-badge.matched {
+            background: rgba(16, 185, 129, 0.12);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .status-badge.mismatch {
+            background: rgba(245, 158, 11, 0.12);
+            color: #d97706;
+            border: 1px solid rgba(245, 158, 11, 0.25);
+        }
+
+        .status-badge.new-item {
+            background: rgba(59, 130, 246, 0.12);
+            color: #2563eb;
+            border: 1px solid rgba(59, 130, 246, 0.25);
+        }
+
+        /* Filter Pills for Import Preview */
+        .preview-filter-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-pill {
+            padding: 0.4rem 0.85rem;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border-color);
+            background: white;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .filter-pill.active {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 2px 8px rgba(255, 65, 108, 0.25);
+        }
+
+        .name-mismatch-box {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            padding: 0.5rem 0.75rem;
+            margin-top: 0.35rem;
+            font-size: 0.8rem;
+            color: #92400e;
+        }
+
+        .stock-diff-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
@@ -1128,33 +1327,162 @@
         </div>
     </div>
 
-    <!-- Import Confirm Modal Popup -->
+    <!-- Enhanced Excel Import Confirm Modal Popup -->
     <div class="location-modal" id="importModal" style="z-index: 10005;">
-        <div class="location-modal-content" style="max-width: 600px; text-align: left; padding: 2.5rem 2rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <div class="location-modal-title" style="font-size: 1.3rem; margin: 0; color: var(--text-main); font-weight: 800; text-transform: none;">ยืนยันการนำเข้าข้อมูล</div>
-                <div class="badge" id="importCountBadge">0 รายการ</div>
+        <div class="location-modal-content" style="max-width: 820px; width: 94%; text-align: left; padding: 2.25rem 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+                <div>
+                    <div style="font-size: 0.8rem; font-weight: 700; color: #059669; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.2rem;">
+                        นำเข้าผ่านไฟล์ Excel (โดยผู้จัดการ - Manager Only)
+                    </div>
+                    <div class="location-modal-title" style="font-size: 1.35rem; margin: 0; color: var(--text-main); font-weight: 800; text-transform: none;">
+                        ตรวจสอบและยืนยันการนำเข้าข้อมูล
+                    </div>
+                </div>
+                <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+                    <div class="badge" id="importCountBadge">0 รายการ</div>
+                    <span class="status-badge matched" id="importMatchedBadge">0 ตรงกัน</span>
+                    <span class="status-badge mismatch" id="importMismatchBadge">0 ชื่อไม่ตรง</span>
+                    <span class="status-badge new-item" id="importNewBadge">0 สินค้าใหม่</span>
+                </div>
+            </div>
+
+            <!-- Filter Pills -->
+            <div class="preview-filter-bar">
+                <button type="button" class="filter-pill active" onclick="setImportModalFilter('all', this)">ทั้งหมด</button>
+                <button type="button" class="filter-pill" onclick="setImportModalFilter('matched', this)">เฉพาะชื่อตรงกัน</button>
+                <button type="button" class="filter-pill" onclick="setImportModalFilter('mismatch', this)">เฉพาะชื่อไม่ตรง</button>
+                <button type="button" class="filter-pill" onclick="setImportModalFilter('new', this)">เฉพาะสินค้าใหม่</button>
             </div>
             
-            <div style="max-height: 300px; overflow-y: auto; margin-bottom: 1.5rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+            <div style="max-height: 340px; overflow-y: auto; margin-bottom: 1.25rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
                 <div class="items-list" style="margin-top: 0; border: none; box-shadow: none;">
-                    <div class="item-row header" style="position: sticky; top: 0; z-index: 1;">
-                        <span style="flex: 2;">รหัส/บาร์โค้ด</span>
-                        <span style="flex: 3;">ชื่อสินค้า</span>
-                        <span style="flex: 1; text-align: right;">จำนวน</span>
+                    <div class="item-row header" style="position: sticky; top: 0; z-index: 2; background: #f8fafc; font-size: 0.8rem;">
+                        <span style="flex: 1.5;">รหัส/บาร์โค้ด</span>
+                        <span style="flex: 3;">ชื่อสินค้า & สถานะตรวจเช็ก</span>
+                        <span style="flex: 1; text-align: center;">สต็อกเดิม</span>
+                        <span style="flex: 1.5; text-align: center;">จำนวนที่จะเพิ่ม</span>
+                        <span style="flex: 1; text-align: center;">รวมใหม่</span>
+                        <span style="flex: 0.6; text-align: center;">ลบ</span>
                     </div>
                     <div id="importPreviewList">
-                        <!-- Preview Items -->
+                        <!-- Preview Items Loaded by JS -->
                     </div>
                 </div>
             </div>
 
+            <!-- Import Summary Bar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #f8fafc; padding: 0.85rem 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin-bottom: 1.25rem; font-size: 0.95rem;">
+                <span style="color: var(--text-muted); font-weight: 600;">ยอดรวมจำนวนสินค้าที่จะเพิ่มเข้าสต็อกทั้งหมด:</span>
+                <span id="importTotalQtyBadge" style="font-size: 1.2rem; font-weight: 800; color: var(--primary-color);">0 ชิ้น</span>
+            </div>
+
             <div style="display: flex; gap: 1rem;">
-                <button class="btn btn-secondary" style="flex: 1; padding: 1rem;" onclick="closeImportModal()">ยกเลิก</button>
-                <button class="btn btn-primary" style="flex: 2; padding: 1rem;" onclick="confirmImport()">
+                <button class="btn btn-secondary" style="flex: 1; padding: 0.9rem;" onclick="closeImportModal()">ยกเลิก</button>
+                <button class="btn btn-primary" id="btnConfirmExcelImport" style="flex: 2; padding: 0.9rem;" onclick="confirmImport()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
                     ยืนยันนำเข้าข้อมูล
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- Barcode Scan Import Modal Popup -->
+    <div class="location-modal" id="barcodeImportModal" style="z-index: 10006;">
+        <div class="location-modal-content" style="max-width: 580px; width: 92%; text-align: left; padding: 2.25rem 2rem;">
+            <!-- Header -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
+                <div>
+                    <div style="font-size: 0.8rem; font-weight: 700; color: var(--primary-color); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.2rem;">
+                        วิธีที่ 2: สแกนบาร์โค้ดสินค้า
+                    </div>
+                    <div class="location-modal-title" style="font-size: 1.35rem; margin: 0; color: var(--text-main); font-weight: 800; text-transform: none;">
+                        นำเข้าสินค้าผ่านบาร์โค้ด
+                    </div>
+                </div>
+                <div id="barcodeModalStatusBadge">
+                    <!-- Dynamic Status Badge -->
+                </div>
+            </div>
+
+            <!-- Scanned Item Info & Database Verification Card -->
+            <div id="barcodeModalItemInfo" style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.25rem;">
+                <!-- Populated dynamically by JS -->
+            </div>
+
+            <!-- Specify Quantity to Add -->
+            <div style="background: #ffffff; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; margin-bottom: 1.25rem;">
+                <label style="color: var(--text-muted); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; display: block; text-align: center; margin-bottom: 0.75rem;">
+                    ระบุจำนวนที่ต้องการเพิ่มเข้าคลัง (Quantity to Add)
+                </label>
+                <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; margin-bottom: 1rem;">
+                    <button type="button" class="btn btn-outline btn-icon" style="border-radius: 50%; width: 48px; height: 48px; padding: 0;" onclick="adjustBarcodeImportQty(-1)">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </button>
+                    <input type="number" id="barcodeModalQty" value="1" min="1" oninput="updateBarcodeModalStockPreview()" style="width: 120px; text-align: center; font-size: 2.2rem; font-weight: 800; padding: 0.25rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-main); outline: none;">
+                    <button type="button" class="btn btn-outline btn-icon" style="border-radius: 50%; width: 48px; height: 48px; padding: 0;" onclick="adjustBarcodeImportQty(1)">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    </button>
+                </div>
+
+                <!-- Stock Calculation Preview -->
+                <div style="display: flex; justify-content: space-around; align-items: center; background: #f1f5f9; padding: 0.75rem 1rem; border-radius: 10px; text-align: center;">
+                    <div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">สต็อกปัจจุบัน</div>
+                        <div id="barcodeStockCurrent" style="font-size: 1.1rem; font-weight: 700; color: var(--text-main);">0 ชิ้น</div>
+                    </div>
+                    <div style="font-size: 1.25rem; color: var(--text-muted); font-weight: 700;">+</div>
+                    <div>
+                        <div style="font-size: 0.75rem; color: var(--primary-color); font-weight: 600;">จำนวนที่เพิ่ม</div>
+                        <div id="barcodeStockAdd" style="font-size: 1.1rem; font-weight: 800; color: var(--primary-color);">+1 ชิ้น</div>
+                    </div>
+                    <div style="font-size: 1.25rem; color: var(--text-muted); font-weight: 700;">=</div>
+                    <div>
+                        <div style="font-size: 0.75rem; color: #10b981; font-weight: 600;">ยอดรวมหลังนำเข้า</div>
+                        <div id="barcodeStockNewTotal" style="font-size: 1.2rem; font-weight: 800; color: #10b981;">1 ชิ้น</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: 0.75rem;">
+                <button class="btn btn-secondary" style="flex: 1; padding: 0.9rem;" onclick="closeBarcodeImportModal()">ยกเลิก</button>
+                <button class="btn btn-outline" style="flex: 1.2; padding: 0.9rem; font-size: 0.95rem;" onclick="addScannedItemToBatch()" title="สะสมรายการเพื่อนำเข้าพร้อมกัน">
+                    + ใส่รายการรอ
+                </button>
+                <button class="btn btn-primary" style="flex: 1.6; padding: 0.9rem;" onclick="confirmSingleBarcodeImport()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    ยืนยันนำเข้าข้อมูล
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Import Detail Modal Popup -->
+    <div class="location-modal" id="importDetailModal" style="z-index: 10007;">
+        <div class="location-modal-content" style="max-width: 650px; width: 92%; text-align: left; padding: 2.25rem 2rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem;">
+                <div>
+                    <div style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);" id="importDetailDate">-</div>
+                    <div class="location-modal-title" style="font-size: 1.3rem; margin: 0; color: var(--text-main); font-weight: 800;" id="importDetailTitle">
+                        รายละเอียดการนำเข้า
+                    </div>
+                </div>
+                <div class="badge" id="importDetailCountBadge">0 รายการ</div>
+            </div>
+
+            <div style="max-height: 320px; overflow-y: auto; margin-bottom: 1.25rem; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                <div class="items-list" style="margin-top: 0; border: none; box-shadow: none;">
+                    <div class="item-row header" style="position: sticky; top: 0; z-index: 1; background: #f8fafc;">
+                        <span style="flex: 2;">รหัส/บาร์โค้ด</span>
+                        <span style="flex: 3;">ชื่อสินค้า</span>
+                        <span style="flex: 1; text-align: right;">จำนวนนำเข้า</span>
+                    </div>
+                    <div id="importDetailItemsList"></div>
+                </div>
+            </div>
+
+            <button class="btn btn-secondary" style="width: 100%; padding: 0.85rem;" onclick="closeImportDetailModal()">ปิดหน้าต่าง</button>
         </div>
     </div>
 
@@ -1220,7 +1548,7 @@
         </div>
 
         <div class="sidebar-footer">
-            <div class="nav-item">
+            <div class="nav-item" id="nav-settings" onclick="switchTab('settings')">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="3"></circle>
@@ -1228,7 +1556,7 @@
                         d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
                     </path>
                 </svg>
-                ตั้งค่า (Settings)
+                <span class="nav-text">ตั้งค่า <span class="nav-en">(Settings)</span></span>
             </div>
         </div>
     </div>
@@ -1393,31 +1721,106 @@
                 </div>
             </div>
 
-            <!-- View Import -->
+            <!-- View Import (General Staff Barcode Scan Import) -->
             <div class="view" id="view-import">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <h2 style="margin: 0; padding: 0; border: none;">ประวัติการนำเข้าข้อมูล (Import History)</h2>
-                    <div style="display: flex; gap: 1rem;">
-                        <button class="btn btn-outline" onclick="downloadImportTemplate()" style="padding: 0.75rem 1.5rem; font-size: 1rem;">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem; vertical-align: middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                            โหลดเทมเพลต
-                        </button>
-                        <label class="btn btn-primary" style="cursor: pointer; padding: 0.75rem 1.5rem; font-size: 1rem; margin: 0;">
-                            <input type="file" accept=".xlsx, .xls" style="display: none;" onchange="handleFileUpload(event)">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.5rem; vertical-align: middle;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                            แนบไฟล์ Excel
-                        </label>
+                <div class="import-container">
+                    <!-- Page Header -->
+                    <div class="import-header">
+                        <h2>นำเข้าข้อมูลสินค้าเข้าคลัง (Inventory Stock In)</h2>
+                        <p>สแกนบาร์โค้ดบนตัวสินค้า ตรวจสอบฐานข้อมูล และระบุจำนวนที่ต้องการนำเข้าสต็อก</p>
                     </div>
-                </div>
 
-                <div class="items-list">
-                    <div class="item-row header">
-                        <span style="flex: 2;">วัน-เวลาที่นำเข้า</span>
-                        <span style="flex: 2;">รหัสนำเข้า (ID)</span>
-                        <span style="flex: 1; text-align: right;">จำนวนรายการ</span>
+                    <!-- General Staff Barcode Scan Card -->
+                    <div class="import-card" style="width: 100%; margin-bottom: 2rem; border: 2px solid rgba(255, 65, 108, 0.18); box-shadow: var(--shadow-md);">
+                        <div>
+                            <span class="import-card-tag barcode">การสแกนบาร์โค้ดสินค้า (พนักงานคลังสินค้า)</span>
+                            <div class="import-card-title">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M3 5v14"></path>
+                                    <path d="M8 5v14"></path>
+                                    <path d="M12 5v14"></path>
+                                    <path d="M17 5v14"></path>
+                                    <path d="M21 5v14"></path>
+                                </svg>
+                                สแกนบาร์โค้ดบนตัวสินค้าเพื่อนำเข้า
+                            </div>
+                            <div class="import-card-desc">
+                                สแกนบาร์โค้ดหรือพิมพ์รหัสสินค้า ระบบจะตรวจสอบว่ามีสินค้านี้ในฐานข้อมูลหรือไม่ และชื่อตรงกับคอลัมน์ E (รายการ) หรือไม่ จากนั้นระบุจำนวนที่ต้องการเพิ่มแล้วยืนยันนำเข้า
+                            </div>
+                        </div>
+                        <div>
+                            <div class="import-barcode-input-wrapper">
+                                <input type="text" id="importBarcodeScanInput" placeholder="สแกนบาร์โค้ด หรือ พิมพ์รหัสสินค้า..." onkeydown="if(event.key === 'Enter') { event.preventDefault(); lookupBarcodeForImport(this.value); }">
+                                <button type="button" class="btn btn-secondary btn-icon" onclick="openCameraForImport()" title="เปิดกล้องสแกนบาร์โค้ด">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                        <circle cx="12" cy="13" r="4"></circle>
+                                    </svg>
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="lookupBarcodeForImport(document.getElementById('importBarcodeScanInput').value)" style="white-space: nowrap; padding: 0 1.5rem;">
+                                    ตรวจสอบสินค้า
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div id="importHistoryList">
-                        <div class="empty-state">กำลังโหลดประวัติ...</div>
+
+                    <!-- Staging Batch Section (Visible when items added to batch) -->
+                    <div id="importStagingSection" style="display: none; background: white; border-radius: var(--radius-lg); border: 1px solid var(--border-color); padding: 1.5rem; margin-bottom: 2.5rem; box-shadow: var(--shadow-sm);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
+                            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                <h3 style="margin: 0; font-size: 1.15rem; font-weight: 800; color: var(--text-main);">รายการที่สแกนรอการยืนยันนำเข้า (Staged Items)</h3>
+                                <span class="badge" id="stagedBatchCountBadge">0 รายการ</span>
+                            </div>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <button type="button" class="btn btn-secondary" onclick="clearStagedImportBatch()" style="padding: 0.6rem 1rem; font-size: 0.9rem;">ล้างรายการ</button>
+                                <button type="button" class="btn btn-primary" onclick="confirmStagedImportBatch()" style="padding: 0.6rem 1.25rem; font-size: 0.9rem;">
+                                    ยืนยันนำเข้ารายการทั้งหมด
+                                </button>
+                            </div>
+                        </div>
+                        <div style="max-height: 250px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: var(--radius-md);">
+                            <div class="items-list" style="margin-top: 0; border: none; box-shadow: none;">
+                                <div class="item-row header" style="position: sticky; top: 0; z-index: 1; background: #f8fafc; font-size: 0.8rem;">
+                                    <span style="flex: 2;">รหัส/บาร์โค้ด</span>
+                                    <span style="flex: 3;">ชื่อสินค้า</span>
+                                    <span style="flex: 1.5; text-align: center;">สถานะระบบ</span>
+                                    <span style="flex: 1.5; text-align: right;">จำนวนที่จะเพิ่ม</span>
+                                    <span style="flex: 0.8; text-align: center;">ลบ</span>
+                                </div>
+                                <div id="stagedBatchList"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Import History Section -->
+                    <div style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--border-color); padding: 1.75rem; box-shadow: var(--shadow-sm);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+                            <div>
+                                <h3 style="margin: 0 0 0.25rem 0; font-size: 1.2rem; font-weight: 800; color: var(--text-main);">
+                                    ประวัติการนำเข้าข้อมูล (Import History)
+                                </h3>
+                                <p style="margin: 0; color: var(--text-muted); font-size: 0.85rem;">
+                                    บันทึกรายการนำเข้าสินค้าเข้าคลังสินค้าทั้งหมด
+                                </p>
+                            </div>
+                            <button type="button" class="btn btn-secondary" onclick="loadImportHistory()" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                                รีเฟรชประวัติ
+                            </button>
+                        </div>
+
+                        <div class="items-list" style="margin-top: 0; border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: none;">
+                            <div class="item-row header" style="background: #f8fafc; font-size: 0.8rem;">
+                                <span style="flex: 2;">วัน-เวลาที่นำเข้า</span>
+                                <span style="flex: 2;">รหัสนำเข้า (ID)</span>
+                                <span style="flex: 1.5;">วิธีการนำเข้า</span>
+                                <span style="flex: 1.5; text-align: right;">จำนวนรายการ</span>
+                                <span style="flex: 1; text-align: center;">รายละเอียด</span>
+                            </div>
+                            <div id="importHistoryList">
+                                <div class="empty-state">กำลังโหลดประวัติ...</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1483,22 +1886,39 @@
                 </div>
             </div>
 
-            <!-- View History -->
+            <!-- View History: Requisition History Connected to Google Sheets -->
             <div class="view" id="view-history">
-                <h2>ประวัติการอนุมัติ (History)</h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+                    <div>
+                        <h2 style="margin: 0 0 0.35rem 0; font-size: 1.5rem; font-weight: 800; color: var(--text-main);">
+                            ประวัติการทำรายการ (Requisition History)
+                        </h2>
+                        <p style="margin: 0; color: var(--text-muted); font-size: 0.9rem;">
+                            แสดงข้อมูลจริงที่เชื่อมต่อกับ Google Sheets แผ่นงาน "การเบิกสินค้า"
+                        </p>
+                    </div>
+                    <button type="button" class="btn btn-secondary" onclick="fetchHistoryFromGoogleSheets()" style="padding: 0.55rem 1.1rem; font-size: 0.88rem; display: flex; align-items: center; gap: 0.45rem;">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="23 4 23 10 17 10"></polyline>
+                            <polyline points="1 20 1 14 7 14"></polyline>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                        รีเฟรชข้อมูลจาก Google Sheets
+                    </button>
+                </div>
 
                 <!-- List View -->
                 <div id="history-list-view">
-                    <div class="items-list" style="margin-top: 1rem;">
-                        <div class="item-row header">
+                    <div class="items-list" style="margin-top: 1rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: none;">
+                        <div class="item-row header" style="background: #f8fafc; font-size: 0.82rem;">
                             <span style="flex: 2;">รหัสงาน / โครงการ</span>
                             <span style="flex: 2;">ชื่อผู้เบิก</span>
                             <span style="flex: 1; text-align: right;">จำนวนรายการ</span>
                             <span style="flex: 1; text-align: center;">สถานะ</span>
                         </div>
                         <div id="historyRequestsList">
-                            <!-- Populated via JS -->
-                            <div class="empty-state">ไม่มีประวัติการอนุมัติ</div>
+                            <!-- Populated via JS directly from Google Sheets -->
+                            <div class="empty-state">กำลังโหลดข้อมูลจาก Google Sheets...</div>
                         </div>
                     </div>
                 </div>
@@ -1576,6 +1996,121 @@
                     <p style="color: var(--text-muted); margin-bottom: 2rem;">ตัดยอดสินค้าจาก PDC เรียบร้อยแล้ว
                         ขั้นตอนการเบิกสินค้าเสร็จสมบูรณ์</p>
                     <button class="btn btn-outline" onclick="resetFlow()">เริ่มการเบิกสินค้าใหม่</button>
+                </div>
+            </div>
+
+            <!-- View Settings: Direct Excel Data Import -->
+            <div class="view" id="view-settings">
+                <div style="max-width: 1050px; margin: 0 auto;">
+                    <!-- Page Header -->
+                    <div class="import-header" style="margin-bottom: 2rem;">
+                        <h2 style="font-size: 1.8rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem;">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--primary-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                <polyline points="14 2 14 8 20 8"></polyline>
+                                <line x1="16" y1="13" x2="8" y2="13"></line>
+                                <line x1="16" y1="17" x2="8" y2="17"></line>
+                                <polyline points="10 9 9 9 8 9"></polyline>
+                            </svg>
+                            นำเข้าข้อมูลสินค้าผ่านไฟล์ Excel (Excel Data Import)
+                        </h2>
+                        <p style="color: var(--text-muted); font-size: 0.95rem;">
+                            อัปโหลดไฟล์ Excel (.xlsx, .xls) เพื่อนำเข้าและอัปเดตสต็อกสินค้าเข้าสู่ระบบคลังสินค้า และตรวจสอบข้อมูลกับฐานข้อมูล
+                        </p>
+                    </div>
+
+                    <!-- Excel Import Card -->
+                    <div style="background: white; border-radius: var(--radius-lg); border: 2px solid #10b981; padding: 2rem; margin-bottom: 2rem; box-shadow: var(--shadow-md);">
+                        <div style="margin-bottom: 1.5rem;">
+                            <span class="import-card-tag excel" style="margin-bottom: 0.5rem; display: inline-flex;">
+                                📊 นำเข้าข้อมูลเป็นชุดผ่านไฟล์ Excel (Bulk Data Import)
+                            </span>
+                            <div style="color: var(--text-muted); font-size: 0.95rem; margin-top: 0.5rem; line-height: 1.6;">
+                                อัปโหลดไฟล์ Excel (.xlsx, .xls) ระบบจะตรวจสอบรหัสสินค้ากับฐานข้อมูล เปรียบเทียบชื่อสินค้าในไฟล์กับคอลัมน์ E (รายการ) ในระบบ และคำนวณจำนวนสต็อกเดิมกับจำนวนที่จะเพิ่มให้อัตโนมัติ
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.75rem;">
+                            <label class="btn btn-primary" style="cursor: pointer; padding: 0.85rem 1.5rem; font-size: 1rem; font-weight: 700; background: linear-gradient(135deg, #059669 0%, #10b981 100%); border: none; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                                <input type="file" id="managerExcelFileInput" accept=".xlsx, .xls" style="display: none;" onchange="handleFileUpload(event)">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
+                                เลือกไฟล์ Excel เพื่อนำเข้า (.xlsx, .xls)
+                            </label>
+                            <button type="button" class="btn btn-secondary" onclick="downloadImportTemplate()" style="padding: 0.85rem 1.25rem; font-size: 0.95rem;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="7 10 12 15 17 10"></polyline>
+                                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                                </svg>
+                                ดาวน์โหลดเทมเพลต Excel
+                            </button>
+                        </div>
+
+                        <!-- Format Info Box -->
+                        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem 1.5rem;">
+                            <div style="font-weight: 700; color: var(--text-main); font-size: 0.9rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+                                <span>📋</span> รูปแบบคอลัมน์ในไฟล์ Excel ที่ระบบรองรับ:
+                            </div>
+                            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+                                <span style="background: white; border: 1px solid var(--border-color); padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.82rem; font-weight: 600; color: var(--text-main);">โลเคชั่น</span>
+                                <span style="background: white; border: 1px solid var(--border-color); padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.82rem; font-weight: 600; color: #059669;">รหัส (Code)</span>
+                                <span style="background: white; border: 1px solid var(--border-color); padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.82rem; font-weight: 600; color: var(--text-main);">ในระบบ</span>
+                                <span style="background: white; border: 1px solid var(--border-color); padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.82rem; font-weight: 600; color: #2563eb;">รายการ (ชื่อสินค้า คอลัมน์ E)</span>
+                                <span style="background: white; border: 1px solid var(--border-color); padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.82rem; font-weight: 600; color: var(--primary-color);">Bar128 (บาร์โค้ด)</span>
+                                <span style="background: white; border: 1px solid var(--border-color); padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.82rem; font-weight: 600; color: #d97706;">จำนวน (ที่จะเพิ่ม)</span>
+                                <span style="background: white; border: 1px solid var(--border-color); padding: 0.25rem 0.6rem; border-radius: 6px; font-size: 0.82rem; font-weight: 600; color: var(--text-muted);">หมายเหตุ</span>
+                            </div>
+                            <div style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.5;">
+                                • ระบบจะจับคู่รหัสหรือบาร์โค้ดในไฟล์เข้ากับฐานข้อมูลคลังสินค้าอัตโนมัติ<br>
+                                • หากชื่อสินค้าในไฟล์ไม่ตรงกับคอลัมน์ E (รายการ) ในระบบ จะแสดงป้ายเตือน <span class="status-badge mismatch" style="font-size: 0.7rem;">⚠️ ชื่อไม่ตรง</span> และให้เลือกได้ว่าจะใช้ชื่อเดิมในระบบหรือชื่อใหม่ในไฟล์<br>
+                                • สามารถแก้ไขจำนวนที่จะเพิ่มในแต่ละแถวได้โดยตรง และระบบจะคำนวณยอดสต็อกคงเหลือใหม่อัตโนมัติ
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Google Sheets Import History -->
+                    <div style="background: white; border-radius: var(--radius-lg); border: 1px solid var(--border-color); padding: 1.75rem; box-shadow: var(--shadow-sm);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+                            <div>
+                                <h3 style="margin: 0 0 0.25rem 0; font-size: 1.2rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 0.5rem;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="23 4 23 10 17 10"></polyline>
+                                        <polyline points="1 20 1 14 7 14"></polyline>
+                                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                                    </svg>
+                                    ประวัติการนำเข้าข้อมูล (Google Sheets Import History)
+                                </h3>
+                                <p style="margin: 0; color: var(--text-muted); font-size: 0.85rem;">
+                                    บันทึกรายการนำเข้าข้อมูลสินค้าจริงที่เชื่อมต่อกับ Google Sheets
+                                </p>
+                            </div>
+                            <button type="button" class="btn btn-secondary" onclick="loadImportHistory()" style="padding: 0.5rem 1rem; font-size: 0.85rem;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 4px;">
+                                    <polyline points="23 4 23 10 17 10"></polyline>
+                                    <polyline points="1 20 1 14 7 14"></polyline>
+                                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                                </svg>
+                                รีเฟรชประวัติจาก Google Sheets
+                            </button>
+                        </div>
+                        <div class="items-list" style="margin-top: 0; border: 1px solid var(--border-color); border-radius: var(--radius-md); box-shadow: none;">
+                            <div class="item-row header" style="background: #f8fafc; font-size: 0.8rem;">
+                                <span style="flex: 2;">วัน-เวลาที่นำเข้า</span>
+                                <span style="flex: 2;">รหัสนำเข้า (ID)</span>
+                                <span style="flex: 1.5;">วิธีการนำเข้า</span>
+                                <span style="flex: 1.5; text-align: right;">จำนวนรายการ</span>
+                                <span style="flex: 1; text-align: center;">ดูรายละเอียด</span>
+                            </div>
+                            <div id="settingsImportHistoryList">
+                                <div class="empty-state">กำลังโหลดประวัติจาก Google Sheets...</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1748,61 +2283,284 @@
             document.getElementById('alertModal').classList.remove('active');
         }
 
-        let mockProducts = [];
-        let pendingImportProducts = [];
+        // Default Sample Products (used as fallback if Google Sheet is unreachable or offline)
+        const DEFAULT_PRODUCTS = [
+            { code: "BOX-001", barcode: "8850001001", name: "กล่องกระดาษลูกฟูก 30x40 ซม.", location: "A-01-01", quantity: 150, inSystemText: "PDC-BOX-01" },
+            { code: "TAPE-002", barcode: "8850001002", name: "เทปกาวปิดกล่อง OPP หนา 45 ไมครอน", location: "A-01-02", quantity: 80, inSystemText: "PDC-TAPE-02" },
+            { code: "BUB-003", barcode: "8850001003", name: "พลาสติกกันกระแทก แอร์บับเบิ้ล 100 ม.", location: "B-02-01", quantity: 35, inSystemText: "PDC-BUB-03" },
+            { code: "STRETCH-004", barcode: "8850001004", name: "ฟิล์มยืดพันพาเลท 15 ไมครอน", location: "B-02-02", quantity: 45, inSystemText: "PDC-STR-04" },
+            { code: "LABEL-005", barcode: "8850001005", name: "สติ๊กเกอร์บาร์โค้ดความร้อน 100x150 มม.", location: "C-01-01", quantity: 200, inSystemText: "PDC-LBL-05" }
+        ];
 
+        let mockProducts = [...DEFAULT_PRODUCTS];
+        let pendingImportProducts = [];
+        let stagedImportProducts = []; // Items queued for batch import
+        let currentBarcodeImportItem = null;
+        let currentImportModalFilter = 'all';
+
+        // Check if an item exists in database and if names match
+        function checkProductInDatabase(codeOrBarcode, searchName = '') {
+            const searchKey = (codeOrBarcode || '').toString().trim().toLowerCase();
+            if (!searchKey) {
+                return { exists: false, product: null, nameMatch: false, statusCode: 'NEW', statusText: 'ไม่ระบุรหัส' };
+            }
+
+            const found = mockProducts.find(p => 
+                (p.barcode && p.barcode.toString().trim().toLowerCase() === searchKey) ||
+                (p.code && p.code.toString().trim().toLowerCase() === searchKey)
+            );
+
+            if (!found) {
+                return {
+                    exists: false,
+                    product: null,
+                    nameMatch: false,
+                    dbName: '',
+                    currentStock: 0,
+                    statusCode: 'NEW',
+                    statusText: 'ไม่พบในระบบ (สินค้าใหม่)'
+                };
+            }
+
+            // Product exists in database. Check if name matches.
+            const cleanSearchName = (searchName || '').toString().trim().toLowerCase();
+            const cleanDbName = (found.name || '').toString().trim().toLowerCase();
+            
+            // If searchName is provided, check equality; if not provided, default nameMatch is true
+            const nameMatch = cleanSearchName ? (cleanSearchName === cleanDbName) : true;
+
+            return {
+                exists: true,
+                product: found,
+                nameMatch: nameMatch,
+                dbName: found.name,
+                currentStock: parseInt(found.quantity) || 0,
+                statusCode: nameMatch ? 'MATCHED' : 'NAME_MISMATCH',
+                statusText: nameMatch ? 'พบในระบบ (ชื่อตรงกัน)' : 'ชื่อสินค้าไม่ตรงกับในระบบ'
+            };
+        }
+
+        // ==========================================
+        // METHOD 1: EXCEL FILE IMPORT
+        // ==========================================
         function handleFileUpload(event) {
             const file = event.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array' });
-                const firstSheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[firstSheetName];
-                const results = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const results = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
 
-                pendingImportProducts = results
-                    .filter(row => row['Bar128'] || row['รหัส'])
-                    .map(row => ({
-                        code: (row['รหัส'] || row['Bar128'] || '').toString().trim(),
-                        barcode: (row['Bar128'] || '').toString().trim(),
-                        name: row['รายการ'] ? row['รายการ'].toString().trim() : 'ไม่ทราบชื่อ',
-                        location: row['โลเคชั่น'] ? row['โลเคชั่น'].toString().trim() : '',
-                        quantity: parseInt(row['จำนวน']) || 0,
-                        inSystemText: row['ในระบบ'] ? row['ในระบบ'].toString().trim() : '',
-                        note: row['หมายเหตุ'] ? row['หมายเหตุ'].toString().trim() : ''
-                    }));
+                    pendingImportProducts = results
+                        .filter(row => row['Bar128'] || row['รหัส'] || row['รายการ'])
+                        .map((row, idx) => {
+                            const code = (row['รหัส'] || row['Bar128'] || '').toString().trim();
+                            const barcode = (row['Bar128'] || row['รหัส'] || '').toString().trim();
+                            const fileName = row['รายการ'] ? row['รายการ'].toString().trim() : 'ไม่ทราบชื่อ';
+                            const rawQty = parseInt(row['จำนวน']);
+                            const qty = (!isNaN(rawQty) && rawQty > 0) ? rawQty : 1;
+                            const location = row['โลเคชั่น'] ? row['โลเคชั่น'].toString().trim() : '';
+                            const inSystemText = row['ในระบบ'] ? row['ในระบบ'].toString().trim() : '';
+                            const note = row['หมายเหตุ'] ? row['หมายเหตุ'].toString().trim() : '';
 
-                const previewList = document.getElementById('importPreviewList');
-                previewList.innerHTML = '';
-                
-                if (pendingImportProducts.length === 0) {
-                    previewList.innerHTML = '<div class="empty-state" style="padding: 2rem;">ไม่พบข้อมูลสินค้าที่สามารถนำเข้าได้</div>';
-                } else {
-                    pendingImportProducts.forEach(item => {
-                        previewList.innerHTML += `
-                            <div class="item-row" style="padding: 0.75rem 1.5rem;">
-                                <span style="flex: 2; font-family: 'Inter', monospace; font-size: 0.9rem;">${item.code}</span>
-                                <span style="flex: 3; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="${item.name}">${item.name}</span>
-                                <span style="flex: 1; text-align: right; font-weight: 600;">${item.quantity}</span>
-                            </div>
-                        `;
-                    });
+                            // Check against database
+                            const check = checkProductInDatabase(code || barcode, fileName);
+
+                            return {
+                                id: idx,
+                                code: code || barcode,
+                                barcode: barcode || code,
+                                name: fileName,
+                                fileName: fileName,
+                                dbName: check.dbName,
+                                exists: check.exists,
+                                nameMatch: check.nameMatch,
+                                statusCode: check.statusCode,
+                                location: location || (check.product ? check.product.location : ''),
+                                quantity: qty, // Quantity to be added!
+                                currentStock: check.currentStock,
+                                inSystemText: inSystemText || (check.product ? check.product.inSystemText : ''),
+                                note: note,
+                                useDbName: false
+                            };
+                        });
+
+                    if (pendingImportProducts.length === 0) {
+                        showAlert("แจ้งเตือน", "ไม่พบข้อมูลสินค้าที่สามารถนำเข้าได้ในไฟล์ Excel กรุณาตรวจสอบคอลัมน์");
+                        event.target.value = '';
+                        return;
+                    }
+
+                    currentImportModalFilter = 'all';
+                    renderExcelImportPreview();
+                    document.getElementById('importModal').classList.add('active');
+                } catch (err) {
+                    console.error("Excel parse error:", err);
+                    showAlert("ข้อผิดพลาด", "ไม่สามารถอ่านไฟล์ Excel ได้: " + err.message);
                 }
-                
-                document.getElementById('importCountBadge').innerText = `${pendingImportProducts.length} รายการ`;
-                document.getElementById('importModal').classList.add('active');
                 event.target.value = '';
             };
             reader.readAsArrayBuffer(file);
         }
 
+        function setImportModalFilter(filter, btn) {
+            currentImportModalFilter = filter;
+            document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            renderExcelImportPreview();
+        }
+
+        function renderExcelImportPreview() {
+            const previewList = document.getElementById('importPreviewList');
+            if (!previewList) return;
+            previewList.innerHTML = '';
+
+            // Counts
+            const totalCount = pendingImportProducts.length;
+            const matchedCount = pendingImportProducts.filter(i => i.statusCode === 'MATCHED').length;
+            const mismatchCount = pendingImportProducts.filter(i => i.statusCode === 'NAME_MISMATCH').length;
+            const newCount = pendingImportProducts.filter(i => i.statusCode === 'NEW').length;
+
+            const totalQty = pendingImportProducts.reduce((sum, item) => sum + (parseInt(item.quantity) || 0), 0);
+
+            const countBadge = document.getElementById('importCountBadge');
+            const matchedBadge = document.getElementById('importMatchedBadge');
+            const mismatchBadge = document.getElementById('importMismatchBadge');
+            const newBadge = document.getElementById('importNewBadge');
+            const totalQtyBadge = document.getElementById('importTotalQtyBadge');
+
+            if (countBadge) countBadge.innerText = `${totalCount} รายการ`;
+            if (matchedBadge) matchedBadge.innerText = `${matchedCount} ตรงกัน`;
+            if (mismatchBadge) mismatchBadge.innerText = `${mismatchCount} ชื่อไม่ตรง`;
+            if (newBadge) newBadge.innerText = `${newCount} สินค้าใหม่`;
+            if (totalQtyBadge) totalQtyBadge.innerText = `${totalQty} ชิ้น`;
+
+            // Filter items
+            let filtered = pendingImportProducts;
+            if (currentImportModalFilter === 'matched') {
+                filtered = pendingImportProducts.filter(i => i.statusCode === 'MATCHED');
+            } else if (currentImportModalFilter === 'mismatch') {
+                filtered = pendingImportProducts.filter(i => i.statusCode === 'NAME_MISMATCH');
+            } else if (currentImportModalFilter === 'new') {
+                filtered = pendingImportProducts.filter(i => i.statusCode === 'NEW');
+            }
+
+            if (filtered.length === 0) {
+                previewList.innerHTML = '<div class="empty-state" style="padding: 2rem;">ไม่มีรายการในหมวดหมู่นี้</div>';
+                return;
+            }
+
+            filtered.forEach(item => {
+                const idx = pendingImportProducts.findIndex(p => p.id === item.id);
+                const newStockTotal = (item.currentStock || 0) + (parseInt(item.quantity) || 0);
+
+                let statusBadgeHtml = '';
+                let nameHtml = '';
+
+                if (item.statusCode === 'MATCHED') {
+                    statusBadgeHtml = `<span class="status-badge matched">✓ ตรงกับระบบ</span>`;
+                    nameHtml = `<div style="font-weight: 600; color: var(--text-main); font-size: 0.9rem;">${item.name}</div>`;
+                } else if (item.statusCode === 'NAME_MISMATCH') {
+                    statusBadgeHtml = `<span class="status-badge mismatch">⚠️ ชื่อไม่ตรง</span>`;
+                    nameHtml = `
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 0.9rem;">${item.name}</div>
+                        <div class="name-mismatch-box">
+                            <div>ในระบบ: <strong>${item.dbName}</strong></div>
+                            <label style="cursor: pointer; display: flex; align-items: center; gap: 0.35rem; margin-top: 0.3rem; font-size: 0.78rem;">
+                                <input type="checkbox" ${item.useDbName ? 'checked' : ''} onchange="toggleExcelItemUseDbName(${idx}, this.checked)">
+                                ใช้ชื่อในระบบ (${item.dbName}) แทนชื่อในไฟล์
+                            </label>
+                        </div>
+                    `;
+                } else {
+                    statusBadgeHtml = `<span class="status-badge new-item">🆕 สินค้าใหม่</span>`;
+                    nameHtml = `<div style="font-weight: 600; color: var(--text-main); font-size: 0.9rem;">${item.name}</div>`;
+                }
+
+                previewList.innerHTML += `
+                    <div class="item-row" style="padding: 0.75rem 1rem; align-items: center; font-size: 0.88rem;">
+                        <div style="flex: 1.5; font-family: 'Inter', monospace; font-size: 0.85rem; color: var(--text-muted);">
+                            ${item.code || item.barcode}
+                        </div>
+                        <div style="flex: 3; padding-right: 0.75rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.2rem;">
+                                ${statusBadgeHtml}
+                            </div>
+                            ${nameHtml}
+                        </div>
+                        <div style="flex: 1; text-align: center; color: var(--text-muted); font-weight: 600;">
+                            ${item.currentStock || 0}
+                        </div>
+                        <div style="flex: 1.5; text-align: center;">
+                            <input type="number" min="1" value="${item.quantity}" 
+                                oninput="updatePendingImportItemQty(${idx}, this.value)"
+                                style="width: 80px; text-align: center; font-weight: 800; font-size: 1rem; padding: 0.35rem; border: 1px solid var(--border-color); border-radius: 8px; color: var(--primary-color);">
+                        </div>
+                        <div style="flex: 1; text-align: center; font-weight: 800; color: #10b981;" id="row-new-total-${idx}">
+                            ${newStockTotal}
+                        </div>
+                        <div style="flex: 0.6; text-align: center;">
+                            <button type="button" class="btn btn-secondary btn-icon" 
+                                onclick="removePendingImportItem(${idx})" 
+                                title="ลบรายการนี้"
+                                style="width: 32px; height: 32px; padding: 0; color: #ef4444; border-color: #fee2e2;">
+                                ✕
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function updatePendingImportItemQty(index, newQty) {
+            const val = parseInt(newQty);
+            if (!isNaN(val) && val > 0 && pendingImportProducts[index]) {
+                pendingImportProducts[index].quantity = val;
+                const newTotalEl = document.getElementById(`row-new-total-${index}`);
+                if (newTotalEl) {
+                    newTotalEl.innerText = (pendingImportProducts[index].currentStock || 0) + val;
+                }
+                const totalQty = pendingImportProducts.reduce((sum, item) => sum + (parseInt(item.quantity) || 0), 0);
+                const badge = document.getElementById('importTotalQtyBadge');
+                if (badge) badge.innerText = `${totalQty} ชิ้น`;
+            }
+        }
+
+        function toggleExcelItemUseDbName(index, checked) {
+            if (pendingImportProducts[index]) {
+                pendingImportProducts[index].useDbName = checked;
+                if (checked && pendingImportProducts[index].dbName) {
+                    pendingImportProducts[index].name = pendingImportProducts[index].dbName;
+                } else {
+                    pendingImportProducts[index].name = pendingImportProducts[index].fileName;
+                }
+            }
+        }
+
+        function removePendingImportItem(index) {
+            if (pendingImportProducts[index]) {
+                pendingImportProducts.splice(index, 1);
+                renderExcelImportPreview();
+                if (pendingImportProducts.length === 0) {
+                    closeImportModal();
+                }
+            }
+        }
+
         function downloadImportTemplate() {
             const headers = [["โลเคชั่น", "รหัส", "ในระบบ", "รายการ", "Bar128", "จำนวน", "หมายเหตุ"]];
+            const sampleData = [
+                ["A-01-01", "BOX-001", "PDC-BOX-01", "กล่องกระดาษลูกฟูก 30x40 ซม.", "8850001001", 50, "สินค้าตรงกับระบบ"],
+                ["A-01-02", "TAPE-002", "PDC-TAPE-02", "เทป OPP", "8850001002", 20, "ทดสอบชื่อไม่ตรง"],
+                ["D-01-01", "NEW-999", "PDC-NEW-99", "สายรัดพลาสติก PP 15 มม.", "8850009999", 10, "ทดสอบสินค้าใหม่"]
+            ];
             const wb = XLSX.utils.book_new();
-            const ws = XLSX.utils.aoa_to_sheet(headers);
+            const ws = XLSX.utils.aoa_to_sheet([...headers, ...sampleData]);
 
             ws['!cols'] = [
                 { wch: 15 }, // โลเคชั่น
@@ -1823,81 +2581,632 @@
             pendingImportProducts = [];
         }
 
-        function confirmImport() {
-            if (pendingImportProducts.length > 0) {
-                if (!GOOGLE_WEBAPP_URL || !GOOGLE_WEBAPP_URL.startsWith("http")) {
-                    // Fallback to local
-                    mockProducts = [...mockProducts, ...pendingImportProducts];
-                    showAlert("สำเร็จ", `จำลองการนำเข้าข้อมูล ${pendingImportProducts.length} รายการ (Local)`);
-                    closeImportModal();
-                    loadImportHistory();
-                    return;
-                }
+        // Apply imported items to mockProducts database (increases stock)
+        function applyItemsToDatabase(items) {
+            items.forEach(impItem => {
+                const qtyToAdd = parseInt(impItem.quantity) || 0;
+                const searchKey = (impItem.code || impItem.barcode || '').toString().trim().toLowerCase();
+                const existing = mockProducts.find(p => 
+                    (p.code && p.code.toString().trim().toLowerCase() === searchKey) ||
+                    (p.barcode && p.barcode.toString().trim().toLowerCase() === searchKey)
+                );
 
-                document.getElementById('importModal').classList.remove('active');
-                showAlert("กำลังบันทึก...", "ระบบกำลังบันทึกข้อมูลนำเข้า กรุณารอสักครู่...");
-
-                fetch(GOOGLE_WEBAPP_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: JSON.stringify({
-                        action: 'import_excel',
-                        items: pendingImportProducts
-                    })
-                })
-                .then(res => res.json())
-                .then(resData => {
-                    closeAlertModal();
-                    if (resData.success) {
-                        mockProducts = [...mockProducts, ...pendingImportProducts];
-                        showAlert("สำเร็จ", `บันทึกข้อมูลนำเข้า ${pendingImportProducts.length} รายการ เรียบร้อยแล้ว`);
-                        loadImportHistory();
-                    } else {
-                        showAlert("ข้อผิดพลาด", "ไม่สามารถบันทึกข้อมูลได้: " + (resData.error || "Unknown Error"));
+                if (existing) {
+                    existing.quantity = (parseInt(existing.quantity) || 0) + qtyToAdd;
+                    if (impItem.useDbName === false && impItem.name && existing.name !== impItem.name) {
+                        // User chose file name
+                        existing.name = impItem.name;
                     }
-                })
-                .catch(err => {
-                    closeAlertModal();
-                    showAlert("ข้อผิดพลาด", "การเชื่อมต่อล้มเหลว: " + err.message);
-                });
-            } else {
+                    if (impItem.location && !existing.location) {
+                        existing.location = impItem.location;
+                    }
+                } else {
+                    mockProducts.push({
+                        code: impItem.code || impItem.barcode || 'ITEM-' + Date.now(),
+                        barcode: impItem.barcode || impItem.code || '',
+                        name: impItem.name || 'สินค้าใหม่',
+                        location: impItem.location || '',
+                        quantity: qtyToAdd,
+                        inSystemText: impItem.inSystemText || ''
+                    });
+                }
+            });
+
+            // Save to localStorage cache
+            try {
+                localStorage.setItem('cached_mock_products', JSON.stringify(mockProducts));
+            } catch(e){}
+        }
+
+        function confirmImport() {
+            if (pendingImportProducts.length === 0) {
                 closeImportModal();
+                return;
+            }
+
+            const importCount = pendingImportProducts.length;
+            const itemsToSave = JSON.parse(JSON.stringify(pendingImportProducts));
+            const importId = 'IMP-EXCEL-' + Date.now().toString().slice(-6);
+
+            // Apply stock updates to database
+            applyItemsToDatabase(itemsToSave);
+
+            // Save transaction to local cache
+            const historyRecord = {
+                importId: importId,
+                timestamp: new Date().toLocaleString('th-TH'),
+                method: 'ไฟล์ Excel',
+                items: itemsToSave
+            };
+            saveImportHistoryRecord(historyRecord);
+
+            closeImportModal();
+
+            if (!GOOGLE_WEBAPP_URL || !GOOGLE_WEBAPP_URL.startsWith("http")) {
+                showAlert("นำเข้าข้อมูลสำเร็จ", `นำเข้าข้อมูลสินค้าจากไฟล์ Excel จำนวน ${importCount} รายการ เรียบร้อยแล้ว (อัปเดตสต็อกในระบบแล้ว)`);
+                loadImportHistory();
+                return;
+            }
+
+            showAlert("กำลังบันทึก...", "กำลังส่งข้อมูลนำเข้าไปยังเซิร์ฟเวอร์ Google Sheets กรุณารอสักครู่...");
+
+            fetch(GOOGLE_WEBAPP_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: JSON.stringify({
+                    action: 'import_excel',
+                    importId: importId,
+                    items: itemsToSave
+                })
+            })
+            .then(res => res.json())
+            .then(resData => {
+                closeAlertModal();
+                showAlert("นำเข้าข้อมูลสำเร็จ", `บันทึกข้อมูลนำเข้า ${importCount} รายการ ไปยัง Google Sheets และอัปเดตสต็อกเรียบร้อยแล้ว`);
+                loadImportHistory();
+            })
+            .catch(err => {
+                closeAlertModal();
+                showAlert("แจ้งเตือน", `บันทึกข้อมูลในเครื่องเรียบร้อยแล้ว (การเชื่อมต่อ Google Script ขัดข้อง: ${err.message})`);
+                loadImportHistory();
+            });
+        }
+
+        // ==========================================
+        // METHOD 2: BARCODE SCAN IMPORT
+        // ==========================================
+        function openCameraForImport() {
+            openCamera('importBarcodeScanInput');
+        }
+
+        function lookupBarcodeForImport(barcode) {
+            const code = (barcode || '').toString().trim();
+            if (!code) {
+                showAlert("แจ้งเตือน", "กรุณาสแกนหรือกรอกบาร์โค้ด / รหัสสินค้า");
+                return;
+            }
+
+            // Database check & name matching
+            const check = checkProductInDatabase(code);
+
+            currentBarcodeImportItem = {
+                code: check.product ? check.product.code : code,
+                barcode: check.product ? (check.product.barcode || code) : code,
+                exists: check.exists,
+                product: check.product,
+                dbName: check.product ? check.product.name : '',
+                name: check.product ? check.product.name : '',
+                location: check.product ? check.product.location : '',
+                currentStock: check.currentStock,
+                inSystemText: check.product ? (check.product.inSystemText || '') : '',
+                quantity: 1
+            };
+
+            openBarcodeImportModal(code, check);
+        }
+
+        function openBarcodeImportModal(code, check) {
+            const badgeContainer = document.getElementById('barcodeModalStatusBadge');
+            const infoContainer = document.getElementById('barcodeModalItemInfo');
+            const qtyInput = document.getElementById('barcodeModalQty');
+
+            if (qtyInput) qtyInput.value = 1;
+
+            if (check.exists) {
+                if (badgeContainer) badgeContainer.innerHTML = `<span class="status-badge matched">✓ มีสินค้าในระบบ</span>`;
+                if (infoContainer) {
+                    infoContainer.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <span style="font-family: 'Inter', monospace; font-size: 1rem; font-weight: 700; color: var(--primary-color);">
+                                🏷️ ${code}
+                            </span>
+                            <span class="badge" style="background: rgba(16, 185, 129, 0.1); color: #059669;">พบในฐานข้อมูล</span>
+                        </div>
+
+                        <div style="margin-bottom: 0.75rem;">
+                            <label style="font-size: 0.78rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">ชื่อสินค้าในระบบ (Database Name):</label>
+                            <div style="font-size: 1.1rem; font-weight: 700; color: var(--text-main); margin-top: 0.15rem;">
+                                ${check.product.name}
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.85rem; font-size: 0.88rem;">
+                            <div>
+                                <span style="color: var(--text-muted); font-size: 0.78rem; font-weight: 600;">โลเคชั่น:</span>
+                                <div style="font-weight: 600;">${check.product.location || 'ไม่ระบุ'}</div>
+                            </div>
+                            <div>
+                                <span style="color: var(--text-muted); font-size: 0.78rem; font-weight: 600;">สต็อกปัจจุบันในคลัง:</span>
+                                <div style="font-weight: 800; color: var(--primary-color);">${check.currentStock} ชิ้น</div>
+                            </div>
+                        </div>
+
+                        <!-- Name Match Verification Box -->
+                        <div style="background: white; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 0.85rem;">
+                            <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 0.35rem;">
+                                ตรวจสอบชื่อสินค้าบนตัวสินค้า / ฉลาก (Name Verification):
+                            </label>
+                            <input type="text" id="barcodeModalItemName" value="${check.product.name}" 
+                                oninput="handleBarcodeModalNameChange(this.value)" 
+                                placeholder="พิมพ์ชื่อสินค้าเพื่อตรวจสอบความตรงกัน..." 
+                                style="width: 100%; padding: 0.6rem 0.85rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.9rem; outline: none;">
+                            <div id="barcodeModalNameMatchAlert" style="margin-top: 0.4rem; font-size: 0.82rem; font-weight: 600; color: #059669;">
+                                ✓ ชื่อสินค้าตรงกับฐานข้อมูลในระบบ
+                            </div>
+                        </div>
+                    `;
+                }
+            } else {
+                if (badgeContainer) badgeContainer.innerHTML = `<span class="status-badge new-item">🆕 สินค้าใหม่</span>`;
+                if (infoContainer) {
+                    infoContainer.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                            <span style="font-family: 'Inter', monospace; font-size: 1rem; font-weight: 700; color: var(--primary-color);">
+                                🏷️ ${code}
+                            </span>
+                            <span class="badge" style="background: rgba(59, 130, 246, 0.1); color: #2563eb;">ไม่พบในระบบ</span>
+                        </div>
+
+                        <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 0.65rem 0.85rem; margin-bottom: 0.85rem; font-size: 0.85rem; color: #1e40af;">
+                            ℹ️ บาร์โค้ดนี้ยังไม่มีในฐานข้อมูล กรุณาระบุชื่อสินค้าเพื่อนำเข้าเป็นสินค้าใหม่
+                        </div>
+
+                        <div style="margin-bottom: 0.75rem;">
+                            <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 0.35rem;">
+                                ชื่อสินค้า (Product Name) <span style="color: #ef4444;">*จำเป็น</span>:
+                            </label>
+                            <input type="text" id="barcodeModalItemName" placeholder="เช่น กล่องพัสดุ เบอร์ 0..." 
+                                oninput="handleBarcodeModalNameChange(this.value)"
+                                style="width: 100%; padding: 0.6rem 0.85rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.9rem; outline: none;">
+                            <div id="barcodeModalNameMatchAlert" style="margin-top: 0.4rem; font-size: 0.82rem; font-weight: 600; color: #2563eb;">
+                                ระบบจะเพิ่มเป็นสินค้าใหม่ในฐานข้อมูล
+                            </div>
+                        </div>
+
+                        <div>
+                            <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: block; margin-bottom: 0.35rem;">
+                                โลเคชั่นจัดเก็บ (Location):
+                            </label>
+                            <input type="text" id="barcodeModalItemLocation" placeholder="เช่น A-01-01..." 
+                                style="width: 100%; padding: 0.6rem 0.85rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.9rem; outline: none;">
+                        </div>
+                    `;
+                }
+            }
+
+            updateBarcodeModalStockPreview();
+            document.getElementById('barcodeImportModal').classList.add('active');
+
+            setTimeout(() => {
+                const q = document.getElementById('barcodeModalQty');
+                if (q) { q.focus(); q.select(); }
+            }, 100);
+        }
+
+        function handleBarcodeModalNameChange(val) {
+            if (!currentBarcodeImportItem) return;
+            const inputVal = (val || '').trim();
+            currentBarcodeImportItem.name = inputVal;
+
+            const alertEl = document.getElementById('barcodeModalNameMatchAlert');
+            if (!alertEl) return;
+
+            if (currentBarcodeImportItem.exists) {
+                const dbName = (currentBarcodeImportItem.dbName || '').trim();
+                if (inputVal.toLowerCase() === dbName.toLowerCase()) {
+                    alertEl.style.color = '#059669';
+                    alertEl.innerHTML = '✓ ชื่อสินค้าตรงกับฐานข้อมูลในระบบ';
+                    currentBarcodeImportItem.nameMatch = true;
+                } else {
+                    alertEl.style.color = '#d97706';
+                    alertEl.innerHTML = `⚠️ ชื่อสินค้าไม่ตรงกับในระบบ! (ชื่อในระบบเดิมคือ: "${dbName}")`;
+                    currentBarcodeImportItem.nameMatch = false;
+                }
+            } else {
+                if (inputVal) {
+                    alertEl.style.color = '#059669';
+                    alertEl.innerHTML = '✓ พร้อมลงทะเบียนเป็นสินค้าใหม่';
+                } else {
+                    alertEl.style.color = '#ef4444';
+                    alertEl.innerHTML = '⚠️ กรุณาระบุชื่อสินค้า';
+                }
+            }
+        }
+
+        function adjustBarcodeImportQty(delta) {
+            const input = document.getElementById('barcodeModalQty');
+            if (!input) return;
+            let current = parseInt(input.value) || 1;
+            current = Math.max(1, current + delta);
+            input.value = current;
+            updateBarcodeModalStockPreview();
+        }
+
+        function updateBarcodeModalStockPreview() {
+            const qtyInput = document.getElementById('barcodeModalQty');
+            const qty = Math.max(1, parseInt(qtyInput ? qtyInput.value : 1) || 1);
+            if (currentBarcodeImportItem) {
+                currentBarcodeImportItem.quantity = qty;
+            }
+
+            const curStock = currentBarcodeImportItem ? (currentBarcodeImportItem.currentStock || 0) : 0;
+            const newTotal = curStock + qty;
+
+            const curEl = document.getElementById('barcodeStockCurrent');
+            const addEl = document.getElementById('barcodeStockAdd');
+            const totalEl = document.getElementById('barcodeStockNewTotal');
+
+            if (curEl) curEl.innerText = `${curStock} ชิ้น`;
+            if (addEl) addEl.innerText = `+${qty} ชิ้น`;
+            if (totalEl) totalEl.innerText = `${newTotal} ชิ้น`;
+        }
+
+        function closeBarcodeImportModal() {
+            document.getElementById('barcodeImportModal').classList.remove('active');
+            currentBarcodeImportItem = null;
+            const input = document.getElementById('importBarcodeScanInput');
+            if (input) input.value = '';
+        }
+
+        function confirmSingleBarcodeImport() {
+            if (!currentBarcodeImportItem) return;
+
+            const nameInput = document.getElementById('barcodeModalItemName');
+            const finalName = nameInput ? nameInput.value.trim() : (currentBarcodeImportItem.name || '');
+
+            if (!finalName) {
+                showAlert("แจ้งเตือน", "กรุณาระบุชื่อสินค้าก่อนยืนยันนำเข้า");
+                return;
+            }
+
+            currentBarcodeImportItem.name = finalName;
+
+            const locInput = document.getElementById('barcodeModalItemLocation');
+            if (locInput && locInput.value.trim()) {
+                currentBarcodeImportItem.location = locInput.value.trim();
+            }
+
+            const qtyInput = document.getElementById('barcodeModalQty');
+            const finalQty = Math.max(1, parseInt(qtyInput ? qtyInput.value : 1) || 1);
+            currentBarcodeImportItem.quantity = finalQty;
+
+            const itemToSave = { ...currentBarcodeImportItem };
+            const importId = 'IMP-BC-' + Date.now().toString().slice(-6);
+
+            // Update database
+            applyItemsToDatabase([itemToSave]);
+
+            // Save history record
+            const historyRecord = {
+                importId: importId,
+                timestamp: new Date().toLocaleString('th-TH'),
+                method: 'สแกนบาร์โค้ด',
+                items: [itemToSave]
+            };
+            saveImportHistoryRecord(historyRecord);
+
+            closeBarcodeImportModal();
+
+            const newTotalStock = (itemToSave.currentStock || 0) + finalQty;
+
+            if (!GOOGLE_WEBAPP_URL || !GOOGLE_WEBAPP_URL.startsWith("http")) {
+                showAlert("นำเข้าสินค้าสำเร็จ", `นำเข้า "${finalName}" เรียบร้อยแล้ว!\n• จำนวนที่เพิ่ม: +${finalQty} ชิ้น\n• สต็อกรวมใหม่: ${newTotalStock} ชิ้น`);
+                loadImportHistory();
+                return;
+            }
+
+            showAlert("กำลังบันทึก...", "กำลังส่งข้อมูลนำเข้าไปยังเซิร์ฟเวอร์ Google Sheets...");
+
+            fetch(GOOGLE_WEBAPP_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: JSON.stringify({
+                    action: 'import_excel',
+                    importId: importId,
+                    items: [itemToSave]
+                })
+            })
+            .then(res => res.json())
+            .then(resData => {
+                closeAlertModal();
+                showAlert("นำเข้าสินค้าสำเร็จ", `นำเข้า "${finalName}" เรียบร้อยแล้ว!\n• จำนวนที่เพิ่ม: +${finalQty} ชิ้น\n• สต็อกรวมใหม่: ${newTotalStock} ชิ้น`);
+                loadImportHistory();
+            })
+            .catch(err => {
+                closeAlertModal();
+                showAlert("แจ้งเตือน", `นำเข้าสินค้าในเครื่องสำเร็จ: ${finalName} (+${finalQty} ชิ้น)`);
+                loadImportHistory();
+            });
+        }
+
+        // Add scanned item to staging batch instead of direct single import
+        function addScannedItemToBatch() {
+            if (!currentBarcodeImportItem) return;
+
+            const nameInput = document.getElementById('barcodeModalItemName');
+            const finalName = nameInput ? nameInput.value.trim() : (currentBarcodeImportItem.name || '');
+
+            if (!finalName) {
+                showAlert("แจ้งเตือน", "กรุณาระบุชื่อสินค้า");
+                return;
+            }
+
+            currentBarcodeImportItem.name = finalName;
+
+            const locInput = document.getElementById('barcodeModalItemLocation');
+            if (locInput && locInput.value.trim()) {
+                currentBarcodeImportItem.location = locInput.value.trim();
+            }
+
+            const qtyInput = document.getElementById('barcodeModalQty');
+            const finalQty = Math.max(1, parseInt(qtyInput ? qtyInput.value : 1) || 1);
+            currentBarcodeImportItem.quantity = finalQty;
+
+            // Check if already in staging
+            const existingIdx = stagedImportProducts.findIndex(p => p.code === currentBarcodeImportItem.code);
+            if (existingIdx >= 0) {
+                stagedImportProducts[existingIdx].quantity += finalQty;
+            } else {
+                stagedImportProducts.push({ ...currentBarcodeImportItem });
+            }
+
+            closeBarcodeImportModal();
+            renderStagedImportBatch();
+            showAlert("เพิ่มลงในรายการรอแล้ว", `เพิ่ม "${finalName}" (+${finalQty} ชิ้น) ลงในรายการเตรียมนำเข้าเรียบร้อย คุณสามารถสแกนรายการอื่นต่อได้`);
+        }
+
+        function renderStagedImportBatch() {
+            const section = document.getElementById('importStagingSection');
+            const list = document.getElementById('stagedBatchList');
+            const badge = document.getElementById('stagedBatchCountBadge');
+
+            if (!section || !list) return;
+
+            if (stagedImportProducts.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+
+            section.style.display = 'block';
+            if (badge) badge.innerText = `${stagedImportProducts.length} รายการ`;
+            list.innerHTML = '';
+
+            stagedImportProducts.forEach((item, idx) => {
+                let statusBadge = item.exists 
+                    ? `<span class="status-badge matched">ตรงกับระบบ</span>` 
+                    : `<span class="status-badge new-item">สินค้าใหม่</span>`;
+
+                list.innerHTML += `
+                    <div class="item-row" style="padding: 0.75rem 1rem; align-items: center; font-size: 0.88rem;">
+                        <span style="flex: 2; font-family: 'Inter', monospace; color: var(--text-muted);">${item.code || item.barcode}</span>
+                        <span style="flex: 3; font-weight: 600;">${item.name}</span>
+                        <span style="flex: 1.5; text-align: center;">${statusBadge}</span>
+                        <span style="flex: 1.5; text-align: right; font-weight: 800; color: var(--primary-color);">+${item.quantity}</span>
+                        <span style="flex: 0.8; text-align: center;">
+                            <button type="button" class="btn btn-secondary btn-icon" onclick="removeStagedItem(${idx})" style="width: 28px; height: 28px; padding: 0; color: #ef4444;">✕</button>
+                        </span>
+                    </div>
+                `;
+            });
+        }
+
+        function removeStagedItem(idx) {
+            stagedImportProducts.splice(idx, 1);
+            renderStagedImportBatch();
+        }
+
+        function clearStagedImportBatch() {
+            stagedImportProducts = [];
+            renderStagedImportBatch();
+        }
+
+        function confirmStagedImportBatch() {
+            if (stagedImportProducts.length === 0) return;
+
+            const itemsToSave = JSON.parse(JSON.stringify(stagedImportProducts));
+            const count = itemsToSave.length;
+            const importId = 'IMP-BATCH-' + Date.now().toString().slice(-6);
+
+            applyItemsToDatabase(itemsToSave);
+
+            saveImportHistoryRecord({
+                importId: importId,
+                timestamp: new Date().toLocaleString('th-TH'),
+                method: 'สแกนบาร์โค้ด (ชุด)',
+                items: itemsToSave
+            });
+
+            clearStagedImportBatch();
+
+            if (!GOOGLE_WEBAPP_URL || !GOOGLE_WEBAPP_URL.startsWith("http")) {
+                showAlert("นำเข้าสำเร็จ", `ยืนยันการนำเข้าสินค้าชุด ${count} รายการ เรียบร้อยแล้ว (อัปเดตสต็อกแล้ว)`);
+                loadImportHistory();
+                return;
+            }
+
+            showAlert("กำลังบันทึก...", "กำลังส่งข้อมูลนำเข้าชุดไปยังเซิร์ฟเวอร์ Google Sheets...");
+
+            fetch(GOOGLE_WEBAPP_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: JSON.stringify({
+                    action: 'import_excel',
+                    importId: importId,
+                    items: itemsToSave
+                })
+            })
+            .then(res => res.json())
+            .then(resData => {
+                closeAlertModal();
+                showAlert("นำเข้าสำเร็จ", `ยืนยันการนำเข้าสินค้าชุด ${count} รายการ ไปยัง Google Sheets เรียบร้อยแล้ว`);
+                loadImportHistory();
+            })
+            .catch(err => {
+                closeAlertModal();
+                showAlert("แจ้งเตือน", `บันทึกรายการในเครื่องสำเร็จ: ${count} รายการ`);
+                loadImportHistory();
+            });
+        }
+
+        // ==========================================
+        // IMPORT HISTORY (CONNECTED TO GOOGLE SHEETS)
+        // ==========================================
+        function saveImportHistoryRecord(record) {
+            try {
+                let localHistory = JSON.parse(localStorage.getItem('warehouse_import_history') || '[]');
+                localHistory.unshift(record);
+                if (localHistory.length > 50) localHistory = localHistory.slice(0, 50);
+                localStorage.setItem('warehouse_import_history', JSON.stringify(localHistory));
+            } catch(e) {
+                console.error("Error saving local import history:", e);
             }
         }
 
         function loadImportHistory() {
             const listContainer = document.getElementById('importHistoryList');
+            const settingsContainer = document.getElementById('settingsImportHistoryList');
+
+            if (listContainer) listContainer.innerHTML = '<div class="empty-state">กำลังโหลดประวัติจาก Google Sheets...</div>';
+            if (settingsContainer) settingsContainer.innerHTML = '<div class="empty-state">กำลังโหลดประวัติจาก Google Sheets...</div>';
+
             if (!GOOGLE_WEBAPP_URL || !GOOGLE_WEBAPP_URL.startsWith("http")) {
-                listContainer.innerHTML = '<div class="empty-state">ไม่สามารถโหลดประวัติจากระบบจำลอง (Local) ได้</div>';
+                renderImportHistoryList([]);
                 return;
             }
-            listContainer.innerHTML = '<div class="empty-state">กำลังโหลดประวัติ...</div>';
-            
+
             fetch(GOOGLE_WEBAPP_URL + "?action=getImportHistory", { method: 'GET' })
                 .then(response => response.json())
-                .then(data => {
-                    if (Array.isArray(data) && data.length > 0) {
-                        listContainer.innerHTML = '';
-                        data.forEach(imp => {
-                            const dateStr = imp.timestamp || imp.importId;
-                            listContainer.innerHTML += `
-                                <div class="item-row">
-                                    <span style="flex: 2; font-weight: 500;">${dateStr}</span>
-                                    <span style="flex: 2; font-family: 'Inter', monospace; color: var(--text-muted); font-size: 0.9rem;">${imp.importId}</span>
-                                    <span style="flex: 1; text-align: right; font-weight: 600; color: var(--primary-color);">${imp.items.length} รายการ</span>
-                                </div>
-                            `;
-                        });
-                    } else {
-                        listContainer.innerHTML = '<div class="empty-state">ยังไม่มีประวัติการนำเข้าข้อมูล</div>';
-                    }
+                .then(remoteData => {
+                    const validData = Array.isArray(remoteData) ? remoteData : [];
+                    renderImportHistoryList(validData);
                 })
                 .catch(err => {
-                    listContainer.innerHTML = `<div class="empty-state" style="color: var(--primary-red);">เกิดข้อผิดพลาด: ${err.message}</div>`;
+                    console.warn("Could not fetch Google Sheets import history:", err);
+                    const errorMsg = `<div class="empty-state" style="color: #ef4444;">ไม่สามารถดึงข้อมูลจาก Google Sheets ได้: ${err.message}</div>`;
+                    if (listContainer) listContainer.innerHTML = errorMsg;
+                    if (settingsContainer) settingsContainer.innerHTML = errorMsg;
                 });
         }
 
+        let allLoadedImportRecords = [];
+
+        function renderImportHistoryList(data) {
+            allLoadedImportRecords = Array.isArray(data) ? data : [];
+
+            const listContainer = document.getElementById('importHistoryList');
+            const settingsContainer = document.getElementById('settingsImportHistoryList');
+
+            const targets = [listContainer, settingsContainer].filter(Boolean);
+            if (targets.length === 0) return;
+
+            if (allLoadedImportRecords.length === 0) {
+                targets.forEach(t => {
+                    t.innerHTML = '<div class="empty-state">ยังไม่มีประวัติการนำเข้าข้อมูลใน Google Sheets</div>';
+                });
+                return;
+            }
+
+            const html = allLoadedImportRecords.map((imp, idx) => {
+                const dateStr = imp.timestamp || imp.importId || '-';
+                const idStr = imp.importId || '-';
+                const itemsCount = (imp.items && Array.isArray(imp.items)) ? imp.items.length : 0;
+                const methodStr = imp.method || 'ไฟล์ Excel';
+
+                return `
+                    <div class="item-row" style="align-items: center; padding: 0.85rem 1rem;">
+                        <span style="flex: 2; font-weight: 500; font-size: 0.9rem;">${dateStr}</span>
+                        <span style="flex: 2; font-family: 'Inter', monospace; color: var(--text-muted); font-size: 0.88rem;">${idStr}</span>
+                        <span style="flex: 1.5; font-size: 0.85rem;"><span class="badge" style="background:#f1f5f9; color:var(--text-main); font-weight: 600;">${methodStr}</span></span>
+                        <span style="flex: 1.5; text-align: right; font-weight: 700; color: var(--primary-color);">${itemsCount} รายการ</span>
+                        <span style="flex: 1; text-align: center;">
+                            <button type="button" class="btn btn-secondary btn-icon" onclick="viewImportDetails(${idx})" title="ดูรายละเอียดรายการ" style="width: 32px; height: 32px; padding: 0; font-size: 0.85rem;">
+                                👁️
+                            </button>
+                        </span>
+                    </div>
+                `;
+            }).join('');
+
+            targets.forEach(t => {
+                t.innerHTML = html;
+            });
+        }
+
+        function viewImportDetails(recordIndex) {
+            const record = allLoadedImportRecords[recordIndex];
+            if (!record) return;
+
+            document.getElementById('importDetailDate').innerText = `${record.timestamp || '-'} • ${record.importId || '-'}`;
+            document.getElementById('importDetailTitle').innerText = `รายการนำเข้า (${record.method || 'Excel'})`;
+            document.getElementById('importDetailCountBadge').innerText = `${record.items ? record.items.length : 0} รายการ`;
+
+            const list = document.getElementById('importDetailItemsList');
+            list.innerHTML = '';
+
+            if (record.items && record.items.length > 0) {
+                record.items.forEach(item => {
+                    list.innerHTML += `
+                        <div class="item-row" style="padding: 0.65rem 1rem; font-size: 0.88rem;">
+                            <span style="flex: 2; font-family: 'Inter', monospace; color: var(--text-muted);">${item.code || item.barcode || '-'}</span>
+                            <span style="flex: 3; font-weight: 600;">${item.name || item.inSystem || '-'}</span>
+                            <span style="flex: 1; text-align: right; font-weight: 700; color: var(--primary-color);">+${item.quantity || item.qty || 1}</span>
+                        </div>
+                    `;
+                });
+            } else {
+                list.innerHTML = '<div class="empty-state" style="padding: 1.5rem;">ไม่มีข้อมูลรายการย่อย</div>';
+            }
+
+            document.getElementById('importDetailModal').classList.add('active');
+        }
+
+        function closeImportDetailModal() {
+            document.getElementById('importDetailModal').classList.remove('active');
+        }
+
         async function loadProductsFromSheet() {
+            // First attempt to load directly from Google Apps Script Web App API
+            if (GOOGLE_WEBAPP_URL && GOOGLE_WEBAPP_URL.startsWith("http")) {
+                try {
+                    const response = await fetch(GOOGLE_WEBAPP_URL + "?action=getProducts");
+                    const data = await response.json();
+                    if (Array.isArray(data) && data.length > 0) {
+                        mockProducts = data.map(item => ({
+                            code: (item.code || '').trim(),
+                            barcode: (item.barcode || item.code || '').trim(),
+                            name: (item.name || 'ไม่ทราบชื่อ').trim(),
+                            location: (item.location || '').trim(),
+                            quantity: parseInt(item.quantity) || 0,
+                            inSystemText: (item.inSystemText || item.inSystem || '').trim()
+                        }));
+                        console.log("Loaded products from Google Apps Script API:", mockProducts);
+                        return;
+                    }
+                } catch(err) {
+                    console.warn("Could not load products via Web App API, falling back to CSV export:", err);
+                }
+            }
+
             const sheetUrl = "https://docs.google.com/spreadsheets/d/1qowevGtNwTDaXStrJzoKmPgkVR9U0mQ0sNb3MW9uuMw/export?format=csv&gid=439510755";
             try {
                 const response = await fetch(sheetUrl);
@@ -1909,7 +3218,7 @@
                     transformHeader: function(h) { return h.trim(); },
                     complete: function (results) {
                         mockProducts = results.data
-                            .filter(row => row['Bar128'] || row['รหัส']) // ensure there's an identifier
+                            .filter(row => row['Bar128'] || row['รหัส'])
                             .map(row => ({
                                 code: (row['รหัส'] || row['Bar128'] || '').trim(),
                                 barcode: (row['Bar128'] || '').trim(),
@@ -1918,7 +3227,7 @@
                                 quantity: parseInt(row['จำนวน']) || 0,
                                 inSystemText: row['ในระบบ'] ? row['ในระบบ'].trim() : ''
                             }));
-                        console.log("Loaded products from sheet:", mockProducts);
+                        console.log("Loaded products from sheet CSV:", mockProducts);
                     }
                 });
             } catch (err) {
@@ -1930,6 +3239,39 @@
             loadProductsFromSheet();
             switchTab('warehouse');
         });
+
+        // ==========================================
+        // REQUISITION HISTORY (CONNECTED TO GOOGLE SHEETS)
+        // ==========================================
+        function fetchHistoryFromGoogleSheets() {
+            const listContainer = document.getElementById('historyRequestsList');
+            if (listContainer) {
+                listContainer.innerHTML = '<div class="empty-state">กำลังโหลดข้อมูลจริงจาก Google Sheets...</div>';
+            }
+
+            if (!GOOGLE_WEBAPP_URL || !GOOGLE_WEBAPP_URL.startsWith("http")) {
+                renderHistoryList([]);
+                return;
+            }
+
+            fetch(GOOGLE_WEBAPP_URL + "?action=getAll", { method: 'GET' })
+                .then(response => response.json())
+                .then(data => {
+                    if (Array.isArray(data) && data.length > 0) {
+                        historyWarehouseRequests = data;
+                        renderHistoryList(historyWarehouseRequests);
+                    } else {
+                        historyWarehouseRequests = [];
+                        renderHistoryList([]);
+                    }
+                })
+                .catch(err => {
+                    console.error("Fetch history error:", err);
+                    if (listContainer) {
+                        listContainer.innerHTML = `<div class="empty-state" style="color: #ef4444;">ไม่สามารถดึงข้อมูลจาก Google Sheets ได้: ${err.message}</div>`;
+                    }
+                });
+        }
 
         // Functions
         function switchTab(tabId) {
@@ -1963,7 +3305,6 @@
                         .then(response => response.json())
                         .then(data => {
                             if (Array.isArray(data) && data.length > 0) {
-                                // Filter based on backend status instead of localStorage
                                 pendingWarehouseRequests = data.filter(r => r.status !== 'Confirmed');
                             }
                             renderWarehouseList();
@@ -1981,6 +3322,12 @@
                 headerObj.style.display = 'none';
                 document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
                 document.getElementById('view-import').classList.add('active');
+                renderStagedImportBatch();
+                loadImportHistory();
+            } else if (tabId === 'settings') {
+                headerObj.style.display = 'none';
+                document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+                document.getElementById('view-settings').classList.add('active');
                 loadImportHistory();
             } else if (tabId === 'history') {
                 headerObj.style.display = 'none';
@@ -1989,35 +3336,7 @@
                 document.getElementById('history-list-view').style.display = 'block';
                 document.getElementById('history-detail-view').style.display = 'none';
 
-                if (GOOGLE_WEBAPP_URL && GOOGLE_WEBAPP_URL.startsWith("http")) {
-                    document.getElementById('historyRequestsList').innerHTML = '<div class="empty-state">กำลังโหลดข้อมูล...</div>';
-
-                    fetch(GOOGLE_WEBAPP_URL + "?action=getAll", {
-                        method: 'GET'
-                    })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (Array.isArray(data) && data.length > 0) {
-                                if (currentUserRole === 'requester') {
-                                    // Requester sees ALL their requests
-                                    historyWarehouseRequests = data;
-                                } else {
-                                    // Warehouse sees ONLY confirmed requests in history
-                                    historyWarehouseRequests = data.filter(r => r.status === 'Confirmed');
-                                }
-                                renderHistoryList(historyWarehouseRequests);
-                            } else {
-                                historyWarehouseRequests = [];
-                                renderHistoryList([]);
-                            }
-                        })
-                        .catch(err => {
-                            console.error("Fetch error:", err);
-                            renderHistoryList(historyWarehouseRequests);
-                        });
-                } else {
-                    renderHistoryList(historyWarehouseRequests);
-                }
+                fetchHistoryFromGoogleSheets();
 
                 document.getElementById('view-history').classList.add('active');
             }
@@ -2094,26 +3413,29 @@
 
         function renderHistoryList(historyReqs) {
             const listContainer = document.getElementById('historyRequestsList');
+            if (!listContainer) return;
+
             if (!historyReqs || historyReqs.length === 0) {
-                listContainer.innerHTML = '<div class="empty-state">ไม่มีประวัติการอนุมัติ</div>';
+                listContainer.innerHTML = '<div class="empty-state">ยังไม่มีประวัติการทำรายการใน Google Sheets</div>';
                 return;
             }
 
             listContainer.innerHTML = historyReqs.map(req => {
-                const isPending = req.status !== 'Confirmed';
+                const isPending = (req.status || '').toLowerCase() !== 'confirmed';
                 const badgeHtml = isPending 
                     ? '<span class="badge" style="background: rgba(245, 158, 11, 0.1); color: #F59E0B;">รอตรวจสอบ</span>'
                     : '<span class="badge" style="background: rgba(16, 185, 129, 0.1); color: #10B981;">อนุมัติแล้ว</span>';
                 
+                const itemCount = (req.items && Array.isArray(req.items)) ? req.items.length : 0;
                 const editBtnHtml = (isPending && currentUserRole === 'requester')
                     ? `<button class="btn btn-outline" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; margin-top: 0.25rem;" onclick="event.stopPropagation(); editOwnRequest('${req.id}')">แก้ไข</button>`
                     : '';
 
                 return `
                 <div class="item-row" style="cursor: pointer; align-items: center;" onclick="viewHistoryRequest('${req.id}')">
-                    <span style="flex: 2; font-weight: 600; color: ${isPending ? '#F59E0B' : '#10B981'};">${req.jobId}</span>
-                    <span style="flex: 2;">${req.reqName}</span>
-                    <span style="flex: 1; text-align: right; font-weight: 600;">${req.items.length} รายการ</span>
+                    <span style="flex: 2; font-weight: 600; color: ${isPending ? '#F59E0B' : '#10B981'};">${req.jobId || '-'}</span>
+                    <span style="flex: 2;">${req.reqName || '-'}</span>
+                    <span style="flex: 1; text-align: right; font-weight: 600;">${itemCount} รายการ</span>
                     <div style="flex: 1; text-align: center; display: flex; flex-direction: column; align-items: center;">
                         ${badgeHtml}
                         ${editBtnHtml}
@@ -2127,11 +3449,11 @@
             const req = historyWarehouseRequests.find(r => r.id === id);
             if (!req) return;
 
-            document.getElementById('historyJobId').innerText = req.jobId;
-            document.getElementById('historyReqName').innerText = req.reqName;
+            document.getElementById('historyJobId').innerText = req.jobId || '-';
+            document.getElementById('historyReqName').innerText = req.reqName || '-';
             
             // Update the status badge in the detail view
-            const isPending = req.status !== 'Confirmed';
+            const isPending = (req.status || '').toLowerCase() !== 'confirmed';
             const detailBadge = document.getElementById('historyDetailBadge');
             if (detailBadge) {
                 if (isPending) {
@@ -2146,13 +3468,17 @@
             }
 
             const itemsContainer = document.getElementById('historyItems');
-            itemsContainer.innerHTML = req.items.map(item => `
-                <div class="item-row">
-                    <span style="flex: 2; font-family: monospace;">${item.code}</span>
-                    <span style="flex: 3; font-weight: 500;">${item.name}</span>
-                    <span style="flex: 1; text-align: right; font-weight: 600; font-size: 1.1rem; color: var(--text-main);">${item.qty}</span>
-                </div>
-            `).join('');
+            if (req.items && Array.isArray(req.items) && req.items.length > 0) {
+                itemsContainer.innerHTML = req.items.map(item => `
+                    <div class="item-row">
+                        <span style="flex: 2; font-family: monospace;">${item.code || '-'}</span>
+                        <span style="flex: 3; font-weight: 500;">${item.name || item.inSystem || '-'}</span>
+                        <span style="flex: 1; text-align: right; font-weight: 600; font-size: 1.1rem; color: var(--text-main);">${item.qty || item.quantity || 1}</span>
+                    </div>
+                `).join('');
+            } else {
+                itemsContainer.innerHTML = '<div class="empty-state" style="padding: 1.5rem;">ไม่มีข้อมูลรายการย่อย</div>';
+            }
 
             document.getElementById('history-list-view').style.display = 'none';
             document.getElementById('history-detail-view').style.display = 'block';
@@ -2267,23 +3593,48 @@
             }
         }
 
-        function captureBarcode() {
+        async function captureBarcode() {
             const video = document.getElementById('videoElement');
 
             // Visual effect of taking a photo
             video.pause();
 
+            let foundCode = '';
+            let foundProduct = null;
+
+            // Attempt hardware barcode detection if supported by browser
+            if ('BarcodeDetector' in window) {
+                try {
+                    const detector = new BarcodeDetector({ formats: ['code_128', 'code_39', 'ean_13', 'ean_8', 'qr_code', 'upc_a', 'upc_e'] });
+                    const barcodes = await detector.detect(video);
+                    if (barcodes && barcodes.length > 0) {
+                        foundCode = barcodes[0].rawValue;
+                    }
+                } catch(e) {
+                    console.log("Barcode detection attempt:", e);
+                }
+            }
+
             // Simulate processing time
             setTimeout(() => {
-                let foundCode = 'MOCK-123';
-                let foundProduct = null;
-
-                if (mockProducts.length > 0) {
-                    foundProduct = mockProducts[Math.floor(Math.random() * mockProducts.length)];
-                    foundCode = foundProduct.barcode || foundProduct.code;
+                if (!foundCode) {
+                    if (mockProducts.length > 0) {
+                        foundProduct = mockProducts[Math.floor(Math.random() * mockProducts.length)];
+                        foundCode = foundProduct.barcode || foundProduct.code;
+                    } else {
+                        foundCode = 'BC-' + Math.floor(100000 + Math.random() * 900000);
+                    }
+                } else {
+                    foundProduct = mockProducts.find(p => 
+                        (p.barcode && p.barcode.toLowerCase() === foundCode.toLowerCase()) || 
+                        (p.code && p.code.toLowerCase() === foundCode.toLowerCase())
+                    );
                 }
 
-                document.getElementById(currentScanTarget).value = foundCode;
+                const targetEl = document.getElementById(currentScanTarget);
+                if (targetEl) targetEl.value = foundCode;
+
+                closeCamera();
 
                 if (currentScanTarget === 'barcode') {
                     if (foundProduct) {
@@ -2297,10 +3648,10 @@
                     if (foundProduct) {
                         showLocationPopup(foundProduct.location, foundProduct.name);
                     }
+                } else if (currentScanTarget === 'importBarcodeScanInput') {
+                    lookupBarcodeForImport(foundCode);
                 }
-
-                closeCamera();
-            }, 600);
+            }, 500);
         }
 
         function addItem() {
