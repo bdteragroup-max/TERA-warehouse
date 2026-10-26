@@ -1381,7 +1381,9 @@
             <!-- View Submitted (Requisitioner Success) -->
             <div class="view" id="view-submitted">
                 <div class="text-center" style="padding: 3rem 0;">
-                    <div class="success-icon">✓</div>
+                    <div class="success-icon">
+                        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
                     <h2 style="border: none; padding: 0; margin-bottom: 1rem;">ส่งรายการเบิกสำเร็จ</h2>
                     <p style="color: var(--text-muted); margin-bottom: 2rem;">
                         รายการของคุณถูกส่งไปยังแผนกคลังสินค้าเพื่อตรวจสอบแล้ว</p>
@@ -1415,20 +1417,74 @@
                         style="margin-bottom: 1.5rem; padding: 0.5rem 1rem; font-size: 0.9rem;">&larr;
                         กลับไปหน้ารายการ</button>
                     <div
-                        style="background: var(--bg-color); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
+                        style="background: #ffffff; border: 1.5px solid var(--border-color); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.75rem; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
                         <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 1rem;">
                             <div>
-                                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.25rem;">รหัสงาน
-                                    / โครงการ</p>
-                                <h3 id="warehouseJobId" style="font-family: 'Inter', sans-serif; margin: 0;">-</h3>
+                                <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.35rem; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">
+                                    รหัสงาน / โครงการ (Job / Project Code)
+                                </p>
+                                <h3 id="warehouseJobId" style="font-family: 'Inter', monospace, sans-serif; margin: 0; font-size: 1.5rem; font-weight: 800; color: var(--text-main);">-</h3>
                             </div>
-                            <span class="badge">รอตรวจสอบ</span>
+                            <div style="text-align: right;">
+                                <span class="badge" style="font-size: 0.85rem; padding: 0.35rem 0.85rem; margin-bottom: 0.4rem; display: inline-block;">รอตรวจสอบ</span>
+                                <div>
+                                    <span style="color: var(--text-muted); font-size: 0.85rem;">ชื่อผู้เบิก: </span>
+                                    <strong id="warehouseReqName" style="font-weight: 700; color: var(--text-main);">-</strong>
+                                </div>
+                                <div style="margin-top: 0.35rem;">
+                                    <span style="color: var(--text-muted); font-size: 0.85rem;">สรุปรายการ: </span>
+                                    <strong id="warehouseHeaderItemCount" style="color: var(--primary-color); font-weight: 700;">- รายการ (- ชิ้น)</strong>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.25rem;">ชื่อผู้เบิก
-                            </p>
-                            <p id="warehouseReqName" style="font-weight: 600; margin: 0;">-</p>
+
+                        <!-- Scannable Job Barcode Container for Express Software -->
+                        <div id="warehouseJobBarcodeContainer"
+                            style="background: #f8fafc; border: 1.5px dashed #cbd5e1; border-radius: 12px; padding: 1rem 1.25rem; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);">
+                            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 440px; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
+                                <div style="font-size: 0.78rem; font-weight: 700; color: #475569; display: flex; align-items: center; gap: 0.4rem; text-transform: uppercase; letter-spacing: 0.3px;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M3 5v14M8 5v14M12 5v14M17 5v14M21 5v14"/></svg>
+                                    บาร์โค้ดรหัสงาน (สแกนเข้าโปรแกรม Express)
+                                </div>
+                                <span style="font-size: 0.72rem; color: #059669; font-weight: 700; background: rgba(5, 150, 105, 0.1); padding: 0.15rem 0.5rem; border-radius: 4px;">
+                                    CODE 128
+                                </span>
+                            </div>
+                            <div style="background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 8px 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.03); max-width: 100%; overflow-x: auto; display: flex; justify-content: center;">
+                                <svg id="warehouseJobBarcode" style="min-height: 58px; max-width: 100%; display: block;"></svg>
+                            </div>
+                            <div style="font-size: 0.76rem; color: #64748b; margin-top: 0.4rem; text-align: center; display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: -2px;"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path></svg>
+                                สแกนบาร์โค้ดนี้เข้าโปรแกรม Express เพื่อบันทึกการตัดจ่ายตามรหัสงานได้ทันที
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary of Items KPI Strip -->
+                    <div style="background: white; border: 1.5px solid var(--border-color); border-radius: 14px; padding: 0.9rem 1.4rem; margin-bottom: 1.25rem; display: flex; justify-content: space-around; align-items: center; box-shadow: 0 2px 8px rgba(0,0,0,0.02); flex-wrap: wrap; gap: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.85rem;">
+                            <div style="background: rgba(255, 65, 108, 0.1); color: var(--primary-color); width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><line x1="8" y1="11" x2="16" y2="11"></line><line x1="8" y1="15" x2="13" y2="15"></line></svg>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.76rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px;">จำนวนรายการสินค้า</div>
+                                <div style="font-size: 1.35rem; font-weight: 800; color: var(--text-main); line-height: 1.2;">
+                                    <span id="warehouseTotalLineItems">0</span> <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted);">รายการ</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="height: 36px; width: 1px; background: var(--border-color);"></div>
+                        <div style="display: flex; align-items: center; gap: 0.85rem;">
+                            <div style="background: rgba(16, 185, 129, 0.1); color: #10B981; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"></line><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                            </div>
+                            <div>
+                                <div style="font-size: 0.76rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px;">จำนวนชิ้นรวมทั้งหมด</div>
+                                <div style="font-size: 1.35rem; font-weight: 800; color: #10B981; line-height: 1.2;">
+                                    <span id="warehouseTotalQuantity">0</span> <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted);">ชิ้น</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -1440,6 +1496,25 @@
                         </div>
                         <div id="warehouseItems">
                             <!-- Populated via JS -->
+                        </div>
+                    </div>
+
+                    <!-- Total Items Summary Footer -->
+                    <div style="background: #ffffff; border: 1.5px solid var(--border-color); border-radius: 12px; padding: 1.1rem 1.5rem; margin-top: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; box-shadow: 0 2px 8px rgba(0,0,0,0.03);">
+                        <div style="font-weight: 700; color: var(--text-main); font-size: 1.05rem; display: flex; align-items: center; gap: 0.5rem;">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary-color);">
+                                <path d="M9 11l3 3L22 4"></path>
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                            </svg>
+                            ยอดรวมที่ต้องจ่ายทั้งหมด:
+                        </div>
+                        <div style="display: flex; gap: 1.75rem; align-items: baseline; flex-wrap: wrap;">
+                            <div style="font-size: 0.95rem; color: var(--text-muted);">
+                                จำนวนรายการ: <strong id="warehouseBottomItemCount" style="color: var(--text-main); font-size: 1.2rem; font-weight: 800;">0</strong> <span style="font-size: 0.85rem;">รายการ</span>
+                            </div>
+                            <div style="font-size: 0.95rem; color: var(--text-muted);">
+                                จำนวนชิ้นรวม: <strong id="warehouseBottomTotalQty" style="color: var(--primary-color); font-size: 1.4rem; font-weight: 800;">0</strong> <span style="font-size: 0.85rem; font-weight: 700; color: var(--primary-color);">ชิ้น</span>
+                            </div>
                         </div>
                     </div>
 
@@ -1538,7 +1613,9 @@
             <!-- View 5: Success -->
             <div class="view" id="view-5">
                 <div class="text-center" style="padding: 3rem 0;">
-                    <div class="success-icon">✓</div>
+                    <div class="success-icon">
+                        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                    </div>
                     <h2 style="border: none; padding: 0; margin-bottom: 1rem;">ดำเนินการเสร็จสิ้น</h2>
                     <p style="color: var(--text-muted); margin-bottom: 2rem;">ตัดยอดสินค้าจาก PDC เรียบร้อยแล้ว
                         ขั้นตอนการเบิกสินค้าเสร็จสมบูรณ์</p>
@@ -1988,8 +2065,9 @@
                         <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap;">
                             <div style="flex: 1; min-width: 220px;">
                                 <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.35rem; flex-wrap: wrap;">
-                                    <span style="font-family: monospace; font-size: 0.95rem; font-weight: 700; color: var(--primary-color); background: rgba(255, 65, 108, 0.08); padding: 0.2rem 0.6rem; border-radius: 6px;">
-                                        🏷️ ${itemCode || '-'}
+                                    <span style="font-family: monospace; font-size: 0.95rem; font-weight: 700; color: var(--primary-color); background: rgba(255, 65, 108, 0.08); padding: 0.2rem 0.6rem; border-radius: 6px; display: inline-flex; align-items: center; gap: 0.35rem;">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                                        ${itemCode || '-'}
                                     </span>
                                     ${item.inSystem ? `<span style="font-size: 0.8rem; color: var(--text-muted); background: #f1f5f9; padding: 0.2rem 0.5rem; border-radius: 4px;">${item.inSystem}</span>` : ''}
                                 </div>
@@ -2012,8 +2090,9 @@
                             <div style="background: white; padding: 6px 12px; border-radius: 6px; width: 100%; max-width: 380px; overflow-x: auto; display: flex; justify-content: center;">
                                 <svg id="hist_item_barcode_${idx}" class="rendered-item-barcode" style="max-width: 100%; height: auto; min-height: 52px;"></svg>
                             </div>
-                            <div style="font-size: 0.78rem; color: #64748b; margin-top: 0.35rem; font-weight: 500;">
-                                💡 สามารถใช้เครื่องสแกนบาร์โค้ดหรือกล้องสแกนได้ทันทีโดยไม่ต้องดาวน์โหลดและเปิดไฟล์ Excel
+                            <div style="font-size: 0.78rem; color: #64748b; margin-top: 0.35rem; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 0.35rem;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: -2px;"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"></path></svg>
+                                สามารถใช้เครื่องสแกนบาร์โค้ดหรือกล้องสแกนได้ทันทีโดยไม่ต้องดาวน์โหลดและเปิดไฟล์ Excel
                             </div>
                         </div>
                     </div>
@@ -2064,6 +2143,56 @@
             currentViewingRequestId = id;
             document.getElementById('warehouseJobId').innerText = req.jobId;
             document.getElementById('warehouseReqName').innerText = req.reqName;
+
+            // Calculate and display summary of items
+            const totalLineItems = (req.items && Array.isArray(req.items)) ? req.items.length : 0;
+            const totalQty = (req.items && Array.isArray(req.items)) 
+                ? req.items.reduce((sum, item) => sum + (Number(item.qty || item.quantity || 1)), 0) 
+                : 0;
+
+            const elWhHeaderCount = document.getElementById('warehouseHeaderItemCount');
+            if (elWhHeaderCount) elWhHeaderCount.innerText = `${totalLineItems} รายการ (${totalQty} ชิ้น)`;
+
+            const elWhLineItems = document.getElementById('warehouseTotalLineItems');
+            if (elWhLineItems) elWhLineItems.innerText = totalLineItems;
+
+            const elWhTotalQty = document.getElementById('warehouseTotalQuantity');
+            if (elWhTotalQty) elWhTotalQty.innerText = totalQty;
+
+            const elWhBottomCount = document.getElementById('warehouseBottomItemCount');
+            if (elWhBottomCount) elWhBottomCount.innerText = totalLineItems;
+
+            const elWhBottomQty = document.getElementById('warehouseBottomTotalQty');
+            if (elWhBottomQty) elWhBottomQty.innerText = totalQty;
+
+            // Render Warehouse Job Barcode
+            const whJobContainer = document.getElementById('warehouseJobBarcodeContainer');
+            const whJobSvg = document.getElementById('warehouseJobBarcode');
+            const rawWhJobId = (req.jobId || '').toString().trim();
+            if (whJobSvg) {
+                if (rawWhJobId && rawWhJobId !== '-' && rawWhJobId !== 'ไม่ระบุ') {
+                    if (whJobContainer) whJobContainer.style.display = 'flex';
+                    try {
+                        JsBarcode(whJobSvg, rawWhJobId, {
+                            format: "CODE128",
+                            width: 2.2,
+                            height: 56,
+                            displayValue: true,
+                            fontSize: 14,
+                            font: "monospace",
+                            fontOptions: "bold",
+                            margin: 8,
+                            background: "#ffffff",
+                            lineColor: "#000000"
+                        });
+                    } catch (err) {
+                        console.error("Error rendering warehouse job barcode:", err);
+                        if (whJobContainer) whJobContainer.style.display = 'none';
+                    }
+                } else {
+                    if (whJobContainer) whJobContainer.style.display = 'none';
+                }
+            }
 
             const warehouseItems = document.getElementById('warehouseItems');
             warehouseItems.innerHTML = req.items.map(item => `
@@ -2492,17 +2621,37 @@
             worksheet.getCell('A1').alignment = { horizontal: 'center' };
             worksheet.addRow([]); // empty row
 
-            worksheet.addRow(['รหัสงาน:', jobId, 'วันที่:', new Date().toLocaleDateString('th-TH')]);
-            worksheet.getCell('A3').font = { bold: true };
-            worksheet.getCell('C3').font = { bold: true };
-            worksheet.getCell('C3').alignment = { horizontal: 'right' };
+            // Row 3: Job Code & Date
+            const row3 = worksheet.addRow(['รหัสงาน / โครงการ:', jobId, 'วันที่:', new Date().toLocaleDateString('th-TH')]);
+            row3.height = 24;
+            worksheet.getCell('A3').font = { bold: true, size: 11 };
+            worksheet.getCell('A3').alignment = { vertical: 'middle' };
+            worksheet.getCell('B3').font = { bold: true, size: 12 };
+            worksheet.getCell('B3').alignment = { vertical: 'middle' };
+            worksheet.getCell('C3').font = { bold: true, size: 11 };
+            worksheet.getCell('C3').alignment = { horizontal: 'right', vertical: 'middle' };
+            worksheet.getCell('D3').alignment = { horizontal: 'left', vertical: 'middle' };
 
-            worksheet.addRow(['ผู้เบิก:', reqName]);
-            worksheet.getCell('A4').font = { bold: true };
-            worksheet.addRow([]); // empty row
+            // Row 4: Job Barcode for scanning into Express Software
+            const jobBarcodeRow = worksheet.addRow(['บาร์โค้ดรหัสงาน (Express):', '', '', '']);
+            jobBarcodeRow.height = 66;
+            worksheet.mergeCells('B4:C4');
+            worksheet.getCell('A4').font = { bold: true, size: 11 };
+            worksheet.getCell('A4').alignment = { vertical: 'middle' };
+            worksheet.getCell('B4').alignment = { horizontal: 'center', vertical: 'middle' };
 
-            // Table Header
-            const headerRow = worksheet.addRow(['รหัส (Barcode)', 'ในระบบ', 'ชื่อสินค้า', 'จำนวน']);
+            // Row 5: Requester
+            const row5 = worksheet.addRow(['ผู้เบิก:', reqName]);
+            row5.height = 24;
+            worksheet.getCell('A5').font = { bold: true, size: 11 };
+            worksheet.getCell('A5').alignment = { vertical: 'middle' };
+            worksheet.getCell('B5').font = { bold: true, size: 11 };
+            worksheet.getCell('B5').alignment = { vertical: 'middle' };
+
+            worksheet.addRow([]); // empty row (Row 6)
+
+            // Table Header (Row 7)
+            const headerRow = worksheet.addRow(['รหัสสินค้า (Barcode)', 'ในระบบ', 'ชื่อสินค้า', 'จำนวน']);
             headerRow.height = 28;
             headerRow.eachCell(cell => {
                 cell.font = { bold: true };
@@ -2520,11 +2669,47 @@
                 cell.alignment = { horizontal: 'center', vertical: 'middle' };
             });
 
-            // Process items and add to excel
+            // Process items and barcodes
             const offscreenCanvas = document.createElement('canvas');
+
+            // Render Job Barcode Image in Excel Row 4
+            const cleanJobIdStr = String(jobId || '').trim();
+            if (cleanJobIdStr && cleanJobIdStr !== 'ไม่ระบุ' && cleanJobIdStr !== '-') {
+                try {
+                    JsBarcode(offscreenCanvas, cleanJobIdStr, {
+                        format: "CODE128",
+                        width: 2.2,
+                        height: 50,
+                        displayValue: true,
+                        fontSize: 13,
+                        font: "monospace",
+                        fontOptions: "bold",
+                        margin: 6,
+                        background: '#ffffff',
+                        lineColor: '#000000'
+                    });
+                    const jobBarcodeBase64 = offscreenCanvas.toDataURL("image/png");
+                    const jobBarcodeImageId = workbook.addImage({
+                        base64: jobBarcodeBase64,
+                        extension: 'png',
+                    });
+
+                    // Insert image into merged B4:C4 with vertical centering
+                    worksheet.addImage(jobBarcodeImageId, {
+                        tl: { col: 1.08, row: 3.12 },
+                        ext: { width: 210, height: 56 }
+                    });
+                    worksheet.getCell('B4').value = cleanJobIdStr;
+                } catch (e) {
+                    console.error("Job Barcode generation error for Excel:", e);
+                    worksheet.getCell('B4').value = cleanJobIdStr;
+                }
+            } else {
+                worksheet.getCell('B4').value = '-';
+            }
             
             sourceItems.forEach((item, index) => {
-                const rowIndex = index + 7; // starting after headers (row 6 is table header)
+                const rowIndex = index + 8; // starting after headers (row 7 is table header)
                 const inSystem = item.inSystem !== undefined ? item.inSystem : (item.inSystemText || '');
                 const itemCode = (item.code || item.barcode || '').toString().trim();
                 const itemQty = item.qty !== undefined ? item.qty : (item.quantity !== undefined ? item.quantity : 1);
