@@ -591,7 +591,7 @@
             height: 100%;
             background-color: rgba(0, 0, 0, 0.92);
             backdrop-filter: blur(10px);
-            z-index: 9999;
+            z-index: 10020;
             flex-direction: column;
             align-items: center;
             justify-content: center;
@@ -909,7 +909,7 @@
             background: none;
             border: none;
             cursor: pointer;
-            z-index: 10001;
+            z-index: 10025;
         }
 
         .location-modal {
@@ -1583,6 +1583,27 @@
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                     + นำเข้าและลงทะเบียนสินค้านี้เข้าคลัง (เก็บบาร์โค้ดนี้ไว้)
                 </button>
+            </div>
+
+            <!-- Optional Serial Number Field -->
+            <div style="text-align: left; margin-bottom: 1.5rem; background: #f8fafc; padding: 1rem 1.25rem; border-radius: var(--radius-md); border: 1px solid var(--border-color);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                    <label for="addPopupSerial" style="color: var(--text-muted); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; display: flex; align-items: center; gap: 4px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="7" y1="8" x2="17" y2="8"></line><line x1="7" y1="12" x2="17" y2="12"></line><line x1="7" y1="16" x2="13" y2="16"></line></svg>
+                        หมายเลขซีเรียล (Serial Number / S/N)
+                    </label>
+                    <span style="font-size: 0.72rem; color: var(--text-muted);">(ไม่บังคับ / Optional)</span>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="text" id="addPopupSerial" placeholder="กรอก หรือยิงซีเรียลข้างกล่อง..." onkeydown="if(event.key === 'Enter') { event.preventDefault(); }" style="flex: 1; padding: 0.6rem 0.85rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.9rem; font-family: monospace; outline: none; background: white;">
+                    <button type="button" class="btn btn-secondary" onclick="openCamera('addPopupSerial')" title="เปิดกล้องยิงซีเรียล" style="padding: 0.6rem 0.85rem; display: inline-flex; align-items: center; gap: 4px; border-radius: 8px; font-size: 0.82rem; font-weight: 700; white-space: nowrap; background: #e0e7ff; border: 1px solid #c7d2fe; color: #4338ca; cursor: pointer;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                            <circle cx="12" cy="13" r="4"></circle>
+                        </svg>
+                        ยิงซีเรียล
+                    </button>
+                </div>
             </div>
 
             <div class="form-group"
@@ -2902,6 +2923,8 @@
             document.getElementById('addPopupItemName').innerText = product.name;
             document.getElementById('addPopupItemCode').innerText = product.code;
             document.getElementById('addPopupQuantity').value = 1;
+            const serialInput = document.getElementById('addPopupSerial');
+            if (serialInput) serialInput.value = product.serial || '';
 
             const isUnknown = !product.name || product.name.includes('ต้องลงทะเบียน') || product.quantity === undefined;
             const unknownNotice = document.getElementById('addPopupUnknownNotice');
@@ -2932,6 +2955,8 @@
             document.getElementById('addItemModal').classList.remove('active');
             const unknownNotice = document.getElementById('addPopupUnknownNotice');
             if (unknownNotice) unknownNotice.style.display = 'none';
+            const serialInput = document.getElementById('addPopupSerial');
+            if (serialInput) serialInput.value = '';
             scannedProductToAdd = null;
             document.getElementById('barcode').value = '';
         }
@@ -2940,6 +2965,7 @@
             if (!scannedProductToAdd) return;
 
             const qty = parseInt(document.getElementById('addPopupQuantity').value) || 1;
+            const serialVal = document.getElementById('addPopupSerial') ? document.getElementById('addPopupSerial').value.trim() : '';
 
             const existingIndex = items.findIndex(i => i.code === scannedProductToAdd.code);
             const currentCartQty = existingIndex >= 0 ? items[existingIndex].qty : 0;
@@ -2971,8 +2997,11 @@
 
             if (existingIndex >= 0) {
                 items[existingIndex].qty += qty;
+                if (serialVal && !items[existingIndex].serial) {
+                    items[existingIndex].serial = serialVal;
+                }
             } else {
-                items.push({ ...scannedProductToAdd, qty });
+                items.push({ ...scannedProductToAdd, qty, serial: serialVal });
             }
 
             document.getElementById('barcode').value = '';
@@ -3324,6 +3353,14 @@
                     if (impItem.location && !existing.location) {
                         existing.location = impItem.location;
                     }
+                    if (impItem.serial) {
+                        existing.serial = impItem.serial;
+                        if (existing.serials && !existing.serials.includes(impItem.serial)) {
+                            existing.serials += ', ' + impItem.serial;
+                        } else if (!existing.serials) {
+                            existing.serials = impItem.serial;
+                        }
+                    }
                 } else {
                     mockProducts.push({
                         code: impItem.code || impItem.barcode || 'ITEM-' + Date.now(),
@@ -3331,6 +3368,8 @@
                         name: impItem.name || 'สินค้าใหม่',
                         location: impItem.location || '',
                         quantity: qtyToAdd,
+                        serial: impItem.serial || '',
+                        serials: impItem.serial || '',
                         inSystemText: impItem.inSystemText || ''
                     });
                 }
@@ -3403,6 +3442,10 @@
             openCamera('importBarcodeScanInput');
         }
 
+        function openCameraForSerial() {
+            openCamera('barcodeModalItemSerial');
+        }
+
         function openAddNewProductModal() {
             const autoCode = 'ITEM-' + Date.now().toString().slice(-6);
             lookupBarcodeForImport(autoCode);
@@ -3428,6 +3471,7 @@
                 location: check.product ? check.product.location : '',
                 currentStock: check.currentStock,
                 inSystemText: check.product ? (check.product.inSystemText || '') : '',
+                serial: check.product ? (check.product.serial || check.product.serialNumber || '') : '',
                 quantity: 1
             };
 
@@ -3440,6 +3484,43 @@
             const qtyInput = document.getElementById('barcodeModalQty');
 
             if (qtyInput) qtyInput.value = 1;
+
+            const initialSerial = (check.product && (check.product.serial || check.product.serialNumber)) 
+                ? (check.product.serial || check.product.serialNumber) 
+                : '';
+
+            const serialBlockHtml = `
+                <!-- Serial Number (S/N) Input Field -->
+                <div style="margin-top: 0.85rem; padding-top: 0.85rem; border-top: 1px dashed var(--border-color);">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.35rem;">
+                        <label style="font-size: 0.82rem; font-weight: 700; color: var(--text-main); display: inline-flex; align-items: center; gap: 5px;">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><line x1="7" y1="8" x2="17" y2="8"></line><line x1="7" y1="12" x2="17" y2="12"></line><line x1="7" y1="16" x2="13" y2="16"></line></svg>
+                            หมายเลขซีเรียลสินค้า (Serial Number / S/N):
+                        </label>
+                        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 500;">(ไม่บังคับ / Optional)</span>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                        <input type="text" id="barcodeModalItemSerial" 
+                            value="${initialSerial}" 
+                            placeholder="กรอก หรือกดปุ่มยิงซีเรียลที่ติดข้างกล่อง..." 
+                            oninput="if(currentBarcodeImportItem) currentBarcodeImportItem.serial = this.value.trim()"
+                            onkeydown="if(event.key === 'Enter') { event.preventDefault(); if (currentBarcodeImportItem) currentBarcodeImportItem.serial = this.value.trim(); }"
+                            style="flex: 1; padding: 0.65rem 0.85rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.92rem; font-family: monospace; outline: none; background: white;">
+                        <button type="button" class="btn btn-secondary" onclick="openCameraForSerial()" title="เปิดกล้องยิงซีเรียล" 
+                            style="padding: 0.65rem 0.95rem; display: inline-flex; align-items: center; gap: 5px; border-radius: 8px; font-size: 0.85rem; font-weight: 700; white-space: nowrap; background: #e0e7ff; border: 1px solid #c7d2fe; color: #4338ca; cursor: pointer;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                <circle cx="12" cy="13" r="4"></circle>
+                            </svg>
+                            ยิงซีเรียล
+                        </button>
+                    </div>
+                    <div style="font-size: 0.74rem; color: var(--text-muted); margin-top: 0.35rem; display: flex; align-items: center; gap: 4px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        <span>สำหรับกรองและนำเข้าข้อมูลลงโปรแกรมบัญชี Express</span>
+                    </div>
+                </div>
+            `;
 
             if (check.exists) {
                 if (badgeContainer) badgeContainer.innerHTML = `<span class="status-badge matched" style="display:inline-flex; align-items:center; gap:3px;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>มีสินค้าในระบบ</span>`;
@@ -3484,6 +3565,8 @@
                                 <span style="display:inline-flex; align-items:center; gap:4px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>ชื่อสินค้าตรงกับฐานข้อมูลในระบบ</span>
                             </div>
                         </div>
+
+                        ${serialBlockHtml}
                     `;
                 }
             } else {
@@ -3531,6 +3614,8 @@
                             <input type="text" id="barcodeModalItemLocation" placeholder="เช่น A-01-01 หรือ พื้นที่กองวาง 1..." 
                                 style="width: 100%; padding: 0.6rem 0.85rem; border: 1px solid var(--border-color); border-radius: 8px; font-size: 0.9rem; outline: none;">
                         </div>
+
+                        ${serialBlockHtml}
                     `;
                 }
             }
@@ -3637,7 +3722,11 @@
             const finalQty = Math.max(1, parseInt(qtyInput ? qtyInput.value : 1) || 1);
             currentBarcodeImportItem.quantity = finalQty;
 
-            const itemToSave = { ...currentBarcodeImportItem };
+            const serialInput = document.getElementById('barcodeModalItemSerial');
+            const finalSerial = serialInput ? serialInput.value.trim() : (currentBarcodeImportItem.serial || '');
+            currentBarcodeImportItem.serial = finalSerial;
+
+            const itemToSave = { ...currentBarcodeImportItem, serial: finalSerial };
             const importId = 'IMP-BC-' + Date.now().toString().slice(-6);
 
             // Update database
@@ -3655,9 +3744,10 @@
             closeBarcodeImportModal();
 
             const newTotalStock = (itemToSave.currentStock || 0) + finalQty;
+            const serialNotice = finalSerial ? `\n• หมายเลขซีเรียล (S/N): ${finalSerial}` : '';
 
             if (!GOOGLE_WEBAPP_URL || !GOOGLE_WEBAPP_URL.startsWith("http")) {
-                showAlert("นำเข้าสินค้าสำเร็จ", `นำเข้า "${finalName}" เรียบร้อยแล้ว!\n• จำนวนที่เพิ่ม: +${finalQty} ชิ้น\n• สต็อกรวมใหม่: ${newTotalStock} ชิ้น`);
+                showAlert("นำเข้าสินค้าสำเร็จ", `นำเข้า "${finalName}" เรียบร้อยแล้ว!\n• จำนวนที่เพิ่ม: +${finalQty} ชิ้น\n• สต็อกรวมใหม่: ${newTotalStock} ชิ้น${serialNotice}`);
                 loadImportHistory();
                 loadProductsFromSheet();
                 return;
@@ -3677,13 +3767,13 @@
             .then(res => res.json())
             .then(resData => {
                 closeAlertModal();
-                showAlert("นำเข้าสินค้าสำเร็จ", `นำเข้า "${finalName}" เรียบร้อยแล้ว!\n• จำนวนที่เพิ่ม: +${finalQty} ชิ้น\n• สต็อกรวมใหม่: ${newTotalStock} ชิ้น`);
+                showAlert("นำเข้าสินค้าสำเร็จ", `นำเข้า "${finalName}" เรียบร้อยแล้ว!\n• จำนวนที่เพิ่ม: +${finalQty} ชิ้น\n• สต็อกรวมใหม่: ${newTotalStock} ชิ้น${serialNotice}`);
                 loadImportHistory();
                 loadProductsFromSheet();
             })
             .catch(err => {
                 closeAlertModal();
-                showAlert("แจ้งเตือน", `นำเข้าสินค้าในเครื่องสำเร็จ: ${finalName} (+${finalQty} ชิ้น)`);
+                showAlert("แจ้งเตือน", `นำเข้าสินค้าในเครื่องสำเร็จ: ${finalName} (+${finalQty} ชิ้น)${serialNotice}`);
                 loadImportHistory();
                 loadProductsFromSheet();
             });
@@ -3718,12 +3808,23 @@
             const finalQty = Math.max(1, parseInt(qtyInput ? qtyInput.value : 1) || 1);
             currentBarcodeImportItem.quantity = finalQty;
 
+            const serialInput = document.getElementById('barcodeModalItemSerial');
+            const finalSerial = serialInput ? serialInput.value.trim() : (currentBarcodeImportItem.serial || '');
+            currentBarcodeImportItem.serial = finalSerial;
+
             // Check if already in staging
             const existingIdx = stagedImportProducts.findIndex(p => p.code === currentBarcodeImportItem.code);
             if (existingIdx >= 0) {
                 stagedImportProducts[existingIdx].quantity += finalQty;
+                if (finalSerial) {
+                    if (stagedImportProducts[existingIdx].serial) {
+                        stagedImportProducts[existingIdx].serial += ', ' + finalSerial;
+                    } else {
+                        stagedImportProducts[existingIdx].serial = finalSerial;
+                    }
+                }
             } else {
-                stagedImportProducts.push({ ...currentBarcodeImportItem });
+                stagedImportProducts.push({ ...currentBarcodeImportItem, serial: finalSerial });
             }
 
             closeBarcodeImportModal();
@@ -3752,10 +3853,12 @@
                     ? `<span class="status-badge matched">ตรงกับระบบ</span>` 
                     : `<span class="status-badge new-item">สินค้าใหม่</span>`;
 
+                const serialInfo = item.serial ? `<div style="font-size: 0.75rem; color: #6366f1; font-family: monospace; font-weight: 600; margin-top: 2px;">S/N: ${item.serial}</div>` : '';
+
                 list.innerHTML += `
                     <div class="item-row" style="padding: 0.75rem 1rem; align-items: center; font-size: 0.88rem;">
                         <span style="flex: 2; font-family: 'Inter', monospace; color: var(--text-muted);">${item.code || item.barcode}</span>
-                        <span style="flex: 3; font-weight: 600;">${item.name}</span>
+                        <span style="flex: 3; font-weight: 600;">${item.name}${serialInfo}</span>
                         <span style="flex: 1.5; text-align: center;">${statusBadge}</span>
                         <span style="flex: 1.5; text-align: right; font-weight: 800; color: var(--primary-color);">+${item.quantity}</span>
                         <span style="flex: 0.8; text-align: center;">
@@ -3926,10 +4029,11 @@
 
             if (record.items && record.items.length > 0) {
                 record.items.forEach(item => {
+                    const serialBadge = (item.serial || item.serialNumber) ? `<div style="font-size: 0.75rem; color: #6366f1; font-family: monospace; font-weight: 600; margin-top: 2px;">S/N: ${item.serial || item.serialNumber}</div>` : '';
                     list.innerHTML += `
                         <div class="item-row" style="padding: 0.65rem 1rem; font-size: 0.88rem;">
                             <span style="flex: 2; font-family: 'Inter', monospace; color: var(--text-muted);">${item.code || item.barcode || '-'}</span>
-                            <span style="flex: 3; font-weight: 600;">${item.name || item.inSystem || '-'}</span>
+                            <span style="flex: 3; font-weight: 600;">${item.name || item.inSystem || '-'}${serialBadge}</span>
                             <span style="flex: 1; text-align: right; font-weight: 700; color: var(--primary-color);">+${item.quantity || item.qty || 1}</span>
                         </div>
                     `;
@@ -3958,6 +4062,7 @@
                             name: (item.name || 'ไม่ทราบชื่อ').trim(),
                             location: (item.location || '').trim(),
                             quantity: parseInt(item.quantity) || 0,
+                            serial: (item.serial || item.serialNumber || item.sn || '').trim(),
                             inSystemText: (item.inSystemText || item.inSystem || '').trim()
                         }));
                         console.log("Loaded products from Google Apps Script API:", mockProducts);
@@ -3986,6 +4091,7 @@
                                 name: row['รายการ'] ? row['รายการ'].trim() : 'ไม่ทราบชื่อ',
                                 location: row['โลเคชั่น'] ? row['โลเคชั่น'].trim() : '',
                                 quantity: parseInt(row['จำนวน']) || 0,
+                                serial: (row['ซีเรียล'] || row['Serial'] || row['S/N'] || row['SN'] || '').trim(),
                                 inSystemText: row['ในระบบ'] ? row['ในระบบ'].trim() : ''
                             }));
                         console.log("Loaded products from sheet CSV:", mockProducts);
@@ -4900,7 +5006,7 @@
         }
 
         function searchProducts() {
-            const query = document.getElementById('searchInput').value.toLowerCase();
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
             const resultsContainer = document.getElementById('searchResults');
 
             if (!query) {
@@ -4911,7 +5017,9 @@
             const results = mockProducts.filter(p =>
                 (p.name && p.name.toLowerCase().includes(query)) ||
                 (p.code && p.code.toLowerCase().includes(query)) ||
-                (p.location && p.location.toLowerCase().includes(query))
+                (p.location && p.location.toLowerCase().includes(query)) ||
+                (p.serial && p.serial.toLowerCase().includes(query)) ||
+                (p.serials && p.serials.toLowerCase().includes(query))
             );
 
             if (results.length === 0) {
@@ -4919,14 +5027,17 @@
                 return;
             }
 
-            resultsContainer.innerHTML = results.slice(0, 50).map(p => `
-                <div class="item-row">
-                    <span style="flex: 1; font-family: monospace;">${p.code}</span>
-                    <span style="flex: 2;">${p.name}</span>
-                    <span style="flex: 1; font-weight: 600; color: #F59E0B;">${p.location || '-'}</span>
-                    <span style="flex: 1; text-align: right;">${p.quantity}</span>
-                </div>
-            `).join('');
+            resultsContainer.innerHTML = results.slice(0, 50).map(p => {
+                const serialBadge = (p.serial || p.serials) ? `<div style="font-size: 0.75rem; color: #6366f1; font-family: monospace; font-weight: 600;">S/N: ${p.serial || p.serials}</div>` : '';
+                return `
+                    <div class="item-row">
+                        <span style="flex: 1; font-family: monospace;">${p.code}</span>
+                        <span style="flex: 2;">${p.name}${serialBadge}</span>
+                        <span style="flex: 1; font-weight: 600; color: #F59E0B;">${p.location || '-'}</span>
+                        <span style="flex: 1; text-align: right;">${p.quantity}</span>
+                    </div>
+                `;
+            }).join('');
         }
 
         function simulateScanText(targetId = 'barcode') {
@@ -5322,7 +5433,14 @@
             const targetEl = document.getElementById(currentScanTarget);
             if (targetEl) targetEl.value = cleanBarcode;
 
-            if (currentScanTarget === 'barcode') {
+            if (currentScanTarget === 'barcodeModalItemSerial') {
+                if (currentBarcodeImportItem) {
+                    currentBarcodeImportItem.serial = cleanBarcode;
+                }
+                return;
+            } else if (currentScanTarget === 'addPopupSerial') {
+                return;
+            } else if (currentScanTarget === 'barcode') {
                 const foundProduct = mockProducts.find(p => 
                     (p.barcode && p.barcode.toString().trim().toLowerCase() === cleanBarcode.toLowerCase()) || 
                     (p.code && p.code.toString().trim().toLowerCase() === cleanBarcode.toLowerCase())
@@ -5817,9 +5935,11 @@
                 const inSystem = item.inSystem !== undefined ? item.inSystem : (item.inSystemText || '');
                 const itemCode = (item.code || item.barcode || '').toString().trim();
                 const itemQty = item.qty !== undefined ? item.qty : (item.quantity !== undefined ? item.quantity : 1);
+                const itemSerial = item.serial || (item.serials && typeof item.serials === 'string' ? item.serials : (Array.isArray(item.serials) ? item.serials.join(', ') : ''));
+                const itemName = item.name ? (itemSerial ? `${item.name}\n(S/N: ${itemSerial})` : item.name) : '';
                 
                 // Add data row
-                const row = worksheet.addRow(['', inSystem, item.name || '', itemQty]);
+                const row = worksheet.addRow(['', inSystem, itemName, itemQty]);
                 // Set generous row height (82pt) to give large spacing between barcodes so scanners don't misread adjacent rows
                 row.height = 82;
                 
@@ -5832,7 +5952,7 @@
                         bottom: { style: 'medium', color: { argb: 'FF94A3B8' } },
                         right: { style: 'thin', color: { argb: 'FFE2E8F0' } }
                     };
-                    cell.alignment = { vertical: 'middle' };
+                    cell.alignment = { vertical: 'middle', wrapText: true };
                     if (isEven) {
                         cell.fill = {
                             type: 'pattern',
