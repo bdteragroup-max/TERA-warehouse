@@ -5994,14 +5994,31 @@
                     ${suggestionsHtml}
                 </div>
 
-                <div style="display: flex; gap: 8px; margin-top: 12px;">
-                    <button type="button" class="btn btn-secondary" onclick="confirmOcrNewProduct()" style="flex: 1; padding: 10px; font-weight: 700; background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe;">
-                        ใช้เป็นชื่อสินค้าใหม่
-                    </button>
-                    <button type="button" class="btn btn-outline" onclick="retryOcrScan()" style="padding: 10px 14px; color: #64748b;">
-                        ถ่ายใหม่
-                    </button>
-                </div>
+                ${!matchedProduct ? `
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+                        <button type="button" class="btn btn-primary" onclick="confirmOcrRegisterWarehouseProduct()" style="padding: 11px; font-weight: 700; background: #10b981; border-color: #10b981; color: white; display: flex; align-items: center; justify-content: center; gap: 6px; box-shadow: 0 4px 12px rgba(16,185,129,0.25);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <span>+ บันทึกเป็นสินค้าใหม่เข้าสู่คลัง (เพิ่มสต็อก/ลงทะเบียน)</span>
+                        </button>
+                        <div style="display: flex; gap: 8px;">
+                            <button type="button" class="btn btn-secondary" onclick="confirmOcrNewProduct()" style="flex: 1; padding: 9px; font-weight: 700; background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe;">
+                                นำไปใส่รายการเบิก
+                            </button>
+                            <button type="button" class="btn btn-outline" onclick="retryOcrScan()" style="padding: 9px 14px; color: #64748b;">
+                                ถ่ายใหม่
+                            </button>
+                        </div>
+                    </div>
+                ` : `
+                    <div style="display: flex; gap: 8px; margin-top: 12px;">
+                        <button type="button" class="btn btn-secondary" onclick="confirmOcrNewProduct()" style="flex: 1; padding: 10px; font-weight: 700; background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe;">
+                            ใช้เป็นชื่อสินค้าใหม่
+                        </button>
+                        <button type="button" class="btn btn-outline" onclick="retryOcrScan()" style="padding: 10px 14px; color: #64748b;">
+                            ถ่ายใหม่
+                        </button>
+                    </div>
+                `}
             `;
 
             sheet.classList.add('active');
@@ -6089,6 +6106,38 @@
                 currentOcrSelectedProduct = p;
                 confirmOcrProduct(p, false);
             }
+        }
+
+        function confirmOcrRegisterWarehouseProduct() {
+            const input = document.getElementById('ocrExtractedTextInput');
+            const finalName = input ? input.value.trim() : '';
+            if (!finalName) {
+                showAlert("แจ้งเตือน", "กรุณาระบุชื่อสินค้า");
+                return;
+            }
+            closeCamera();
+            const autoCode = 'ITEM-' + Date.now().toString().slice(-6);
+            currentBarcodeImportItem = {
+                code: autoCode,
+                barcode: '',
+                exists: false,
+                product: null,
+                dbName: '',
+                name: finalName,
+                location: '',
+                currentStock: 0,
+                inSystemText: '',
+                serial: '',
+                quantity: 1
+            };
+            openBarcodeImportModal(autoCode, { exists: false, product: null });
+            setTimeout(() => {
+                const nameEl = document.getElementById('barcodeModalItemName');
+                if (nameEl) {
+                    nameEl.value = finalName;
+                    handleBarcodeModalNameChange(finalName);
+                }
+            }, 80);
         }
 
         function confirmOcrNewProduct() {
