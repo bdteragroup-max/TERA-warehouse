@@ -3151,10 +3151,22 @@
             if (!rawText) return "";
             let text = rawText
                 .replace(/[|~_—`^*]/g, ' ')
-                // Fix common OCR confusions between Thai and electrical specs (e.g., 2NO mistaken as วพO)
-                .replace(/\b[ว\s]*พ[O0o]/gi, '2NO')
-                .replace(/\b[ว\s]*NC/gi, '2NC')
-                .replace(/\bขนา[เะ]/g, 'ขนาด')
+                // 1. Fix common Thai/English OCR character mixups for electrical specs
+                .replace(/\b([1-4])\s*พ[O0o]\b/gi, '$1NO')          // 1พO, 2พO -> 1NO, 2NO
+                .replace(/\b[ว\s]+พ[O0o]\b/gi, '2NO')              // วพO, วพ0 -> 2NO
+                .replace(/\b([1-4])\s*พC\b/gi, '$1NC')             // 1พC, 2พC -> 1NC, 2NC
+                .replace(/\b[ว\s]+NC\b/gi, '2NC')                  // วNC -> 2NC
+                .replace(/\b([1-4])\s*พ(?=[\s\-_/]|$)/g, '$1P')    // 1พ, 2พ, 3พ, 4พ -> 1P, 2P, 3P, 4P
+                .replace(/\b[ว\s]+P(?=[\s\-_/]|$)/gi, '2P')        // วP -> 2P
+                // 2. Fix voltage/current common OCR misreads
+                .replace(/([0-9]+)\s*[O0o]{2,3}\s*V/gi, '$100V')   // 5OOV -> 500V
+                .replace(/V\s*d\s*c/gi, 'Vdc')                     // V d c -> Vdc
+                .replace(/V\s*a\s*c/gi, 'Vac')                     // V a c -> Vac
+                .replace(/([0-9]+)\s*k\s*A/gi, '$1kA')             // 6 k A -> 6kA
+                // 3. Fix Thai words commonly found on boxes
+                .replace(/ขนา[เะ]/g, 'ขนาด')
+                .replace(/รุ[น่]/g, 'รุ่น')
+                .replace(/เบร[กค]เกอร[์์]?/g, 'เบรกเกอร์')
                 .replace(/\bแอมป[^\s]*/g, 'A');
 
             return text
