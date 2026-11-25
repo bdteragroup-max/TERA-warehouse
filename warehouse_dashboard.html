@@ -818,8 +818,8 @@
 
         .ocr-target-frame {
             position: relative;
-            width: 84%;
-            height: 38%;
+            width: 88%;
+            height: 48%;
             border: 2px dashed #38bdf8;
             border-radius: 12px;
             box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);
@@ -5756,9 +5756,17 @@
 
         function cleanOcrText(rawText) {
             if (!rawText) return "";
-            return rawText
+            let text = rawText
+                .replace(/[|~_—`^*]/g, ' ')
+                // Fix common OCR confusions between Thai and electrical specs (e.g., 2NO mistaken as วพO)
+                .replace(/\b[ว\s]*พ[O0o]/gi, '2NO')
+                .replace(/\b[ว\s]*NC/gi, '2NC')
+                .replace(/\bขนา[เะ]/g, 'ขนาด')
+                .replace(/\bแอมป[^\s]*/g, 'A');
+
+            return text
                 .split('\n')
-                .map(line => line.replace(/[|~_—`^*]/g, '').trim())
+                .map(line => line.trim())
                 .filter(line => line.length >= 2)
                 .join(' ')
                 .replace(/\s+/g, ' ')
@@ -5866,9 +5874,9 @@
                 const fullCtx = fullCanvas.getContext('2d');
                 fullCtx.drawImage(videoEl, 0, 0, vw, vh);
 
-                // Crop center 84% width, 38% height matching the target frame
-                const cropW = Math.round(vw * 0.84);
-                const cropH = Math.round(vh * 0.38);
+                // Crop center 88% width, 48% height matching the target frame
+                const cropW = Math.round(vw * 0.88);
+                const cropH = Math.round(vh * 0.48);
                 const cropX = Math.round((vw - cropW) / 2);
                 const cropY = Math.round((vh - cropH) / 2);
 
@@ -6009,8 +6017,9 @@
                 </div>
 
                 <div style="margin-bottom: 8px;">
-                    <label style="font-size: 0.78rem; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">
-                        ข้อความที่อ่านได้จากกล่อง (แก้ไขได้หากอ่านคลาดเคลื่อน):
+                    <label style="font-size: 0.78rem; font-weight: 700; color: #475569; display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <span>ข้อความที่อ่านได้จากกล่อง:</span>
+                        <span style="font-size: 0.72rem; color: #2563eb; font-weight: 600;">(แตะเพื่อพิมพ์แก้ไขชื่อได้)</span>
                     </label>
                     <div style="display: flex; gap: 6px;">
                         <input type="text" id="ocrExtractedTextInput" value="${(recognizedText || '').replace(/"/g, '&quot;')}" 
