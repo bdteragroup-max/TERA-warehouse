@@ -3320,15 +3320,15 @@
             const rawKey = (codeOrBarcode || '').toString().trim();
             const searchKey = rawKey.toLowerCase();
             const cleanKeyNoSpace = searchKey.replace(/[\s\-_]/g, '');
-            if (!searchKey) {
+            if (!searchKey || searchKey === '-') {
                 return { exists: false, product: null, nameMatch: false, statusCode: 'NEW', statusText: 'ไม่ระบุรหัส' };
             }
 
             const found = mockProducts.find(p => {
                 const b = (p.barcode || '').toString().trim().toLowerCase();
                 const c = (p.code || '').toString().trim().toLowerCase();
-                if (b === searchKey || c === searchKey) return true;
-                if (cleanKeyNoSpace && (b.replace(/[\s\-_]/g, '') === cleanKeyNoSpace || c.replace(/[\s\-_]/g, '') === cleanKeyNoSpace)) return true;
+                if (b && b !== '-' && (b === searchKey || (cleanKeyNoSpace && b.replace(/[\s\-_]/g, '') === cleanKeyNoSpace))) return true;
+                if (c && c !== '-' && (c === searchKey || (cleanKeyNoSpace && c.replace(/[\s\-_]/g, '') === cleanKeyNoSpace))) return true;
                 return false;
             });
 
@@ -4325,15 +4325,22 @@
                     const response = await fetch(GOOGLE_WEBAPP_URL + "?action=getProducts");
                     const data = await response.json();
                     if (Array.isArray(data) && data.length > 0) {
-                        mockProducts = data.map(item => ({
-                            code: (item.code || '').trim(),
-                            barcode: (item.barcode || item.code || '').trim(),
-                            name: (item.name || 'ไม่ทราบชื่อ').trim(),
-                            location: (item.location || '').trim(),
-                            quantity: parseInt(item.quantity) || 0,
-                            serial: (item.serial || item.serialNumber || item.sn || '').trim(),
-                            inSystemText: (item.inSystemText || item.inSystem || '').trim()
-                        }));
+                        mockProducts = data
+                            .filter(item => {
+                                const c = (item.code || '').trim();
+                                const b = (item.barcode || '').trim();
+                                const n = (item.name || '').trim();
+                                return (c && c !== '-') || (b && b !== '-') || (n && n !== 'ไม่ทราบชื่อ' && n !== '-');
+                            })
+                            .map(item => ({
+                                code: (item.code || '').trim() || (item.barcode || '').trim(),
+                                barcode: (item.barcode || item.code || '').trim(),
+                                name: (item.name || 'ไม่ทราบชื่อ').trim(),
+                                location: (item.location || '').trim(),
+                                quantity: parseInt(item.quantity) || 0,
+                                serial: (item.serial || item.serialNumber || item.sn || '').trim(),
+                                inSystemText: (item.inSystemText || item.inSystem || '').trim()
+                            }));
                         console.log("Loaded products from Google Apps Script API:", mockProducts);
                         return;
                     }
@@ -5758,58 +5765,82 @@
                 .trim();
         }
 
+        const OCR_NOISE_WORDS = new Set([
+            'box', 'the', 'and', 'for', 'pcs', 'qty', 'set', 'made', 'thailand', 'china',
+            'item', 'size', 'new', 'no', 'of', 'in', 'on', 'mm', 'cm', 'kg', 'g', 'v', 'w',
+            'a', 'b', 'c', 'd', 'e', 'f', 'to', 'is', 'at', 'by', 'with', 'from',
+            'การ', 'ของ', 'ที่', 'ใน', 'และ', 'มี', 'ไม่', 'ได้', 'ให้', 'เป็น', 'ไม่ทราบชื่อ', '-'
+        ]);
+
         function findProductByNameOrText(rawText) {
             if (!rawText) return null;
             const clean = rawText.trim().toLowerCase();
-            if (!clean) return null;
+            // ต้องมีข้อความความยาวอย่างน้อย 3 ตัวอักษร และไม่ใช่คำทั่วไปที่ติดมากับกล่อง
+            if (clean.length < 3 || OCR_NOISE_WORDS.has(clean)) return null;
 
-            // 1. Direct match by name, code, barcode
-            const exact = mockProducts.find(p => {
-                const n = (p.name || '').trim().toLowerCase();
-                const c = (p.code || '').trim().toLowerCase();
+            // 1. Direct exact match by barcode or code (ต้องตรงเป๊ะ 100% เท่านั้น)
+            const codeMatch = mockProducts.find(p => {
                 const b = (p.barcode || '').trim().toLowerCase();
-                return n === clean || c === clean || b === clean ||
-                       (n.length >= 3 && clean.includes(n)) ||
-                       (clean.length >= 3 && n.includes(clean));
+                const c = (p.code || '').trim().toLowerCase();
+                return (b && b !== '-' && b === clean) || (c && c !== '-' && c === clean);
             });
-            if (exact) return exact;
+            if (codeMatch) return codeMatch;
 
-            // 2. Keyword score match
-            const candidates = getMatchingProductsForText(rawText);
-            return candidates.length > 0 ? candidates[0].product : null;
+            // 2. Direct exact match by product name (ต้องตรงกันทั้งชื่อ 100%)
+            const exactNameMatch = mockProducts.find(p => {
+                const n = (p.name || '').trim().toLowerCase();
+                return n && n !== 'ไม่ทราบชื่อ' && n !== '-' && n === clean;
+            });
+            if (exactNameMatch) return exactNameMatch;
+
+            // 3. Strong Substring match (เฉพาะกรณีที่ข้อความยาวมากพอ และครอบคลุมชื่อสินค้าจริง)
+            const strongSubMatch = mockProducts.find(p => {
+                const n = (p.name || '').trim().toLowerCase();
+                if (!n || n.length < 5 || n === 'ไม่ทราบชื่อ' || n === '-') return false;
+                // ถ้าข้อความที่อ่านได้ มีชื่อสินค้าเต็มๆ อยู่ในนั้น (เช่น อ่านได้ "กล่องกระดาษลูกฟูก 30x40 ซม. รุ่น A")
+                if (clean.length >= n.length && clean.includes(n)) return true;
+                // หรือถ้าข้อความที่อ่านได้ยาว >= 8 ตัวอักษร และเป็นส่วนหลักของชื่อสินค้า
+                if (clean.length >= 8 && n.includes(clean)) return true;
+                return false;
+            });
+            if (strongSubMatch) return strongSubMatch;
+
+            // ป้องกันการทึกทักสินค้ามั่ว: ถ้าไม่ตรงจริง ให้คืนค่า null เสมอเพื่อให้เป็น "สินค้าใหม่"
+            return null;
         }
 
         function getMatchingProductsForText(rawText) {
             if (!rawText) return [];
             const clean = rawText.trim().toLowerCase();
-            const tokens = clean.split(/[\s,\-_/\\()+:#]+/).filter(t => t.length >= 2);
+            const tokens = clean.split(/[\s,\-_/\\()+:#]+/)
+                .map(t => t.trim())
+                .filter(t => t.length >= 3 && !OCR_NOISE_WORDS.has(t));
             if (tokens.length === 0) return [];
 
             const scored = [];
             mockProducts.forEach(p => {
                 const pName = (p.name || '').toLowerCase();
                 const pCode = (p.code || '').toLowerCase();
-                const pLoc = (p.location || '').toLowerCase();
-                const targetStr = `${pName} ${pCode} ${pLoc}`;
-                let score = 0;
+                if (!pName || pName === 'ไม่ทราบชื่อ' || pName === '-') return;
 
+                let score = 0;
                 tokens.forEach(tok => {
-                    if (targetStr.includes(tok)) {
-                        score += (tok.length * 2);
+                    if (pName.includes(tok)) {
+                        score += tok.length * 3;
+                    }
+                    if (pCode && pCode.includes(tok)) {
+                        score += tok.length * 4;
                     }
                 });
 
-                if (pName.includes(clean) || clean.includes(pName)) {
-                    score += 20;
-                }
-
-                if (score >= 4) {
+                // ต้องมีคะแนนความตรงกันสูงมากพอ (อย่างน้อยต้องตรงกับคำสำคัญยาวรวมกัน >= 6 ตัวอักษร)
+                if (score >= 18) {
                     scored.push({ product: p, score });
                 }
             });
 
             scored.sort((a, b) => b.score - a.score);
-            return scored.slice(0, 5);
+            return scored.slice(0, 3);
         }
 
         async function captureAndReadProductName() {
