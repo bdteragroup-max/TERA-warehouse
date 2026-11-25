@@ -762,6 +762,218 @@
             text-align: center;
         }
 
+        /* Camera Mode Tabs & OCR Scanner UI */
+        .camera-mode-tabs {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            width: 92%;
+            max-width: 460px;
+            margin-bottom: 10px;
+            z-index: 10022;
+        }
+
+        .camera-mode-btn {
+            flex: 1;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.14);
+            color: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: all 0.2s ease;
+        }
+
+        .camera-mode-btn.active {
+            background: #ffffff;
+            color: #0f172a;
+            border-color: #ffffff;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+        }
+
+        .ocr-viewfinder-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 12;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ocr-viewfinder-overlay.active {
+            display: flex;
+        }
+
+        .ocr-target-frame {
+            position: relative;
+            width: 84%;
+            height: 38%;
+            border: 2px dashed #38bdf8;
+            border-radius: 12px;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .ocr-target-corner {
+            position: absolute;
+            width: 18px;
+            height: 18px;
+            border-color: #38bdf8;
+            border-style: solid;
+        }
+        .ocr-corner-tl { top: -2px; left: -2px; border-width: 4px 0 0 4px; border-top-left-radius: 10px; }
+        .ocr-corner-tr { top: -2px; right: -2px; border-width: 4px 4px 0 0; border-top-right-radius: 10px; }
+        .ocr-corner-bl { bottom: -2px; left: -2px; border-width: 0 0 4px 4px; border-bottom-left-radius: 10px; }
+        .ocr-corner-br { bottom: -2px; right: -2px; border-width: 0 4px 4px 0; border-bottom-right-radius: 10px; }
+
+        .ocr-laser-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #38bdf8, #60a5fa, transparent);
+            box-shadow: 0 0 8px #38bdf8;
+            animation: ocrScanLaser 2s infinite ease-in-out;
+        }
+
+        @keyframes ocrScanLaser {
+            0% { top: 0%; opacity: 0.2; }
+            50% { top: 96%; opacity: 1; }
+            100% { top: 0%; opacity: 0.2; }
+        }
+
+        .ocr-frame-hint {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            background: rgba(0, 0, 0, 0.75);
+            color: #e0f2fe;
+            padding: 3px 12px;
+            border-radius: 99px;
+            font-size: 0.76rem;
+            font-weight: 600;
+            border: 1px solid rgba(56, 189, 248, 0.45);
+        }
+
+        .camera-ocr-actions {
+            width: 92%;
+            max-width: 460px;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 10022;
+        }
+
+        .btn-capture-ocr {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            color: #ffffff;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+            transition: all 0.2s ease;
+        }
+        .btn-capture-ocr:active {
+            transform: scale(0.98);
+        }
+
+        .btn-quick-switch-ocr {
+            background: rgba(255, 255, 255, 0.14);
+            color: #e2e8f0;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 99px;
+            padding: 6px 14px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            backdrop-filter: blur(6px);
+            margin-top: 4px;
+            transition: all 0.2s ease;
+        }
+        .btn-quick-switch-ocr:hover {
+            background: rgba(255, 255, 255, 0.22);
+            color: #ffffff;
+        }
+
+        /* OCR Loading Overlay */
+        .ocr-loading-overlay {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 25;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: white;
+            backdrop-filter: blur(4px);
+        }
+        .ocr-loading-overlay.active {
+            display: flex;
+        }
+
+        /* OCR Result Bottom Sheet */
+        .ocr-result-sheet {
+            display: none;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #ffffff;
+            color: #1e293b;
+            border-radius: 20px 20px 0 0;
+            padding: 1.25rem 1.25rem 1.5rem;
+            box-sizing: border-box;
+            z-index: 30;
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
+            animation: ocrSlideUp 0.25s ease-out;
+            max-height: 85%;
+            overflow-y: auto;
+        }
+        .ocr-result-sheet.active {
+            display: block;
+        }
+
+        @keyframes ocrSlideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
         #videoElement {
             width: 100%;
             height: 100%;
@@ -1436,6 +1648,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 </head>
 
 <body>
@@ -2863,15 +3076,71 @@
         </div>
     </div>
 
-    <!-- Camera Modal -->
+    <!-- Camera Modal (Supports Barcode & OCR Text Recognition) -->
     <div class="camera-modal" id="cameraModal">
         <button class="close-camera" onclick="closeCamera()">&times;</button>
+        
+        <!-- Mode Switcher Tabs -->
+        <div class="camera-mode-tabs">
+            <button type="button" id="scanModeBarcodeBtn" class="camera-mode-btn active" onclick="switchScannerMode('barcode')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5v14M21 5v14M7 5v14M11 5v14M15 5v14M18 5v14"/></svg>
+                <span>สแกนบาร์โค้ด</span>
+            </button>
+            <button type="button" id="scanModeOcrBtn" class="camera-mode-btn" onclick="switchScannerMode('ocr')">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h3M17 4h3v3M4 17v3h3M20 17v3h-3M9 12h6M12 9v6"/></svg>
+                <span>อ่านชื่อสินค้าบนกล่อง (OCR)</span>
+            </button>
+        </div>
+
         <div class="camera-container" style="background: black; border-radius: var(--radius-lg); overflow: hidden; position: relative;">
             <div id="cameraZoomBadge" class="camera-zoom-badge">1.0x</div>
             <div id="reader" style="width: 100%;"></div>
-            <button type="button" class="btn btn-secondary" onclick="toggleScannerOrientation()" style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); z-index: 10; font-size: 0.8rem; padding: 0.4rem 0.8rem; background: rgba(0,0,0,0.6); color: white; border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(4px); display: inline-flex; align-items: center; gap: 0.4rem;">
+
+            <!-- OCR Viewfinder Overlay -->
+            <div id="ocrViewfinderOverlay" class="ocr-viewfinder-overlay">
+                <div class="ocr-target-frame">
+                    <div class="ocr-target-corner ocr-corner-tl"></div>
+                    <div class="ocr-target-corner ocr-corner-tr"></div>
+                    <div class="ocr-target-corner ocr-corner-bl"></div>
+                    <div class="ocr-target-corner ocr-corner-br"></div>
+                    <div class="ocr-laser-line"></div>
+                    <div class="ocr-frame-hint">จัดข้อความชื่อสินค้าให้อยู่ในกรอบนี้</div>
+                </div>
+            </div>
+
+            <!-- OCR Loading Overlay -->
+            <div id="ocrLoadingOverlay" class="ocr-loading-overlay">
+                <div class="spinner" style="border: 3.5px solid rgba(255,255,255,0.2); border-top-color: #38bdf8; width: 44px; height: 44px; border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+                <div style="font-weight: 700; font-size: 1rem; color: #f8fafc;" id="ocrLoadingText">กำลังอ่านข้อความบนกล่อง...</div>
+                <div style="font-size: 0.8rem; color: #94a3b8;">ระบบกำลังตรวจจับและเทียบชื่อสินค้าในคลัง</div>
+            </div>
+
+            <!-- Orientation toggle button (for barcode scanner) -->
+            <button type="button" id="scannerOrientationBtn" class="btn btn-secondary" onclick="toggleScannerOrientation()" style="position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%); z-index: 10; font-size: 0.8rem; padding: 0.4rem 0.8rem; background: rgba(0,0,0,0.6); color: white; border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(4px); display: inline-flex; align-items: center; gap: 0.4rem;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
                 <span>สลับแนวสแกน (แนวนอน/แนวตั้ง)</span>
+            </button>
+
+            <!-- OCR Result Bottom Sheet -->
+            <div id="ocrResultSheet" class="ocr-result-sheet"></div>
+        </div>
+
+        <!-- Action Button for OCR Mode -->
+        <div id="cameraOcrActions" class="camera-ocr-actions" style="display: none;">
+            <button type="button" class="btn-capture-ocr" onclick="captureAndReadProductName()">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                    <circle cx="12" cy="13" r="4"></circle>
+                </svg>
+                <span>จับภาพ & อ่านชื่อสินค้าบนกล่อง</span>
+            </button>
+        </div>
+
+        <!-- Quick Switch Pill in Barcode Mode -->
+        <div id="cameraBarcodeActions" style="text-align: center; margin-top: 6px; z-index: 10022;">
+            <button type="button" class="btn-quick-switch-ocr" onclick="switchScannerMode('ocr')">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h3M17 4h3v3M4 17v3h3M20 17v3h-3M9 12h6M12 9v6"/></svg>
+                <span>กล่องไม่มีบาร์โค้ด? กดสแกนชื่อสินค้าแทน</span>
             </button>
         </div>
 
@@ -2890,7 +3159,7 @@
             <div class="camera-pinch-hint">ใช้นิ้วถ่าง/หุบเพื่อซูมกล้อง หรือกดปุ่ม/เลื่อนแถบด้านบน</div>
         </div>
 
-        <p style="color: white; margin-top: 10px; text-align: center; font-size: 0.9rem;">นำกล้องไปส่องที่บาร์โค้ดเพื่อสแกนอัตโนมัติ</p>
+        <p id="cameraScanHint" style="color: white; margin-top: 10px; text-align: center; font-size: 0.9rem;">นำกล้องไปส่องที่บาร์โค้ดเพื่อสแกนอัตโนมัติ</p>
     </div>
 
     <script>
@@ -5326,6 +5595,9 @@
             const modal = document.getElementById('cameraModal');
             modal.classList.add('active');
 
+            // Set scanner mode to barcode by default when opening
+            switchScannerMode('barcode');
+
             startScanner();
         }
 
@@ -5400,6 +5672,7 @@
 
         function closeCamera() {
             dismissCameraModal();
+            retryOcrScan();
 
             if (html5QrcodeScanner) {
                 html5QrcodeScanner.stop().then(() => {
@@ -5407,6 +5680,483 @@
                 }).catch((err) => {
                     console.error("Failed to stop scanner", err);
                 });
+            }
+        }
+
+        // ==========================================
+        // SCANNER MODE TOGGLE & OCR TEXT RECOGNITION
+        // ==========================================
+        let currentScannerMode = 'barcode';
+        let currentOcrSelectedProduct = null;
+
+        function switchScannerMode(mode) {
+            currentScannerMode = mode;
+            const barcodeTab = document.getElementById('scanModeBarcodeBtn');
+            const ocrTab = document.getElementById('scanModeOcrBtn');
+            const ocrOverlay = document.getElementById('ocrViewfinderOverlay');
+            const ocrActions = document.getElementById('cameraOcrActions');
+            const barcodeActions = document.getElementById('cameraBarcodeActions');
+            const orientBtn = document.getElementById('scannerOrientationBtn');
+            const hint = document.getElementById('cameraScanHint');
+            const ocrSheet = document.getElementById('ocrResultSheet');
+
+            if (ocrSheet) ocrSheet.classList.remove('active');
+
+            if (mode === 'ocr') {
+                if (barcodeTab) barcodeTab.classList.remove('active');
+                if (ocrTab) ocrTab.classList.add('active');
+                if (ocrOverlay) ocrOverlay.classList.add('active');
+                if (ocrActions) ocrActions.style.display = 'flex';
+                if (barcodeActions) barcodeActions.style.display = 'none';
+                if (orientBtn) orientBtn.style.display = 'none';
+                if (hint) hint.innerText = 'จัดวางกรอบให้ตรงกับชื่อสินค้าบนกล่อง แล้วกด [จับภาพ & อ่านชื่อสินค้า]';
+            } else {
+                if (barcodeTab) barcodeTab.classList.add('active');
+                if (ocrTab) ocrTab.classList.remove('active');
+                if (ocrOverlay) ocrOverlay.classList.remove('active');
+                if (ocrActions) ocrActions.style.display = 'none';
+                if (barcodeActions) barcodeActions.style.display = 'block';
+                if (orientBtn) orientBtn.style.display = 'inline-flex';
+                if (hint) hint.innerText = 'นำกล้องไปส่องที่บาร์โค้ดเพื่อสแกนอัตโนมัติ';
+            }
+        }
+
+        function preprocessOcrCanvas(canvas) {
+            try {
+                const ctx = canvas.getContext('2d');
+                const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const d = imgData.data;
+                let min = 255, max = 0;
+                for (let i = 0; i < d.length; i += 4) {
+                    const gray = (0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]) | 0;
+                    if (gray < min) min = gray;
+                    if (gray > max) max = gray;
+                }
+                const range = max - min || 1;
+                for (let i = 0; i < d.length; i += 4) {
+                    const gray = (0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]) | 0;
+                    const stretched = ((gray - min) / range) * 255;
+                    const val = stretched > 135 ? 255 : (stretched < 80 ? 0 : stretched);
+                    d[i] = val;
+                    d[i + 1] = val;
+                    d[i + 2] = val;
+                }
+                ctx.putImageData(imgData, 0, 0);
+            } catch(e) {
+                console.warn("Preprocessing canvas failed:", e);
+            }
+        }
+
+        function cleanOcrText(rawText) {
+            if (!rawText) return "";
+            return rawText
+                .split('\n')
+                .map(line => line.replace(/[|~_—`^*]/g, '').trim())
+                .filter(line => line.length >= 2)
+                .join(' ')
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function findProductByNameOrText(rawText) {
+            if (!rawText) return null;
+            const clean = rawText.trim().toLowerCase();
+            if (!clean) return null;
+
+            // 1. Direct match by name, code, barcode
+            const exact = mockProducts.find(p => {
+                const n = (p.name || '').trim().toLowerCase();
+                const c = (p.code || '').trim().toLowerCase();
+                const b = (p.barcode || '').trim().toLowerCase();
+                return n === clean || c === clean || b === clean ||
+                       (n.length >= 3 && clean.includes(n)) ||
+                       (clean.length >= 3 && n.includes(clean));
+            });
+            if (exact) return exact;
+
+            // 2. Keyword score match
+            const candidates = getMatchingProductsForText(rawText);
+            return candidates.length > 0 ? candidates[0].product : null;
+        }
+
+        function getMatchingProductsForText(rawText) {
+            if (!rawText) return [];
+            const clean = rawText.trim().toLowerCase();
+            const tokens = clean.split(/[\s,\-_/\\()+:#]+/).filter(t => t.length >= 2);
+            if (tokens.length === 0) return [];
+
+            const scored = [];
+            mockProducts.forEach(p => {
+                const pName = (p.name || '').toLowerCase();
+                const pCode = (p.code || '').toLowerCase();
+                const pLoc = (p.location || '').toLowerCase();
+                const targetStr = `${pName} ${pCode} ${pLoc}`;
+                let score = 0;
+
+                tokens.forEach(tok => {
+                    if (targetStr.includes(tok)) {
+                        score += (tok.length * 2);
+                    }
+                });
+
+                if (pName.includes(clean) || clean.includes(pName)) {
+                    score += 20;
+                }
+
+                if (score >= 4) {
+                    scored.push({ product: p, score });
+                }
+            });
+
+            scored.sort((a, b) => b.score - a.score);
+            return scored.slice(0, 5);
+        }
+
+        async function captureAndReadProductName() {
+            const videoEl = document.querySelector('#reader video');
+            if (!videoEl || videoEl.videoWidth === 0) {
+                showAlert("ข้อผิดพลาด", "ไม่พบสัญญาณภาพจากกล้อง กรุณารอสักครู่แล้วลองใหม่");
+                return;
+            }
+
+            const loadingOverlay = document.getElementById('ocrLoadingOverlay');
+            const loadingText = document.getElementById('ocrLoadingText');
+            if (loadingOverlay) loadingOverlay.classList.add('active');
+            if (loadingText) loadingText.innerText = "กำลังจับภาพและอ่านข้อความ...";
+
+            playBeepSound();
+
+            try {
+                const vw = videoEl.videoWidth;
+                const vh = videoEl.videoHeight;
+                const fullCanvas = document.createElement('canvas');
+                fullCanvas.width = vw;
+                fullCanvas.height = vh;
+                const fullCtx = fullCanvas.getContext('2d');
+                fullCtx.drawImage(videoEl, 0, 0, vw, vh);
+
+                // Crop center 84% width, 38% height matching the target frame
+                const cropW = Math.round(vw * 0.84);
+                const cropH = Math.round(vh * 0.38);
+                const cropX = Math.round((vw - cropW) / 2);
+                const cropY = Math.round((vh - cropH) / 2);
+
+                const cropCanvas = document.createElement('canvas');
+                cropCanvas.width = cropW;
+                cropCanvas.height = cropH;
+                const cropCtx = cropCanvas.getContext('2d');
+                cropCtx.drawImage(fullCanvas, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
+
+                const cropThumbUrl = cropCanvas.toDataURL('image/jpeg', 0.8);
+
+                preprocessOcrCanvas(cropCanvas);
+
+                let recognizedText = "";
+
+                // Tier 1: Browser native TextDetector API
+                if ('TextDetector' in window) {
+                    try {
+                        if (loadingText) loadingText.innerText = "กำลังอ่านตัวอักษรด้วยระบบ On-Device...";
+                        const detector = new window.TextDetector();
+                        const detectedTexts = await detector.detect(cropCanvas);
+                        if (detectedTexts && detectedTexts.length > 0) {
+                            recognizedText = detectedTexts.map(t => t.rawValue).join(' ').trim();
+                        }
+                    } catch(e) {
+                        console.warn("Native TextDetector error:", e);
+                    }
+                }
+
+                // Tier 2: Tesseract.js (Thai + English)
+                if (!recognizedText && window.Tesseract) {
+                    if (loadingText) loadingText.innerText = "กำลังประมวลผลอ่านข้อความบนกล่อง...";
+                    const res = await Tesseract.recognize(
+                        cropCanvas,
+                        'tha+eng',
+                        {
+                            logger: m => {
+                                if (m && m.status && loadingText) {
+                                    if (m.status === 'recognizing text') {
+                                        loadingText.innerText = `กำลังอ่านข้อความ... (${Math.round((m.progress || 0) * 100)}%)`;
+                                    } else if (m.status.includes('loading')) {
+                                        loadingText.innerText = "กำลังโหลดโมเดลอ่านข้อความ...";
+                                    }
+                                }
+                            }
+                        }
+                    );
+                    if (res && res.data && res.data.text) {
+                        recognizedText = res.data.text.trim();
+                    }
+                }
+
+                recognizedText = cleanOcrText(recognizedText);
+
+                if (loadingOverlay) loadingOverlay.classList.remove('active');
+
+                handleOcrSuccess(recognizedText, cropThumbUrl);
+
+            } catch(err) {
+                console.error("OCR capture error:", err);
+                if (loadingOverlay) loadingOverlay.classList.remove('active');
+                handleOcrSuccess("", null);
+            }
+        }
+
+        function handleOcrSuccess(recognizedText, thumbUrl) {
+            const sheet = document.getElementById('ocrResultSheet');
+            if (!sheet) return;
+
+            const matchedProduct = findProductByNameOrText(recognizedText);
+            currentOcrSelectedProduct = matchedProduct;
+
+            const suggestions = getMatchingProductsForText(recognizedText)
+                .filter(c => !matchedProduct || c.product.code !== matchedProduct.code)
+                .slice(0, 3);
+
+            let matchHtml = '';
+            if (matchedProduct) {
+                matchHtml = `
+                    <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 12px; margin-top: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.8rem; font-weight: 700; color: #166534; display: inline-flex; align-items: center; gap: 4px;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                พบสินค้าตรงกันในระบบ
+                            </span>
+                            <span style="font-size: 0.75rem; background: #dcfce7; color: #15803d; font-weight: 700; padding: 2px 8px; border-radius: 99px;">
+                                สต็อก: ${matchedProduct.quantity || 0} ชิ้น
+                            </span>
+                        </div>
+                        <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a; margin-top: 4px;">
+                            ${matchedProduct.name}
+                        </div>
+                        <div style="font-size: 0.82rem; color: #64748b; font-family: monospace; margin-top: 2px;">
+                            รหัส: ${matchedProduct.code} | โลเคชั่น: ${matchedProduct.location || 'ไม่ระบุ'}
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="confirmOcrProductByMatched()" style="width: 100%; margin-top: 10px; padding: 10px; font-weight: 700; background: #16a34a; border-color: #16a34a; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span>เลือกสินค้านี้ (${matchedProduct.name})</span>
+                        </button>
+                    </div>
+                `;
+            } else {
+                matchHtml = `
+                    <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; padding: 10px 12px; margin-top: 10px; font-size: 0.85rem; color: #1e40af; display: flex; align-items: flex-start; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        <span>ไม่พบสินค้าที่ตรงเป๊ะในระบบ คุณสามารถเลือกใช้ข้อความนี้เป็นชื่อสินค้าใหม่ หรือเลือกสินค้าใกล้เคียงด้านล่าง</span>
+                    </div>
+                `;
+            }
+
+            let suggestionsHtml = '';
+            if (suggestions.length > 0) {
+                suggestionsHtml = `
+                    <div style="margin-top: 10px;">
+                        <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; margin-bottom: 4px;">สินค้าใกล้เคียงอื่นๆ ในระบบ:</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                            ${suggestions.map(s => `
+                                <button type="button" onclick="selectSuggestedProduct('${s.product.code}')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; padding: 4px 8px; font-size: 0.78rem; color: #334155; cursor: pointer; text-align: left; display: inline-flex; align-items: center; gap: 4px;">
+                                    <span>${s.product.name}</span>
+                                    <span style="font-size: 0.7rem; color: #64748b; font-family: monospace;">(${s.product.code})</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            sheet.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7V4h3M17 4h3v3M4 17v3h3M20 17v3h-3M9 12h6M12 9v6"/></svg>
+                        <span style="font-weight: 800; font-size: 1rem; color: #0f172a;">ผลการอ่านชื่อสินค้าบนกล่อง</span>
+                    </div>
+                    <button type="button" onclick="retryOcrScan()" style="background: none; border: none; color: #64748b; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+                        <span>ถ่ายใหม่</span>
+                    </button>
+                </div>
+
+                <div style="margin-bottom: 8px;">
+                    <label style="font-size: 0.78rem; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">
+                        ข้อความที่อ่านได้จากกล่อง (แก้ไขได้หากอ่านคลาดเคลื่อน):
+                    </label>
+                    <div style="display: flex; gap: 6px;">
+                        <input type="text" id="ocrExtractedTextInput" value="${(recognizedText || '').replace(/"/g, '&quot;')}" 
+                            oninput="refreshOcrMatches(this.value)"
+                            placeholder="พิมพ์ชื่อสินค้า..." 
+                            style="flex: 1; padding: 8px 12px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem; font-weight: 600; outline: none;">
+                    </div>
+                </div>
+
+                <div id="ocrMatchContainer">
+                    ${matchHtml}
+                    ${suggestionsHtml}
+                </div>
+
+                <div style="display: flex; gap: 8px; margin-top: 12px;">
+                    <button type="button" class="btn btn-secondary" onclick="confirmOcrNewProduct()" style="flex: 1; padding: 10px; font-weight: 700; background: #e0e7ff; color: #4338ca; border: 1px solid #c7d2fe;">
+                        ใช้เป็นชื่อสินค้าใหม่
+                    </button>
+                    <button type="button" class="btn btn-outline" onclick="retryOcrScan()" style="padding: 10px 14px; color: #64748b;">
+                        ถ่ายใหม่
+                    </button>
+                </div>
+            `;
+
+            sheet.classList.add('active');
+        }
+
+        function refreshOcrMatches(text) {
+            const matched = findProductByNameOrText(text);
+            currentOcrSelectedProduct = matched;
+            const matchContainer = document.getElementById('ocrMatchContainer');
+            if (!matchContainer) return;
+
+            const suggestions = getMatchingProductsForText(text)
+                .filter(c => !matched || c.product.code !== matched.code)
+                .slice(0, 3);
+
+            let matchHtml = '';
+            if (matched) {
+                matchHtml = `
+                    <div style="background: #f0fdf4; border: 1.5px solid #86efac; border-radius: 12px; padding: 12px; margin-top: 10px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-size: 0.8rem; font-weight: 700; color: #166534; display: inline-flex; align-items: center; gap: 4px;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                พบสินค้าตรงกันในระบบ
+                            </span>
+                            <span style="font-size: 0.75rem; background: #dcfce7; color: #15803d; font-weight: 700; padding: 2px 8px; border-radius: 99px;">
+                                สต็อก: ${matched.quantity || 0} ชิ้น
+                            </span>
+                        </div>
+                        <div style="font-weight: 700; font-size: 1.05rem; color: #0f172a; margin-top: 4px;">
+                            ${matched.name}
+                        </div>
+                        <div style="font-size: 0.82rem; color: #64748b; font-family: monospace; margin-top: 2px;">
+                            รหัส: ${matched.code} | โลเคชั่น: ${matched.location || 'ไม่ระบุ'}
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="confirmOcrProductByMatched()" style="width: 100%; margin-top: 10px; padding: 10px; font-weight: 700; background: #16a34a; border-color: #16a34a; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                            <span>เลือกสินค้านี้ (${matched.name})</span>
+                        </button>
+                    </div>
+                `;
+            } else {
+                matchHtml = `
+                    <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 12px; padding: 10px 12px; margin-top: 10px; font-size: 0.85rem; color: #1e40af; display: flex; align-items: flex-start; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:2px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        <span>ไม่พบสินค้าที่ตรงเป๊ะในระบบ คุณสามารถเลือกใช้ข้อความนี้เป็นชื่อสินค้าใหม่ หรือเลือกสินค้าใกล้เคียงด้านล่าง</span>
+                    </div>
+                `;
+            }
+
+            let suggestionsHtml = '';
+            if (suggestions.length > 0) {
+                suggestionsHtml = `
+                    <div style="margin-top: 10px;">
+                        <div style="font-size: 0.78rem; font-weight: 700; color: #64748b; margin-bottom: 4px;">สินค้าใกล้เคียงอื่นๆ ในระบบ:</div>
+                        <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                            ${suggestions.map(s => `
+                                <button type="button" onclick="selectSuggestedProduct('${s.product.code}')" style="background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 8px; padding: 4px 8px; font-size: 0.78rem; color: #334155; cursor: pointer; text-align: left; display: inline-flex; align-items: center; gap: 4px;">
+                                    <span>${s.product.name}</span>
+                                    <span style="font-size: 0.7rem; color: #64748b; font-family: monospace;">(${s.product.code})</span>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            matchContainer.innerHTML = matchHtml + suggestionsHtml;
+        }
+
+        function retryOcrScan() {
+            const sheet = document.getElementById('ocrResultSheet');
+            if (sheet) sheet.classList.remove('active');
+            const loadingOverlay = document.getElementById('ocrLoadingOverlay');
+            if (loadingOverlay) loadingOverlay.classList.remove('active');
+        }
+
+        function confirmOcrProductByMatched() {
+            if (!currentOcrSelectedProduct) return;
+            confirmOcrProduct(currentOcrSelectedProduct, false);
+        }
+
+        function selectSuggestedProduct(code) {
+            const p = mockProducts.find(item => item.code === code);
+            if (p) {
+                currentOcrSelectedProduct = p;
+                confirmOcrProduct(p, false);
+            }
+        }
+
+        function confirmOcrNewProduct() {
+            const input = document.getElementById('ocrExtractedTextInput');
+            const finalName = input ? input.value.trim() : '';
+            if (!finalName) {
+                showAlert("แจ้งเตือน", "กรุณาระบุชื่อสินค้า");
+                return;
+            }
+            const newProduct = {
+                code: 'ITEM-' + Date.now().toString().slice(-6),
+                name: finalName,
+                barcode: '',
+                quantity: 1
+            };
+            confirmOcrProduct(newProduct, true);
+        }
+
+        function confirmOcrProduct(product, isNew = false) {
+            closeCamera();
+
+            if (currentScanTarget === 'barcode') {
+                showAddItemPopup(product);
+            } else if (currentScanTarget === 'importBarcodeScanInput') {
+                if (!isNew && (product.barcode || product.code)) {
+                    lookupBarcodeForImport(product.barcode || product.code);
+                } else {
+                    currentBarcodeImportItem = {
+                        code: product.code || ('ITEM-' + Date.now().toString().slice(-6)),
+                        barcode: product.barcode || '',
+                        exists: false,
+                        product: null,
+                        dbName: '',
+                        name: product.name || '',
+                        location: '',
+                        currentStock: 0,
+                        inSystemText: '',
+                        serial: '',
+                        quantity: 1
+                    };
+                    openBarcodeImportModal(currentBarcodeImportItem.code, { exists: false, product: null });
+                    setTimeout(() => {
+                        const nameEl = document.getElementById('barcodeModalItemName');
+                        if (nameEl) {
+                            nameEl.value = product.name || '';
+                            handleBarcodeModalNameChange(product.name || '');
+                        }
+                    }, 60);
+                }
+            } else if (currentScanTarget === 'searchInput') {
+                const searchInput = document.getElementById('searchInput');
+                if (searchInput) {
+                    searchInput.value = product.name || product.code;
+                    searchProducts();
+                }
+                if (!isNew && product.location) {
+                    showLocationPopup(product.location, product.name);
+                }
+            } else if (currentScanTarget === 'directWithdrawInput') {
+                if (typeof handleDirectWithdrawBarcode === 'function') {
+                    handleDirectWithdrawBarcode(product.barcode || product.code);
+                }
+            } else if (currentScanTarget === 'barcodeModalItemSerial' || currentScanTarget === 'addPopupSerial') {
+                const targetEl = document.getElementById(currentScanTarget);
+                if (targetEl) targetEl.value = product.name || product.code;
+                if (currentScanTarget === 'barcodeModalItemSerial' && currentBarcodeImportItem) {
+                    currentBarcodeImportItem.serial = product.name || product.code;
+                }
             }
         }
 
